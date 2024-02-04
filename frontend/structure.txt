@@ -1,0 +1,51 @@
+Src Folder
+
+This folder is the main container of all the code inside your application.
+
+Assets Folder
+
+As the name says, it contains assets of our project. It consists all your static assets, such as fonts and images. It’s a good idea to organize these assets into separate subdirectories for each asset type.
+
+Components Folder
+
+Components are the building blocks of any react project. This folder consists of a collection of UI components like buttons, modals, inputs, loader, etc., that can be used across various files in the project.
+
+Constants Folder
+
+This Folder stores any kind of constant that you have.
+
+Routes Folder
+
+The routes directory is where you should put all your navigation-related code. This folder consists of all routes of the application. It consists of private, protected, and all types of routes. Here we can even call our sub-route like stack, tab bar and drawers.
+
+Redux Folder
+
+If you’re using Redux in your app, you should create a separate folder for Redux files. The redux folder should contain the following structure:
+
+actionTypes: include an object of Redux action types that the reducer responds to.
+actions: include all the functions that Dispatch to change the state of store.
+reducer: include all redux reducers.
+store: state container which holds the application’s state.
+Screens Folder
+
+The files in the screen folder indicate the route of the application. Each file in this folder contains its route.
+
+Helper Folder
+
+Define helper functions in this folder. There are some functions that you might need across your application which generate some certain data or do something special. It’s better to keep them separate from components in order to make them reusable and make your code cleaner.
+
+Utils Folder
+
+The utils folder contains various utility functions that are not related to a specific feature or module of the app. it contains any common function such as Analytics, Logger, DateTime, and etc.
+
+App.js
+
+Main component that starts your whole app.
+
+index.js
+
+Entry point of your application as per React-Native standards.
+
+.env
+
+.env files are one great way of managing your third party keys, especially when you intend to use them across various parts of your application.
