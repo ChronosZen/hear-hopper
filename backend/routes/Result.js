@@ -1,10 +1,9 @@
 import express from 'express';
-import ResultsController from "../controllers/ResultsController"; 
+import ResultsController from "../controllers/ResultController.js";
 
-const router = express.Router();
-router.get("/", ResultsController.get);
-router.get('/:id', ResultsController.getById);
-router.post("/", ResultsController.post);
+const resultsRouter = express.Router();
 
+resultsRouter.get("/", ResultsController.get);
+resultsRouter.post("/", ResultsController.post);
 
-export default router;
+export default resultsRouter;

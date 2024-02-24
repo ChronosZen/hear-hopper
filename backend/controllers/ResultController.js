@@ -1,10 +1,10 @@
 import Result from '../models/Result.js';
 
-const ResultsController = {
+const ResultController = {
     get: async (req, res) => {
         try {
-            const result = await Result.find({});
-            res.json(result);
+            const results = await Result.find({});
+            res.json(results);
         } catch (err) {
             console.error(err.message);
             res.status(500).send('Server Error');
@@ -28,4 +28,4 @@ const ResultsController = {
     },
 };
 
-export default ResultsController;
+export default ResultController;
