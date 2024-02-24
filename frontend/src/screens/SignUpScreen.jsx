@@ -8,6 +8,7 @@ import {
   Platform,
   Modal,
   Pressable,
+  Keyboard,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
@@ -37,21 +38,38 @@ const CustomAlert = (props) => {
     </Modal>
   );
 };
-const LoginScreen = ({ navigation, route, setIsSignedIn }) => {
+const SignUpScreen = ({ navigation, route, setIsSignedIn }) => {
   const [email, onChangeEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState({ check: false, message: "" });
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-  const Login = async () => {
+  const toggleShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+  const validate = () => {
+    Keyboard.dismiss();
+    let isValid = true;
+    if (password !== confirmPassword) {
+      setError({ check: true, message: "Both password is unmatch" });
+      isValid = false;
+    }
+
+    if (isValid) {
+      Signup();
+    }
+  };
+  const Signup = async () => {
     const payload = {
       email: email,
       password: String(password),
     };
-    fetch(`${API_URL}/login`, {
+    fetch(`${API_URL}/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -64,13 +82,10 @@ const LoginScreen = ({ navigation, route, setIsSignedIn }) => {
           setModalVisible(true);
           throw new Error(`HTTP error! status: ${response.status}`);
         } else {
-          return response.json();
+          return response.status;
         }
       })
-      .then((data) => {
-        console.log(data);
-        setIsSignedIn(true);
-      })
+      .then(() => setIsSignedIn(true))
       .catch((error) => {
         console.error("There has been a problem with your fetch:", error);
         setModalVisible(true);
@@ -83,7 +98,6 @@ const LoginScreen = ({ navigation, route, setIsSignedIn }) => {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
       />
-      <View></View>
       <View>
         <Text>email</Text>
         <TextInput
@@ -99,7 +113,12 @@ const LoginScreen = ({ navigation, route, setIsSignedIn }) => {
           secureTextEntry={!showPassword}
           value={password}
           onChangeText={setPassword}
-          style={styles.input}
+          style={[
+            styles.input,
+            {
+              borderColor: error.check ? "red" : "black",
+            },
+          ]}
           placeholder="Enter Password"
           placeholderTextColor="#aaa"
         />
@@ -111,27 +130,41 @@ const LoginScreen = ({ navigation, route, setIsSignedIn }) => {
           onPress={toggleShowPassword}
         />
       </View>
+      <View>
+        <Text>Confirm Password</Text>
+        <TextInput
+          secureTextEntry={!showConfirmPassword}
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          style={[
+            styles.input,
+            {
+              borderColor: error.check ? "red" : "black",
+            },
+          ]}
+          placeholder="Enter Password"
+          placeholderTextColor="#aaa"
+        />
+        {error.check ? <Text>{error.message}</Text> : <></>}
+        <MaterialCommunityIcons
+          name={showConfirmPassword ? "eye-off" : "eye"}
+          size={24}
+          color="#aaa"
+          style={styles.icon}
+          onPress={toggleShowConfirmPassword}
+        />
+      </View>
       <Button
-        title="Login"
+        title="Sign up"
         onPress={() => {
-          Login();
+          validate();
         }}
       />
-      <View style={styles.signup}>
-        <Text>Don't have account?</Text>
-        <Text
-          style={styles.signupColor}
-          onPress={() => {
-            navigation.navigate("Sign up");
-          }}>
-          Sign up
-        </Text>
-      </View>
     </SafeAreaView>
   );
 };
 
-export default LoginScreen;
+export default SignUpScreen;
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -141,7 +174,12 @@ const styles = StyleSheet.create({
   icon: {
     marginLeft: 10,
   },
-  input: { backgroundColor: "white", height: 50, paddingHorizontal: 10 },
+  input: {
+    backgroundColor: "white",
+    height: 50,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+  },
   heading: {
     alignItems: "center",
     fontSize: 20,
@@ -166,8 +204,4 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 30,
   },
-  signup: {
-    flexDirection: "row",
-  },
-  signupColor: { color: "#4900E5" },
 });
