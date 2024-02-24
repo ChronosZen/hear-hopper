@@ -72,7 +72,10 @@ const LoginScreen = ({ navigation, route, setIsSignedIn }) => {
         setIsSignedIn(true);
       })
       .catch((error) => {
-        console.error("There has been a problem with your fetch:", error);
+        console.error(
+          "There has been a problem with your fetch(Login):",
+          error
+        );
         setModalVisible(true);
         setErrorMessage(error.message);
       });
