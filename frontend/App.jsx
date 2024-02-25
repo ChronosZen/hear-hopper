@@ -5,18 +5,47 @@ import BottomTab from "./src/routes/BottomTab";
 import { useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./src/screens/LoginScreen";
+import SignUpScreen from "./src/screens/SignUpScreen";
+import {
+  useFonts,
+  Outfit_400Regular,
+  Outfit_600SemiBold,
+  Outfit_700Bold,
+} from "@expo-google-fonts/outfit";
+import {
+  SplineSans_300Light,
+  SplineSans_400Regular,
+  SplineSans_500Medium,
+  SplineSans_600SemiBold,
+  SplineSans_700Bold,
+} from "@expo-google-fonts/spline-sans";
 const Stack = createNativeStackNavigator();
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
+  let [fontsLoaded] = useFonts({
+    Outfit_400Regular,
+    Outfit_600SemiBold,
+    Outfit_700Bold,
+    SplineSans_300Light,
+    SplineSans_400Regular,
+    SplineSans_500Medium,
+    SplineSans_600SemiBold,
+    SplineSans_700Bold,
+  });
   return (
     <NavigationContainer>
       {isSignedIn ? (
         <BottomTab />
       ) : (
         <Stack.Navigator>
-          <Stack.Screen name="login">
+          <Stack.Screen name="Log in">
             {(props) => (
               <LoginScreen {...props} setIsSignedIn={setIsSignedIn} />
+            )}
+          </Stack.Screen>
+          <Stack.Screen name="Sign up">
+            {(props) => (
+              <SignUpScreen {...props} setIsSignedIn={setIsSignedIn} />
             )}
           </Stack.Screen>
         </Stack.Navigator>
