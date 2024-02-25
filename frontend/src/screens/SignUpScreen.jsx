@@ -13,7 +13,7 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
 const API_URL =
-  Platform.OS === "ios" ? "http://localhost:5000" : "http://10.0.2.2:5000";
+  Platform.OS === "ios" ? "http://localhost:8080" : "http://10.0.2.2:8080";
 
 const CustomAlert = (props) => {
   return (
@@ -69,7 +69,7 @@ const SignUpScreen = ({ navigation, route, setIsSignedIn }) => {
       email: email,
       password: String(password),
     };
-    fetch(`${API_URL}/signup`, {
+    fetch(`${API_URL}/users/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -85,7 +85,9 @@ const SignUpScreen = ({ navigation, route, setIsSignedIn }) => {
           return response.status;
         }
       })
-      .then(() => setIsSignedIn(true))
+      .then((data) => {
+        setIsSignedIn(true);
+      })
       .catch((error) => {
         console.error("There has been a problem with your fetch:", error);
         setModalVisible(true);

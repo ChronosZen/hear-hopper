@@ -12,7 +12,7 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
 const API_URL =
-  Platform.OS === "ios" ? "http://localhost:5000" : "http://10.0.2.2:5000";
+  Platform.OS === "ios" ? "http://localhost:8080" : "http://10.0.2.2:8080";
 
 const CustomAlert = (props) => {
   return (
@@ -51,7 +51,7 @@ const LoginScreen = ({ navigation, route, setIsSignedIn }) => {
       email: email,
       password: String(password),
     };
-    fetch(`${API_URL}/login`, {
+    fetch(`${API_URL}/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
