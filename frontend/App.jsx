@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTab from "./src/routes/BottomTab";
@@ -19,38 +18,49 @@ import {
   SplineSans_600SemiBold,
   SplineSans_700Bold,
 } from "@expo-google-fonts/spline-sans";
+import { config } from "@gluestack-ui/config";
+import { GluestackUIProvider } from "@gluestack-ui/themed";
+import AddProfileScreen from "./src/screens/AddProfileScreen";
+
 const Stack = createNativeStackNavigator();
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
-  let [fontsLoaded] = useFonts({
+  let [fontsLoaded, fontError] = useFonts({
     Outfit_400Regular,
     Outfit_600SemiBold,
     Outfit_700Bold,
-    SplineSans_300Light,
     SplineSans_400Regular,
     SplineSans_500Medium,
     SplineSans_600SemiBold,
     SplineSans_700Bold,
   });
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
   return (
-    <NavigationContainer>
-      {isSignedIn ? (
-        <BottomTab />
-      ) : (
-        <Stack.Navigator>
-          <Stack.Screen name="Log in">
-            {(props) => (
-              <LoginScreen {...props} setIsSignedIn={setIsSignedIn} />
-            )}
-          </Stack.Screen>
-          <Stack.Screen name="Sign up">
-            {(props) => (
-              <SignUpScreen {...props} setIsSignedIn={setIsSignedIn} />
-            )}
-          </Stack.Screen>
-        </Stack.Navigator>
-      )}
-    </NavigationContainer>
+    <GluestackUIProvider config={config}>
+      <NavigationContainer>
+        {isSignedIn ? (
+          <BottomTab />
+        ) : (
+          <Stack.Navigator>
+            <Stack.Screen name="Log in">
+              {(props) => (
+                <LoginScreen {...props} setIsSignedIn={setIsSignedIn} />
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Sign up">
+              {(props) => (
+                <SignUpScreen {...props} setIsSignedIn={setIsSignedIn} />
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Add Profile">
+              {(props) => <AddProfileScreen {...props} />}
+            </Stack.Screen>
+          </Stack.Navigator>
+        )}
+      </NavigationContainer>
+    </GluestackUIProvider>
   );
 }
 
