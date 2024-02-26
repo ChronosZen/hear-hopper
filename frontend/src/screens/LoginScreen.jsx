@@ -4,13 +4,24 @@ import {
   View,
   TextInput,
   SafeAreaView,
-  Button,
   Platform,
   Modal,
   Pressable,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
+import {
+  FormControl,
+  Input,
+  InputIcon,
+  InputSlot,
+  VStack,
+} from "@gluestack-ui/themed";
+import { InputField } from "@gluestack-ui/themed";
+import { Typography, Colors } from "../styles";
+import HeaderText from "../components/reusable/HeaderText";
+import ButtonFunc from "../components/reusable/ButtonFunc";
+
 const API_URL =
   Platform.OS === "ios" ? "http://localhost:8080" : "http://10.0.2.2:8080";
 
@@ -46,7 +57,7 @@ const LoginScreen = ({ navigation, route, setIsSignedIn }) => {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-  const Login = async () => {
+  const Login = async (email, password) => {
     const payload = {
       email: email,
       password: String(password),
@@ -86,50 +97,59 @@ const LoginScreen = ({ navigation, route, setIsSignedIn }) => {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
       />
-      <View></View>
-      <View>
-        <Text>email</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeEmail}
-          value={email}
-          placeholder="eg. chris@gmail.com"
+      <FormControl>
+        <VStack space="xl">
+          <HeaderText text="Log in" />
+          <VStack space="xs">
+            <Text color="$text500" lineHeight="$xs">
+              Email
+            </Text>
+            <Input>
+              <InputField
+                type="text"
+                placeholder="Enter Email"
+                onChangeText={onChangeEmail}
+                value={email}
+              />
+            </Input>
+          </VStack>
+          <VStack space="xs">
+            <Text color="$text500" lineHeight="$xs">
+              Password
+            </Text>
+            <Input textAlign="center">
+              <InputField
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter Password"
+                value={password}
+                onChangeText={setPassword}
+              />
+              <InputSlot pr="$3" onPress={toggleShowPassword}>
+                <MaterialCommunityIcons
+                  name={showPassword ? "eye-off" : "eye"}
+                  size={24}
+                  color="#aaa"
+                  style={styles.icon}
+                />
+              </InputSlot>
+            </Input>
+          </VStack>
+          <View style={styles.signup}>
+            <Text style={styles.account}>Don't have account?</Text>
+            <Text
+              style={styles.signupText}
+              onPress={() => {
+                navigation.navigate("Sign up");
+              }}>
+              Sign up
+            </Text>
+          </View>
+        </VStack>
+        <ButtonFunc
+          handleOnPress={() => Login(email, password)}
+          text="Log in"
         />
-      </View>
-      <View>
-        <Text>Password</Text>
-        <TextInput
-          secureTextEntry={!showPassword}
-          value={password}
-          onChangeText={setPassword}
-          style={styles.input}
-          placeholder="Enter Password"
-          placeholderTextColor="#aaa"
-        />
-        <MaterialCommunityIcons
-          name={showPassword ? "eye-off" : "eye"}
-          size={24}
-          color="#aaa"
-          style={styles.icon}
-          onPress={toggleShowPassword}
-        />
-      </View>
-      <Button
-        title="Login"
-        onPress={() => {
-          Login();
-        }}
-      />
-      <View style={styles.signup}>
-        <Text>Don't have account?</Text>
-        <Text
-          style={styles.signupColor}
-          onPress={() => {
-            navigation.navigate("Sign up");
-          }}>
-          Sign up
-        </Text>
-      </View>
+      </FormControl>
     </SafeAreaView>
   );
 };
@@ -171,6 +191,17 @@ const styles = StyleSheet.create({
   },
   signup: {
     flexDirection: "row",
+    justifyContent: "center",
+    gap: 4,
   },
-  signupColor: { color: "#4900E5" },
+  account: {
+    ...Typography.body.bl,
+    ...Typography.bodyFont.regular,
+    color: Colors.gs.gs2,
+  },
+  signupText: {
+    color: Colors.primary.p2,
+    ...Typography.body.bl,
+    ...Typography.bodyFont.semibold,
+  },
 });
