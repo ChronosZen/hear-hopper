@@ -59,7 +59,7 @@ const NoiseChecker = () => {
     const amplitudeToDb = amplitude => {
         const decibel = 20 * Math.log10(amplitude)
         console.log("decibel -> ", decibel)
-
+            
         return decibel.toFixed(2)
     }
 
@@ -73,7 +73,7 @@ const NoiseChecker = () => {
     }
 
 
-    // UI
+    // UI (button start and stop the noise check)
     return (
         <div>
             <button onClick={handleCheck} disabled={isChecking}>
