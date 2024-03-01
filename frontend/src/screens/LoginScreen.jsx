@@ -22,8 +22,7 @@ import { Typography, Colors } from "../styles";
 import HeaderText from "../components/reusable/HeaderText";
 import ButtonFunc from "../components/reusable/ButtonFunc";
 
-const API_URL =
-  Platform.OS === "ios" ? "http://localhost:8080" : "http://10.0.2.2:8080";
+const API_URL = "http://ec2-35-167-39-253.us-west-2.compute.amazonaws.com";
 
 const CustomAlert = (props) => {
   return (
