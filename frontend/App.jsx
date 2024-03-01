@@ -24,7 +24,7 @@ import AddProfileScreen from "./src/screens/AddProfileScreen";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(true);
   let [fontsLoaded, fontError] = useFonts({
     Outfit_400Regular,
     Outfit_600SemiBold,
