@@ -11,6 +11,14 @@ const userSchema = new Schema(
     age: Number,
     kidInfo: {
       kidID: Number,
+      birthYear: Number,
+      gender: String,
+      image: String,
+      childName: String,
+      hearingAid: {
+        left: String,
+        right: String,
+      }
     },
     hearingIssue: String,
     hearingTestResult: String

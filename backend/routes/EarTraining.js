@@ -1,3 +1,5 @@
+// overall resources : img, sound
+
 import express from 'express';
 import ImagesController from "../controllers/ImageController.js";
 import SoundController from "../controllers/SoundController.js";

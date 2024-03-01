@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
 
 const soundSchema = new mongoose.Schema({
-  id: Number, 
-  description: String,
-  soundUrl: String 
+  id: String,
+  soundUrl: String,
+  image: String,
+  title: String
 }, {
   timestamps: true,
 });

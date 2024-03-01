@@ -10,6 +10,21 @@ const ResultController = {
             res.status(500).send('Server Error');
         }
     },
+
+    getById: async (req, res) => {
+        const { id } = req.params;
+        try {
+        const results = await Result.findOne({ id }); 
+        if (!results) {
+            return res.status(404).send('results not found');
+        }
+        res.json(results);
+        } catch (error) {
+            console.error(error.message);
+        res.status(500).send('Server Error');
+        }    
+    },
+
     post: async (req, res) => {
         const { testType, userID, timestamp, hearingAbility } = req.body;  
         try {
