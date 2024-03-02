@@ -3,18 +3,35 @@ import { Box, Button } from '@gluestack-ui/themed';
 import { useReducer, useEffect } from "react";
 import { Audio } from 'expo-av';
 // import { Button } from 'react-native-paper';
-import { View } from "react-native";
-import ButtonFunc from "./reusable/ButtonFunc";
+import { View, Text } from "react-native";
+import ButtonFunc from "../reusable/ButtonFunc";
 
-// Define the initialize state
-// const initialState = {
-//     noise: 0,
-//     isChecking: null
-// };
-console.log("initailState -> ");
-console.log("This is from the  NoiseCheking Component");
+const initialState = {
+    noise: 0,
+    isChecking: false
+};
+// console.log("initailState -> ", initialState.isChecking);
 
-// Define reducer function
+// Define how to handle the "state" by action. 
+const reducer = (state, action) => {
+    switch (action.type) {
+        case "START NOISE CHECK":
+            return {
+                ...state,
+                isChecking: true
+            }
+        case "STOP NOISE CHECK":
+            return {
+                ...state,
+                isChecking: false
+            }
+    }
+}
+
+
+
+
+
 // const reducer = (state, action) => {
 //     console.log("state -> ", state);
 //     console.log("action -> ", action);
@@ -50,6 +67,10 @@ console.log("This is from the  NoiseCheking Component");
 
 // Main function (Noise Checker)
 const NoiseChecker = () => {
+    // console.log("Message from NoiseChecker component.")
+
+    const [state, dispatch] = useReducer(reducer, initialState);
+
     // console.log("NoiseChecker Component is called.");
     // const [state, dispatch] = useReducer(reducer, initialState);
     // console.log("state -> ", state);
@@ -79,13 +100,22 @@ const NoiseChecker = () => {
     // };
 
     // UI (button start and stop the noise check)
-    return <View>
-        <Button></Button>
-        <ButtonFunc /*onClick={handleCheck} disabled={isChecking}*/>
-            {/* {isChecking ? 'Checking...' : 'Check noise'} */}
-            Check noise
-        </ButtonFunc>
-        <Box>Noise: db</Box>
-    </View>;
-};
+    return (
+        <View>
+            <Box>
+                <Text>
+                    {initialState.isChecking ? 'Checking...' : 'Start Noise Check'}</Text>
+
+                <Text> {initialState.isChecking
+                    ? `Here is the decibel ${state.noise}`
+                    : ""
+                }   </Text>
+            </Box>
+            <ButtonFunc onClick={() => dispatch("START NOISE CHECK")} /*onClick={handleCheck} disabled={isChecking}*/>
+
+            </ButtonFunc>
+
+        </View>
+    )
+}
 export default NoiseChecker;
