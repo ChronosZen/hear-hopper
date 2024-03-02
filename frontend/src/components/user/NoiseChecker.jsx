@@ -199,6 +199,8 @@ const NoiseChecker = () => {
                 text={state.isNoiseChecking ? "STOP NOISE CHECK" : "START NOISE CHECK"}
             />
 
+            
+
             <Text>
                 {state.isNoiseChecking
                     ? `Current Noise is ${state.noiseLevel} DB`
