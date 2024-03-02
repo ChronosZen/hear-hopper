@@ -7,7 +7,7 @@ import { LineChart } from "react-native-chart-kit";
 const countDownReducer = (state, action) => {
   switch (action.type) {
     case "set":
-      return { count: 4 };
+      return { count: 3 };
     case "dec":
       return { count: state.count - 1 };
     default:
@@ -57,7 +57,7 @@ const TestScreen = () => {
     if (!sound) {
       await loadSound();
     }
-    if (!isPlaying) {
+    if (!isPlaying && sound) {
       await sound.playAsync();
     } else {
       await sound.stopAsync();
@@ -71,13 +71,18 @@ const TestScreen = () => {
     dispatch({ type: "set" });
   }
 
+  useEffect(() => {
+    loadSound()
+  },[])
+
   return (
     <View style={styles.container}>
       <View
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
-          margin: 12
+          marginVertical: 24,
+          marginHorizontal: 12
         }}
       >
         <Text style={{ fontWeight: "bold", marginLeft: 12 }}>Hearing Test</Text>
@@ -231,16 +236,22 @@ const TestScreen = () => {
                     }}
                   >
                     <View style={{ flex: 1, justifyContent: "space-evenly" }}>
-                      <TouchableOpacity
+                      <TouchableOpacity style={{
+                          backgroundColor: "#C3ABF6",
+                          width: 200,
+                          height: 200,
+                          borderRadius: 100,
+                          alignSelf: "center",
+                        }}>
+                        <TouchableOpacity
                         style={{
                           backgroundColor: "#4900E5",
                           width: 100,
                           height: 100,
                           borderRadius: 50,
-                          alignSelf: "center",
-                          margin: 12
+                          margin: 50
                         }}
-                      />
+                      /></TouchableOpacity>
                       <Text style={{ textAlign: "center", fontWeight: "400" }}>
                         Hold the Button and Stop when you can’t hear it.
                       </Text>
