@@ -1,8 +1,9 @@
 import express from "express";
 import { connectDB } from "./config/db.js";
 import userRouter from "./routes/User.js";
-import resultRouter from "./routes/Result.js";
-import resourcesRouter from "./routes/Resource.js";
+import resultRouter from "./routes/TestResult.js";
+// import TestResultsRouter from "./routes/TestResult.js";
+
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -16,7 +17,7 @@ connectDB();
 // Routes
 app.use("/users", userRouter);
 app.use("/results", resultRouter);
-app.use("/resources", resourcesRouter);
+// app.use("/resources", resourcesRouter);
 // app.use('/noisecheck', NoiseCheck);
 // app.use('/hearingage', HearingAge);
 

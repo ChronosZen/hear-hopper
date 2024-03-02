@@ -24,7 +24,6 @@ const UserController = {
         res.status(500).send('Server Error');
         }    
     },
-
    
     post: async (req, res) => {
         try {
@@ -69,7 +68,6 @@ const UserController = {
         }
     },
 
-   // recheck 
     signup: async (req, res) => {
       try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -83,7 +81,6 @@ const UserController = {
       }
     },
     
-    // recheck 
     login: async (req, res) => {
     const { email, password } = req.body;
     User.findOne({ email: email })
@@ -107,7 +104,64 @@ const UserController = {
         }
       })
       .catch((error) => res.status(500).json(`Error found: ${error}`));
-  }
+  },
+
+  updateKidInfo: async (req, res) => {
+    const { id } = req.params;
+    const { birthYear, gender, image, childName, left, right } = req.body;
+    try {
+        let user = await User.findOne({ id }); 
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        user.kidInfo.birthYear = birthYear;
+        user.kidInfo.gender = gender;
+        user.kidInfo.image = image;
+        user.kidInfo.childName = childName;
+        user.kidInfo.hearingAid.left = left;
+        user.kidInfo.hearingAid.right = right;
+
+        await user.save();
+        res.json(user);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Server Error');
+    }    
+  },
+
+  updateKidImage: async (req, res) => {
+    const { id } = req.params;
+    const { image } = req.body;
+    try {
+        let user = await User.findOne({ id }); 
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        user.kidInfo.image = image;
+        await user.save();
+        res.json(user);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Server Error');
+    }    
+  },
+  updateKidInfoName: async (req, res) => {
+    const { id } = req.params;
+    const { childName } = req.body;
+    try {
+        let user = await User.findOne({ id }); 
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        user.kidInfo.childName = childName;
+        await user.save();
+        res.json(user);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Server Error');
+    }    
+  },
+
 };
 
 export default UserController;
