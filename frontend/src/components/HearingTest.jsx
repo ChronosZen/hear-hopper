@@ -12,8 +12,9 @@ const HearingTest = () => {
             <CountDown />
           </View>
           : 
-          <View>
-            <Button title="Start hearing test" onPress={() => setcountPress(press => !press)} />
+          <View style={{flex: 1, alignContent: 'space-between', justifyContent: 'space-evenly'}}>
+            <Text style={{textAlign: 'center'}}>Please wear a Headphone for Accurate Results</Text>
+            <Button title="Start hearing test" onPress={() => setcountPress(true)} />
           </View>}
         </View>
       )

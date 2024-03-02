@@ -5,50 +5,85 @@ import { Audio } from 'expo-av';
 const VoiceGenerator = () => {
     const [sound, setSound] = useState();
     const [isPlaying, setIsPlaying] = useState(false);
+    const audioFile = [{uri: '../../assets/audioFiles/1000hz.wav', volume: 0.8}, {uri: '../../assets/audioFiles/2000hz.wav', volume: 0.5}, {uri: '../../assets/audioFiles/5000hz.wav', volume: 0.7}, {uri: '../../assets/audioFiles/8000hz.wav', volume: 0.8}]
 
-    async function loadSound() {
-        console.log('Loading Sound');
-        const { sound } = await Audio.Sound.createAsync( require('../../assets/spring.mp3')
-        );
-        await sound.setVolumeAsync(0.8)
-        // await sound.setPitchAsync(1.5)
+    try{
+      async function loadSound({uri, volume}) {
+          console.log("uri: ",uri," vol: ",volume)
+          const { sound } = await Audio.Sound.createAsync( require(`../../assets/audioFiles/2000hz.wav`)
+          );
+          await sound.setVolumeAsync(volume)
+          // await sound.setPitchAsync(1.5)
+  
+          setSound(sound);
+      }
+      
+      async function playSound(){
+          // if(!sound){
+          //   await loadSound()
+          // }
+          // console.log(await sound.getStatusAsync());
+          if(!isPlaying){
+            // await loadSound({uri, volume})
+            // console.log("Playing Sound")
+            // await sound.playAsync();
 
-        setSound(sound);
-    }
+            for (let i=0; i<audioFile.length; i++){
+              const {uri, volume} = audioFile[i];
+              // console.log(audioFile[i])
+              await loadSound({uri, volume})
+              console.log("Playing audio: ", i)
+              await sound.playAsync();
     
-    async function playSound(){
-        if(!sound){
-          await loadSound()
-        }
-        console.log(await sound.getStatusAsync());
-        if(!isPlaying){
-          console.log("Playing Sound")
-          await sound.playAsync();
-        }
-        else{
-          await sound.stopAsync();
-        console.log(await sound.getStatusAsync());
-    
-        }
-        setIsPlaying(play => !play)
+              await new Promise(resolve => setTimeout(resolve, 3000))
+            }
+          }
+          // else{
+          //   await sound.stopAsync();
+          // console.log(await sound.getStatusAsync());
+      
+          // }
+          setIsPlaying(play => !play)
+      }
+    }catch(error){
+      console.log(error)
     }
 
-    useEffect(() => {
-        loadSound()
-    },[])
+    // useEffect(() => {
+    //     loadSound()
+    // },[])
       
     useEffect(() => {
-        return sound
-          ? () => {
-              console.log('Unloading Sound');
-              sound.unloadAsync();
-            }
-          : undefined;
+      // const playAudio = async() => {
+      //   for (let i=0; i<audioFile.length; i++){
+      //     const {hertz, vol} = audioFile[i];
+      //     await playSound(hertz, vol)
+      //     console.log("Playing audio: ", i)
+
+      //     await new Promise(resolve => setTimeout(resolve, 6000))
+      //   }
+      // }
+
+
+      // playAudio()
+        // return sound
+        //   ? () => {
+        //       console.log('Unloading Sound');
+        //       sound.unloadAsync();
+        //     }
+        //   : undefined;
+
+      // return() => {
+      //   if(sound){
+      //     sound.unloadAsync();
+      //   }
+      // }
     }, [sound]);
 
     return (
         <View style={styles.container}>
             <Button title={isPlaying ? 'Stop' : 'Start Playing'} onPress={playSound} />
+            <Button title='View Results'  />
         </View>
     );
 };
@@ -59,6 +94,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
       },
 });
