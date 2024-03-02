@@ -2,120 +2,110 @@ import React from 'react'; import { Alert, AlertIcon, AlertText, InfoIcon, Check
 import { Box, Button } from '@gluestack-ui/themed';
 import { useReducer, useEffect } from "react";
 import { Audio } from 'expo-av';
-// import { Button } from 'react-native-paper';
 import { View, Text } from "react-native";
 import ButtonFunc from "../reusable/ButtonFunc";
 
 const initialState = {
-    noise: 0,
-    isChecking: false
+    isNoiseChecking: false,
+    noiseLevel: 0,
+    isMicrophonePermGranted: false
 };
 // console.log("initailState -> ", initialState.isChecking);
 
-// Define how to handle the "state" by action. 
+// Define how to handle the "state" by each action. 
 const reducer = (state, action) => {
     switch (action.type) {
-        case "START NOISE CHECK":
+        case "SET_IS_NOISE_CHECKING":
             return {
                 ...state,
-                isChecking: true
+                isChecking: action.payload
             }
-        case "STOP NOISE CHECK":
+        case "SET_NOISE_LEVEL":
             return {
                 ...state,
-                isChecking: false
+                noiseLevel: action.payload
             }
+        case "SET_MICROPHONE_PERM_GRANTED":
+            return {
+                ...state,
+                isMicrophonePermGranted: action.payload
+            }
+        default:
+            return state;
     }
 }
 
-
-
-
-
-// const reducer = (state, action) => {
-//     console.log("state -> ", state);
-//     console.log("action -> ", action);
-//     switch (action.type) {
-//         case 'CHECK_NOIDE':
-//             return {
-//                 ...state,
-//                 isChecking: true
-//             };
-//         case 'NOISE_CHECKED':
-//             return {
-//                 ...state,
-//                 noise: action.payload,
-//                 isChecking: false
-//             };
-//         case 'UPDATE_NOISE':
-//             return {
-//                 ...state,
-//                 noise: action.payload
-//             };
-//         default:
-//             return state;
-//     }
-// };
-// const sample = () => {
-//     <Alert variant={"accent"} action={"success"}>
-//         <AlertIcon as={InfoIcon} mr="$3" />
-//         <AlertText>
-//             Selection successfully moved!
-//         </AlertText>
-//     </Alert>;
-// };
-
-// Main function (Noise Checker)
 const NoiseChecker = () => {
     // console.log("Message from NoiseChecker component.")
 
     const [state, dispatch] = useReducer(reducer, initialState);
+    let recording = null;
 
-    // console.log("NoiseChecker Component is called.");
-    // const [state, dispatch] = useReducer(reducer, initialState);
-    // console.log("state -> ", state);
-    // console.log("dispatch -> ", dispatch);
-    // useEffect(() => {
-    //     const {
-    //         noiseCheck
-    //     } = state;
-    //     console.log("noiseCheck -> ", noiseCheck);
-    //     if (noiseCheck) {
-    //         const checkNoise = noiseCheck.setOnRecordingStatusUpdata();
-    //     }
-    // }, [state.noiseCheck]);
+    // Coverts Noise to a decibel
+    const amplitudeToDb = amplitude => {
+        const decibel = 20 * Math.log10(amplitude);
+        console.log("decibel -> ", decibel);
+        return decibel.toFixed(2);
+    };
 
-    // Function coverts an amplitude to a decibel
-    // const amplitudeToDb = amplitude => {
-    //     const decibel = 20 * Math.log10(amplitude);
-    //     console.log("decibel -> ", decibel);
-    //     return decibel.toFixed(2);
-    // };
+    // Check Microphone use permission status using Expo Audio API.
+    const checkMicrophonePerm = async() => {
+        const { status } = await Audio.getPermissionsAsync()
+        dispatch({ type: "SET_MICROPHONE_PERM_GRANTED", payload: status==="granted" })
 
-    // Async function to start the noise check
-    // const startNoiseCheck = async () => {
-    //     try { } catch (error) {
-    //         console.error("Failed to start noise check", error);
-    //     }
-    // };
+        console.log("permissioStatus", status)
+    }
+
+    // Request Microphone use permission to the first time user using Audio API.
+    const requestMicrophonePerm = async() => {
+        const  { status } = await Audio.requestPermissionsAsync()
+        dispatch({type: "SET_MICROPHONE_PERM_GRANTED", payload: status === "granted"})
+    }
+    useEffect(() => {
+        checkMicrophonePerm()
+        if (!state.isMicrophonePermGranted) {
+            requestMicrophonePerm()
+        }
+    }, [])
 
     // UI (button start and stop the noise check)
     return (
-        <View>
-            <Box>
-                <Text>
-                    {initialState.isChecking ? 'Checking...' : 'Start Noise Check'}</Text>
+        <Box>
+            <ButtonFunc
+                // onClick={state.isChecking ? stopRecording : startRecording}
+                disabled={!state.isDevicePermissionGranted}
+                text={state.isCheking ? "STOP NOISE CHECK" : "START NOISE CHECK"}
+            />
 
-                <Text> {initialState.isChecking
-                    ? `Here is the decibel ${state.noise}`
-                    : ""
-                }   </Text>
-            </Box>
-            <ButtonFunc onClick={() => dispatch("START NOISE CHECK")} /*onClick={handleCheck} disabled={isChecking}*/>
+            <Text> {state.isChecking
+                ? `Current Noise is ${state.noise} DB`
+                : ""
+            }   </Text>
 
+
+            {/* <ButtonFunc
+                onClick={() => dispatch("START NOISE CHECK")}
+                disabled={state.isChecking}
+                text="CHECK NOISE LEVEL">
             </ButtonFunc>
-
-        </View>
+            <ButtonFunc
+                onClick={() => dispatch("STOP NOISE CHECK")}
+                disabled={!state.isChecking}
+                text="STOP NOISE CHECK"
+            >
+            </ButtonFunc> */}
+        </Box>
     )
 }
 export default NoiseChecker;
+
+
+// useEffect(() => {
+//     const {
+//         noiseCheck
+//     } = state;
+//     console.log("noiseCheck -> ", noiseCheck);
+//     if (noiseCheck) {
+//         const checkNoise = noiseCheck.setOnRecordingStatusUpdata();
+//     }
+// }, [state.noiseCheck]);
