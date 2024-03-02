@@ -33,6 +33,7 @@ import {
 
 import { InputField } from "@gluestack-ui/themed";
 import { FormControl } from "@gluestack-ui/themed";
+import CameraProfile from "../components/user/CameraProfile";
 const initialState = {
   page: 1,
   birthYear: "",
@@ -58,6 +59,11 @@ function reducer(state, action) {
       return {
         ...state,
         profileName: action.payload,
+      };
+    case "profilePic":
+      return {
+        ...state,
+        profilePic: action.payload,
       };
     case "leftEar":
       return {
@@ -130,16 +136,7 @@ const AddProfileScreen = () => {
           </HStack>
         </RadioGroup>
       )}
-      {page === 3 && (
-        <Image
-          size="lg"
-          borderRadius="$full"
-          alt="test"
-          source={{
-            uri: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-          }}
-        />
-      )}
+      {page === 3 && <CameraProfile dispatch={dispatch} />}
       {page === 4 && (
         <Input
           m="$4"
@@ -220,9 +217,20 @@ const AddProfileScreen = () => {
         {profileName}
         {gender}
         {birthYear}
+
         {leftEar}
         {rightEar}
       </Text>
+      {profilePic && (
+        <Image
+          size="lg"
+          borderRadius="$full"
+          alt="test"
+          source={{
+            uri: profilePic,
+          }}
+        />
+      )}
       {page !== 5 ? (
         <ButtonFunc
           handleOnPress={() => dispatch({ type: "next" })}
