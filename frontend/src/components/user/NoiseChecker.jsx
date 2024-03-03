@@ -207,23 +207,29 @@ const NoiseChecker = () => {
                 }
             </Text>
 
-            {state.isNoiseChecking && state.noiseLevel > -15 && (
-                <Alert status="alert">
-                    <AlertIcon />
-                    <AlertText>Too loud and Not Safe</AlertText>
-                </Alert>
-            )}
+            {state.isNoiseChecking && (
+                <>
+                    {
+                        state.noiseLevel > -15 && (
+                            <Alert status="alert">
+                                <AlertIcon />
+                                <AlertText>Too loud</AlertText>
+                            </Alert>
+                        )
+                    }
 
-            {state.isNoiseChecking && state.noiseLevel <= -15 && state.noiseLevel > -25 && (
-                <Text>Noisy</Text>
-            )}
+                    {state.noiseLevel <= -15 && state.noiseLevel > -25 && (
+                        <Text>Noisy</Text>
+                    )}
 
-            {state.isNoiseChecking && state.noiseLevel <= -25 && state.noiseLevel > -35 && (
-                <Text>Moderate</Text>
-            )}
+                    {state.noiseLevel <= -25 && state.noiseLevel > -35 && (
+                        <Text>Moderate</Text>
+                    )}
 
-            {state.isNoiseChecking && state.noiseLevel <= -35 && (
-                <Text> Quiet</Text>
+                    {state.noiseLevel <= -35 && (
+                        <Text> Quiet </Text>
+                    )}
+                </>
             )}
         </Box>
     )
