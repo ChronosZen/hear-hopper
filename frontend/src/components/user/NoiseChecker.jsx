@@ -32,7 +32,7 @@ const reducer = (state, action) => {
                 ...state,
                 noiseLevel: action.payload
             }
-        case "SET_NOISE_LEVEL__UPDATE_INTERVAL":
+        case "SET_NOISE_LEVEL_UPDATE_INTERVAL":
             return {
                 ...state,
                 noiseLevelUpdateInterval: action.payload
@@ -54,7 +54,6 @@ const reducer = (state, action) => {
 
 const NoiseChecker = () => {
     // console.log("Message from NoiseChecker component.") -> OK
-
     const [state, dispatch] = useReducer(reducer, initialState);
 
     // Coverts Noise to a decibel
@@ -102,26 +101,26 @@ const NoiseChecker = () => {
         }
     }
 
+
+    let noiseCheckInterval = null
+    // console.log("noiseCheckInterval ->", noiseCheckInterval) // -> OK
+
     // Start noise check
     const startNoiseCheck = async () => {
         try {
             if ((!state.isPermissionGranted) || (!state.isRecordingPermGranted)) {
                 requestPermissions()
             }
-
             if (state.recording !== null) {
                 await stopNoiseCheck()
             }
-
             await Audio.setAudioModeAsync({
                 allowsRecordingIOS: true,
                 playsInSilentModeIOS: true,
             });
-
             // console.log('Starting recording.. and isNoiseChecking ->', state.isNoiseChecking)
 
             const recordingObj = new Audio.Recording()
-
             // console.log("this is recording instance -> ", JSON.stringify(recordingObj))
 
             await recordingObj.prepareToRecordAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
@@ -132,18 +131,17 @@ const NoiseChecker = () => {
 
             // console.log("check the state of recording after start the recording ->", recordingObj)
 
-            const recordingStatus = await recordingObj.getStatusAsync();            
+            const recordingStatus = await recordingObj.getStatusAsync();
             // console.log("recordingStatus after start the recording. ->", recordingStatus);
-        
-   
-            const noiseCheckInterval = setInterval(async () => {
-                try {    
-                    // console.log("state.recording from setInterval->", state.recording)
 
+
+            noiseCheckInterval = setInterval(async () => {
+                try {
+                    // console.log("state.recording from setInterval->", state.recording)
                     if (recordingObj !== null) {
 
                         const recordingStatus = await recordingObj.getStatusAsync();
-                        const meteringDbFS = recordingStatus.metering.toFixed(1);
+                        const meteringDbFS = recordingStatus.metering?.toFixed(1);
                         const floatMeteringDbFS = parseFloat(meteringDbFS)
                         // console.log("recordingStatus in inside of interval ->", recordingStatus);
                         // console.log("recordingStatus.metering", meteringDbFS)
@@ -151,7 +149,7 @@ const NoiseChecker = () => {
                         dispatch({ type: "SET_NOISE_LEVEL", payload: floatMeteringDbFS })
                     }
                 } catch (error) {
-                    console.log("noiseCheckInterval is Error: ", error)
+                    console.error("noiseCheckInterval is Error: ", error)
                 }
             }, 1000)
 
@@ -161,7 +159,6 @@ const NoiseChecker = () => {
             console.error("startNoiseCheck is Error: ", error)
         }
     }
-
     // console.log('Recording started or stopped and isNoiseChecking ->', state.isNoiseChecking);
 
     const stopNoiseCheck = async () => {
@@ -178,6 +175,11 @@ const NoiseChecker = () => {
                 )
                 dispatch({ type: "SET_IS_NOISE_CHECKING", payload: false })
                 dispatch({ type: "SET_RECORDING", payload: null })
+                dispatch({ type: "SET_NOISE_LEVEL", payload: 0 })
+
+                clearInterval(noiseCheckInterval)
+                dispatch({ type: "SET_NOISE_LEVEL_UPDATE_INTERVAL", payload: null })
+                // console.log("noiseCheckInterval is cleared? ->", noiseCheckInterval)
             }
         } catch (error) {
             console.error("stopNoiseCheck is Error: ", error)
@@ -192,22 +194,43 @@ const NoiseChecker = () => {
     }, [])
 
     return (
-        <Box>
+        <Box bg="$primary500">
             <ButtonFunc
                 handleOnPress={state.isNoiseChecking ? stopNoiseCheck : startNoiseCheck}
                 disabled={!state.isMicrophonePermGranted || !state.isRecordingPermGranted}
                 text={state.isNoiseChecking ? "STOP NOISE CHECK" : "START NOISE CHECK"}
             />
-
-            
-
             <Text>
                 {state.isNoiseChecking
                     ? `Current Noise is ${state.noiseLevel} DB`
                     : ""
                 }
             </Text>
+
+            {state.isNoiseChecking && (
+                {
+                    state.noiseLevel > -15 && (
+                        <Alert status="alert">
+                            <AlertIcon />
+                            <AlertText>Too loud</AlertText>
+                        </Alert>
+                    )
+                }
+
+            {state.noiseLevel <= -15 && state.noiseLevel > -25 && (
+                <Text>Noisy</Text>
+            )}
+
+            {state.noiseLevel <= -25 && state.noiseLevel > -35 && (
+                <Text>Moderate</Text>
+            )}
+
+            {state.noiseLevel <= -35 && (
+                <Text> Quiet </Text>
+            )}
+            )}
         </Box>
     )
 }
+
 export default NoiseChecker;
