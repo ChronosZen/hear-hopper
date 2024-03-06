@@ -34,9 +34,8 @@ import {
 import { InputField } from "@gluestack-ui/themed";
 import { FormControl } from "@gluestack-ui/themed";
 import CameraProfile from "../components/user/CameraProfile";
-const API_URL = "http://10.0.2.2:8080";
+const API_URL = "https://hearhopper.wmdd4950.com";
 
-// const API_URL = "http://ec2-35-167-39-253.us-west-2.compute.amazonaws.com";
 const initialState = {
   page: 1,
   birthYear: "",

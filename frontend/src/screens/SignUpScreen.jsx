@@ -20,7 +20,7 @@ import ButtonFunc from "../components/reusable/ButtonFunc";
 import HeaderText from "../components/reusable/HeaderText";
 import { Typography, Colors } from "../styles";
 
-const API_URL = "http://ec2-35-167-39-253.us-west-2.compute.amazonaws.com";
+const API_URL = "https://hearhopper.wmdd4950.com";
 
 const CustomAlert = ({ modalVisible, setModalVisible, errorMessage }) => {
   return (
