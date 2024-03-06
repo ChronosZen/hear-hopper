@@ -22,8 +22,7 @@ import { Typography, Colors } from "../styles";
 import HeaderText from "../components/reusable/HeaderText";
 import ButtonFunc from "../components/reusable/ButtonFunc";
 
-const API_URL = "http://ec2-35-167-39-253.us-west-2.compute.amazonaws.com";
-
+const API_URL = "https://hearhopper.wmdd4950.com";
 const CustomAlert = (props) => {
   return (
     <Modal
@@ -47,7 +46,7 @@ const CustomAlert = (props) => {
     </Modal>
   );
 };
-const LoginScreen = ({ navigation, route, setIsSignedIn }) => {
+const LoginScreen = ({ navigation, route, setIsSignedIn, setUserData }) => {
   const [email, onChangeEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -78,7 +77,8 @@ const LoginScreen = ({ navigation, route, setIsSignedIn }) => {
         }
       })
       .then((data) => {
-        console.log(data);
+        console.log("this is data after login", data);
+        setUserData(data);
         setIsSignedIn(true);
       })
       .catch((error) => {

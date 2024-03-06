@@ -34,14 +34,16 @@ import {
 import { InputField } from "@gluestack-ui/themed";
 import { FormControl } from "@gluestack-ui/themed";
 import CameraProfile from "../components/user/CameraProfile";
+const API_URL = "https://hearhopper.wmdd4950.com";
+
 const initialState = {
   page: 1,
   birthYear: "",
   gender: "",
-  profilePic: "",
-  profileName: "",
-  leftEar: "",
-  rightEar: "",
+  image: "",
+  childName: "",
+  left: "",
+  right: "",
 };
 function reducer(state, action) {
   switch (action.type) {
@@ -55,25 +57,25 @@ function reducer(state, action) {
         ...state,
         gender: action.payload,
       };
-    case "profileName":
+    case "childName":
       return {
         ...state,
-        profileName: action.payload,
+        childName: action.payload,
       };
-    case "profilePic":
+    case "image":
       return {
         ...state,
-        profilePic: action.payload,
+        image: action.payload,
       };
-    case "leftEar":
+    case "left":
       return {
         ...state,
-        leftEar: action.payload,
+        left: action.payload,
       };
-    case "rightEar":
+    case "right":
       return {
         ...state,
-        rightEar: action.payload,
+        right: action.payload,
       };
     case "next":
       return {
@@ -85,13 +87,51 @@ function reducer(state, action) {
         ...state,
         page: state.page + 1,
       };
+    case "goback":
+      return {
+        ...state,
+        page: 1,
+      };
   }
 }
-const AddProfileScreen = () => {
-  const [
-    { page, birthYear, gender, profilePic, profileName, leftEar, rightEar },
-    dispatch,
-  ] = useReducer(reducer, initialState);
+const AddProfileScreen = ({ navigation: { goBack }, route }) => {
+  const [{ page, birthYear, gender, image, childName, left, right }, dispatch] =
+    useReducer(reducer, initialState);
+  const { userData } = route.params;
+  const onSubmitKid = async () => {
+    const payload = {
+      birthYear,
+      gender,
+      image,
+      childName,
+      left,
+      right,
+    };
+    fetch(`${API_URL}/users/updateKidInfo/${userData.id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        } else {
+          return response.json();
+        }
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error(
+          "There has been a problem with your fetch(updateKidInfo):",
+          error
+        );
+      });
+  };
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <HeaderText
@@ -147,8 +187,8 @@ const AddProfileScreen = () => {
           isReadOnly={false}>
           <InputField
             placeholder="Enter Name here"
-            onChangeText={(newProfileName) =>
-              dispatch({ type: "profileName", payload: newProfileName })
+            onChangeText={(newChildName) =>
+              dispatch({ type: "childName", payload: newChildName })
             }
           />
         </Input>
@@ -160,9 +200,9 @@ const AddProfileScreen = () => {
           </FormControlLabel>
           <Select
             width={150}
-            value={leftEar}
+            value={left}
             onValueChange={(newValue) => {
-              dispatch({ type: "leftEar", payload: newValue });
+              dispatch({ type: "left", payload: newValue });
             }}
             variant="outline"
             size="md">
@@ -188,9 +228,9 @@ const AddProfileScreen = () => {
           </FormControlLabel>
           <Select
             width={150}
-            value={rightEar}
+            value={right}
             onValueChange={(newValue) => {
-              dispatch({ type: "rightEar", payload: newValue });
+              dispatch({ type: "right", payload: newValue });
             }}
             variant="outline"
             size="md">
@@ -213,33 +253,50 @@ const AddProfileScreen = () => {
           </Select>
         </FormControl>
       )}
+      {page === 6 && (
+        <View>
+          <Text>Congrat you have added a new kid</Text>
+        </View>
+      )}
       <Text>
-        {profileName}
+        ID:{userData.id}
+        {childName}
         {gender}
         {birthYear}
-
-        {leftEar}
-        {rightEar}
+        {page}
+        {left}
+        {right}
       </Text>
-      {profilePic && (
+      {image && (
         <Image
           size="lg"
           borderRadius="$full"
           alt="test"
           source={{
-            uri: profilePic,
+            uri: image,
           }}
         />
       )}
-      {page !== 5 ? (
+      {(page !== 5) & (page !== 6) ? (
         <ButtonFunc
           handleOnPress={() => dispatch({ type: "next" })}
           text="Next"
         />
+      ) : page === 5 ? (
+        <ButtonFunc
+          handleOnPress={() => {
+            onSubmitKid();
+            dispatch({ type: "submit" });
+          }}
+          text="Submit"
+        />
       ) : (
         <ButtonFunc
-          handleOnPress={() => dispatch({ type: "submit" })}
-          text="Submit"
+          handleOnPress={() => {
+            goBack();
+            dispatch({ type: "goback" });
+          }}
+          text="Go back"
         />
       )}
     </View>

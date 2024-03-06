@@ -24,7 +24,8 @@ import AddProfileScreen from "./src/screens/AddProfileScreen";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
-  const [isSignedIn, setIsSignedIn] = useState(true);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [userData, setUserData] = useState({});
   let [fontsLoaded, fontError] = useFonts({
     Outfit_400Regular,
     Outfit_600SemiBold,
@@ -41,12 +42,16 @@ export default function App() {
     <GluestackUIProvider config={config}>
       <NavigationContainer>
         {isSignedIn ? (
-          <BottomTab />
+          <BottomTab userData={userData} />
         ) : (
           <Stack.Navigator>
             <Stack.Screen name="Log in">
               {(props) => (
-                <LoginScreen {...props} setIsSignedIn={setIsSignedIn} />
+                <LoginScreen
+                  {...props}
+                  setIsSignedIn={setIsSignedIn}
+                  setUserData={setUserData}
+                />
               )}
             </Stack.Screen>
             <Stack.Screen name="Sign up">

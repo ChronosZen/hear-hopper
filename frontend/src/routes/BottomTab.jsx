@@ -19,14 +19,18 @@ import { Colors, Typography } from "../styles";
 
 const ProfileStack = createNativeStackNavigator();
 
-function ProfileStackScreen() {
+function ProfileStackScreen({ route }) {
+  const { userData } = route.params;
+
   return (
     <ProfileStack.Navigator screenOptions={{ headerShown: true }}>
       <ProfileStack.Screen
         name="MainProfile"
+        initialParams={{ userData }}
         component={ProfileScreen}></ProfileStack.Screen>
       <ProfileStack.Screen
         name="AddProfile"
+        initialParams={{ userData }}
         component={AddProfileScreen}></ProfileStack.Screen>
       <ProfileStack.Screen
         name="Example"
@@ -37,7 +41,7 @@ function ProfileStackScreen() {
 
 const Tab = createBottomTabNavigator();
 
-const BottomTab = () => {
+const BottomTab = ({ userData }) => {
   return (
     <Tab.Navigator
       style={styles.tab}
@@ -107,6 +111,7 @@ const BottomTab = () => {
       <Tab.Screen
         name="Profile"
         component={ProfileStackScreen}
+        initialParams={{ userData }}
         options={{
           tabBarLabel: ({ focused }) => (
             <Text style={focused ? styles.hNavActive : styles.hNav}>

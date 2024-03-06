@@ -14,7 +14,6 @@ import * as MediaLibrary from "expo-media-library";
 export default function CameraProfile({ dispatch }) {
   let cameraRef = useRef();
   const [hasCameraPermission, setHasCameraPermission] = useState();
-  const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
   const [photo, setPhoto] = useState();
 
   useEffect(() => {
@@ -23,7 +22,6 @@ export default function CameraProfile({ dispatch }) {
       const mediaLibraryPermission =
         await MediaLibrary.requestPermissionsAsync();
       setHasCameraPermission(cameraPermission.status === "granted");
-      setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
     })();
   }, []);
 
@@ -44,26 +42,21 @@ export default function CameraProfile({ dispatch }) {
       exif: false,
     };
     let newPhoto = await cameraRef.current.takePictureAsync(options);
-    setPhoto(newPhoto);
-    dispatch({ type: "profilePic", payload: newPhoto.uri });
-  };
-
-  if (photo) {
-    let savePhoto = () => {
-      MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
-        setPhoto(undefined);
+    if (newPhoto && newPhoto.base64) {
+      dispatch({
+        type: "image",
+        payload: `data:image/jpg;base64,${newPhoto.base64}`,
       });
-    };
-
+    }
+    setPhoto(newPhoto);
+  };
+  if (photo) {
     return (
       <SafeAreaView style={styles.container}>
         <Image
           style={styles.preview}
           source={{ uri: "data:image/jpg;base64," + photo.base64 }}
         />
-        {hasMediaLibraryPermission ? (
-          <Button title="Save" onPress={savePhoto} />
-        ) : undefined}
         <Button title="Discard" onPress={() => setPhoto(undefined)} />
       </SafeAreaView>
     );
