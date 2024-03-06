@@ -8,10 +8,13 @@ ProfileScreen = ({ navigation }) => {
   function navigateAddProfile() {
     navigation.navigate("AddProfile", { name: "Jane" });
   }
+  function navigateSample() {
+    navigation.navigate("Example");
+  }
   return (
     <SafeAreaView style={styles.mainContainer}>
       <HeaderText text="Profile" />
-      <View style={{ flex: 1, alignItems: "center" }}>
+      <View style={{ flex: 1, alignItems: "center", gap: 32 }}>
         <Image
           size="lg"
           borderRadius="$full"
@@ -26,6 +29,14 @@ ProfileScreen = ({ navigation }) => {
             navigateAddProfile();
           }}
         />
+        <View style={{ flex: 1 }}>
+          <ButtonFunc
+            text="View Sample"
+            handleOnPress={() => {
+              navigateSample();
+            }}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
