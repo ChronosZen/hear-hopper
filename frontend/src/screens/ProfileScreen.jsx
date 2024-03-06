@@ -4,7 +4,9 @@ import HeaderText from "../components/reusable/HeaderText";
 import ButtonFunc from "../components/reusable/ButtonFunc";
 import { Image, SafeAreaView } from "@gluestack-ui/themed";
 
-ProfileScreen = ({ navigation }) => {
+ProfileScreen = ({ navigation, route }) => {
+  const { userData } = route.params;
+  console.log(userData);
   function navigateAddProfile() {
     navigation.navigate("AddProfile", { name: "Jane" });
   }
@@ -14,14 +16,13 @@ ProfileScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <HeaderText text="Profile" />
+      <Text>Hello, {userData.firstName}</Text>
       <View style={{ flex: 1, alignItems: "center", gap: 32 }}>
         <Image
           size="lg"
           borderRadius="$full"
           alt="test"
-          source={{
-            uri: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-          }}
+          source={{ uri: userData.kidInfo.image }}
         />
         <ButtonFunc
           text="Add +"
