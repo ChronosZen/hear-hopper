@@ -202,7 +202,7 @@ const NoiseChecker = () => {
             />
             <Text>
                 {state.isNoiseChecking
-                    ? `Current Noise is ${state.noiseLevel} DB`
+                    ? `Current Noise is ${state.noiseLevel} dB`
                     : ""
                 }
             </Text>
@@ -210,7 +210,7 @@ const NoiseChecker = () => {
             {state.isNoiseChecking && state.noiseLevel > -15 && (
                 <Alert status="alert">
                     <AlertIcon />
-                    <AlertText>Too loud</AlertText>
+                    <AlertText>Too loud and Not Safe</AlertText>
                 </Alert>
             )}
 
@@ -223,7 +223,7 @@ const NoiseChecker = () => {
             )}
 
             {state.isNoiseChecking && state.noiseLevel <= -35 && (
-                <Text> Quiet </Text>
+                <Text> Quiet</Text>
             )}
         </Box>
     )
