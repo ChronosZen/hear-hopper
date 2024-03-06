@@ -44,6 +44,11 @@ const heading = {
     lineHeight: 16 * 1.5,
     fontFamily: "Outfit_700Bold",
   },
+  nav: {
+    fontSize: 14,
+    lineHeight: 14 * 1.5,
+    fontFamily: "Outfit_400Regular",
+  },
 };
 const body = {
   bxl: {
