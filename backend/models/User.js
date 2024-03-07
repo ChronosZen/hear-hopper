@@ -9,7 +9,7 @@ const userSchema = new Schema(
     firstName: String,
     lastName: String,
     age: Number,
-    kidInfo: [{
+    kidInfo: {
       kidID: Number,
       birthYear: Number,
       gender: String,
@@ -19,7 +19,7 @@ const userSchema = new Schema(
         left: String,
         right: String,
       }
-    }],
+    },
     hearingIssue: String,
     hearingTestResult: String
   },
