@@ -14,8 +14,4 @@ router.post("/updateKidImage/:id", UserController.updateKidImage);
 router.post("/updateKidInfoName/:id", UserController.updateKidInfoName);
 
 
-
-
-
-
 export default router;
