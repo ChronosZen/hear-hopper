@@ -94,10 +94,11 @@ const UserController = {
         const match = await bcrypt.compare(req.body.password, user.password);
         if (match) {
           const userWithoutPassword = {
-            // id: user.id,
-            // firstName: user.firstName,
-            // lastName: user.lastName,
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
             email: user.email,
+            kidInfo: user.kidInfo,
           };
           res.status(200).json(userWithoutPassword);
           console.log("Success");
