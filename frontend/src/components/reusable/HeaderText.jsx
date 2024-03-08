@@ -15,6 +15,6 @@ const styles = StyleSheet.create({
   heading: {
     alignItems: "center",
     marginBottom: Spacing.s,
-    ...Typography.disyplay.x1,
+    ...Typography.heading.h2,
   },
 });
