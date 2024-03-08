@@ -41,6 +41,14 @@ export default function App() {
     <GluestackUIProvider config={config}>
       <NavigationContainer>
         {isSignedIn ? (
+
+        // <Stack.Navigator>
+        //   <Stack.Screen name="Home">
+        //     {(props) => <HomeScreen}
+        //   </Stack.Screen>
+
+        // </Stack.Navigator>
+
           <BottomTab />
         ) : (
           <Stack.Navigator>
