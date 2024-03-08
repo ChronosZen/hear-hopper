@@ -94,19 +94,27 @@ function reducer(state, action) {
       };
   }
 }
+const getRandomIntInclusive = (min, max) => {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is inclusive and the minimum is inclusive
+};
+
 const AddProfileScreen = ({ navigation: { goBack }, route }) => {
   const [{ page, birthYear, gender, image, childName, left, right }, dispatch] =
     useReducer(reducer, initialState);
   const { userData } = route.params;
   const onSubmitKid = async () => {
+    const kidID = getRandomIntInclusive(1, 10000);
     const payload = {
+      kidID,
       birthYear,
       gender,
       image,
       childName,
-      left,
-      right,
+      hearingAid: { left, right },
     };
+    console.log(payload);
     fetch(`${API_URL}/users/updateKidInfo/${userData.id}`, {
       method: "POST",
       headers: {
@@ -122,9 +130,9 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
           return response.json();
         }
       })
-      .then((data) => {
-        console.log(data);
-      })
+      // .then((data) => {
+      //   console.log(data);
+      // })
       .catch((error) => {
         console.error(
           "There has been a problem with your fetch(updateKidInfo):",
