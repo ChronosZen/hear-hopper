@@ -6,7 +6,6 @@ import { Image, SafeAreaView } from "@gluestack-ui/themed";
 
 ProfileScreen = ({ navigation, route }) => {
   const { userData } = route.params;
-  console.log(userData);
   function navigateAddProfile() {
     navigation.navigate("AddProfile", { name: "Jane" });
   }
@@ -22,7 +21,7 @@ ProfileScreen = ({ navigation, route }) => {
           size="lg"
           borderRadius="$full"
           alt="test"
-          source={{ uri: userData.kidInfo.image }}
+          source={{ uri: userData.kidInfo[0].image }}
         />
         <ButtonFunc
           text="Add +"
