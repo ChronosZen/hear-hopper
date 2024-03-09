@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, Button, TouchableOpacity, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
 import { useState, useEffect, useReducer } from "react";
-import HearingTest from "../components/HearingTest";
 import { Audio } from "expo-av";
-import { LineChart } from "react-native-chart-kit";
+import TestResult from "../components/hearingTest/TestResult";
+import CountDown from "../components/hearingTest/CountDown";
 
 const countDownReducer = (state, action) => {
   switch (action.type) {
@@ -19,15 +19,39 @@ const TestScreen = () => {
   const [countPress, setcountPress] = useState(false);
   const [state, dispatch] = useReducer(countDownReducer, { count: 3 });
   const [sound, setSound] = useState();
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioIndex, setAudioIndex] = useState(0);
+  const [responseFreq, setResponseFreq] = useState([0, 1000, 2000, 5000, 8000])
+  const [responsedB, setResponsedB] = useState([0,0,0,0])
   const [viewResults, setViewResults] = useState(false);
-  const audioFile = [
-    { uri: "../../assets/audioFiles/1000hz.wav", volume: 0.8 },
-    { uri: "../../assets/audioFiles/2000hz.wav", volume: 0.5 },
-    { uri: "../../assets/audioFiles/5000hz.wav", volume: 0.7 },
-    { uri: "../../assets/audioFiles/8000hz.wav", volume: 0.8 }
+  const audioPlay = [
+    { uri: require("../../assets/audioFiles/2000hz.wav"),freq: 2000, volume: 0.5 },
+    { uri: require("../../assets/audioFiles/2000hz.wav"),freq: 2000, volume: 0.5 },
+    { uri: require("../../assets/audioFiles/2000hz.wav"),freq: 2000, volume: 0.5 },
+    { uri: require("../../assets/audioFiles/2000hz.wav"),freq: 2000, volume: 0.5 },
+    { uri: require("../../assets/audioFiles/2000hz.wav"),freq: 0, volume: 0 },
+    { uri: require("../../assets/audioFiles/2000hz.wav"),freq: 0, volume: 0 },
+    { uri: require("../../assets/audioFiles/2000hz.wav"),freq: 0, volume: 0 },
+    { uri: require("../../assets/audioFiles/1000hz.wav"),freq: 1000, volume: 0.8 },
+    { uri: require("../../assets/audioFiles/1000hz.wav"),freq: 1000, volume: 0.8 },
+    { uri: require("../../assets/audioFiles/1000hz.wav"),freq: 1000, volume: 0.8 },
+    { uri: require("../../assets/audioFiles/1000hz.wav"),freq: 1000, volume: 0.8 },
+    { uri: require("../../assets/audioFiles/1000hz.wav"),freq: 0, volume: 0 },
+    { uri: require("../../assets/audioFiles/1000hz.wav"),freq: 0, volume: 0 },
+    { uri: require("../../assets/audioFiles/1000hz.wav"),freq: 0, volume: 0 },
+    { uri: require("../../assets/audioFiles/5000hz.wav"),freq: 5000, volume: 0.7 },
+    { uri: require("../../assets/audioFiles/5000hz.wav"),freq: 5000, volume: 0.7 },
+    { uri: require("../../assets/audioFiles/5000hz.wav"),freq: 5000, volume: 0.7 },
+    { uri: require("../../assets/audioFiles/5000hz.wav"),freq: 5000, volume: 0.7 },
+    { uri: require("../../assets/audioFiles/5000hz.wav"),freq: 0, volume: 0 },
+    { uri: require("../../assets/audioFiles/5000hz.wav"),freq: 0, volume: 0 },
+    { uri: require("../../assets/audioFiles/5000hz.wav"),freq: 0, volume: 0 },
+    { uri: require("../../assets/audioFiles/8000hz.wav"),freq: 8000, volume: 0.8 },
+    { uri: require("../../assets/audioFiles/8000hz.wav"),freq: 8000, volume: 0.8 },
+    { uri: require("../../assets/audioFiles/8000hz.wav"),freq: 8000, volume: 0.8 },
+    { uri: require("../../assets/audioFiles/8000hz.wav"),freq: 8000, volume: 0.8 },
   ];
 
+  // count down to begin test
   function countDown() {
     if (state.count > 0) {
       const interval = setInterval(() => {
@@ -35,7 +59,6 @@ const TestScreen = () => {
 
         if (state.count === 1) {
           clearInterval(interval);
-          playSound();
         }
       }, 1000);
     } else {
@@ -43,26 +66,48 @@ const TestScreen = () => {
     }
   }
 
+  // loading audio file
   async function loadSound() {
-    // console.log("uri: ", uri, " vol: ", volume);
-    const { sound } = await Audio.Sound.createAsync(
-      require(`../../assets/audioFiles/2000hz.wav`)
-    );
-    await sound.setVolumeAsync(0.8);
-
+    const { sound } = await Audio.Sound.createAsync(audioPlay[audioIndex].uri, {
+      shouldPlay: true
+    });
     setSound(sound);
+    sound.setVolumeAsync(audioPlay[audioIndex].volume)
+    sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
   }
 
+  // playing the loaded audio file
   async function playSound() {
-    if (!sound) {
-      await loadSound();
+    loadSound()
+    if(sound){
+        await sound.playAsync();
     }
-    if (!isPlaying && sound) {
-      await sound.playAsync();
-    } else {
-      await sound.stopAsync();
+  }
+
+  const onPlaybackStatusUpdate = async (status) => {
+    if(status.didJustFinish){
+        setAudioIndex(prev => prev+1)
+        if(audioIndex < audioPlay.length && !status.isPlaying){
+          playSound()
+        }
     }
-    setIsPlaying(play => !play);
+  };
+
+  function userResponse(){
+    if(audioIndex < audioPlay.length){
+      console.log("user is able to hear: ",audioPlay[audioIndex].freq)
+      if(audioPlay[audioIndex].freq){
+        // const audioObj = {
+        //   freq: audioPlay[audioIndex].freq, 
+        //   db: audioPlay[audioIndex].volume == 0.8 ? 40 :  audioPlay[audioIndex].volume == 0.7 ? 30 : audioPlay[audioIndex].volume == 0.5 ? 20 : 10
+        // }
+        const db = audioPlay[audioIndex].volume == 0.8 ? 40 :  audioPlay[audioIndex].volume == 0.7 ? 30 : audioPlay[audioIndex].volume == 0.5 ? 20 : 10
+        const key = responseFreq.indexOf(audioPlay[audioIndex].freq)
+        const audioArr = [...responsedB]
+        audioArr[key] = db
+        setResponsedB(audioArr)
+      }
+    }
   }
 
   function refreshPage() {
@@ -71,9 +116,19 @@ const TestScreen = () => {
     dispatch({ type: "set" });
   }
 
-  useEffect(() => {
-    loadSound()
-  },[])
+  function displayArray(){
+    console.log("display details: ", responseFreq.length, responsedB.length)
+    for(let i=0; i<responseFreq.length; i++){
+      console.log("freq: ", responseFreq[i])
+      console.log("db: ", responsedB[i])
+    }
+  }
+
+  function prevResults(){
+    setViewResults(false)
+  }
+
+  console.log("audio index outside")
 
   return (
     <View style={styles.container}>
@@ -92,140 +147,11 @@ const TestScreen = () => {
         {countPress ? (
           <>
             {state.count > 0 ? (
-              <View style={{ justifyContent: "center", alignItems: "center" }}>
-                <Text style={{ textAlign: "center" }}>Test starts in</Text>
-                <Text style={styles.countDownText}>{state.count}</Text>
-              </View>
+              <CountDown count={state.count} />
             ) : (
               <>
                 {viewResults ? (
-                  <View style={{ flex: 1 }}>
-                    <View style={styles.spacingView}>
-                      <Text
-                        style={{
-                          fontWeight: "bold",
-                          margin: 12,
-                          fontSize: 30
-                        }}
-                      >
-                        Test Results
-                      </Text>
-                    </View>
-
-                    {/* Ear results */}
-                    <View
-                      style={
-                        (styles.spacingView,
-                        {
-                          flexDirection: "row",
-                          justifyContent: "space-around"
-                        })
-                      }
-                    >
-                      <View>
-                        <Text>Left Ear</Text>
-                        <Text
-                          style={{
-                            fontSize: 16,
-                            fontWeight: "bold",
-                            textAlign: "center"
-                          }}
-                        >
-                          95
-                        </Text>
-                      </View>
-                      <View>
-                        <Text>Right Ear</Text>
-                        <Text
-                          style={{
-                            fontSize: 16,
-                            fontWeight: "bold",
-                            textAlign: "center"
-                          }}
-                        >
-                          95
-                        </Text>
-                      </View>
-                    </View>
-
-                    <View style={styles.spacingView}>
-                      <Text
-                        style={{
-                          textAlign: "center",
-                          fontWeight: "500",
-                          paddingVertical: 24
-                        }}
-                      >
-                        Excellent Hearing
-                      </Text>
-                    </View>
-
-                    <View
-                      style={{
-                        backgroundColor: "#D1D1D1",
-                        flex: 1,
-                        justifyContent: "space-between",
-                        padding: 20,
-                        borderTopLeftRadius: 50,
-                        borderTopRightRadius: 50
-                      }}
-                    >
-                      <Text style={{ fontWeight: "bold" }}>Audiogram</Text>
-                      {/* Audio Chart */}
-                      <View>
-                        <LineChart
-                          data={{
-                            labels: [500, 1000, 2000, 3000, 6000, 8000],
-                            datasets: [
-                              {
-                                data: [
-                                  40,
-                                  30,
-                                  50,
-                                  40,
-                                  10,
-                                  30
-                                ]
-                              }
-                            ]
-                          }}
-                          width={Dimensions.get("window").width - 50}
-                          height={200}
-                          xAxisLabel="Hz"
-                          yAxisSuffix="dB"
-                          yAxisInterval={1}
-                          chartConfig={{
-                            backgroundColor: "#4900E5",
-                            backgroundGradientFrom: "#4900E5",
-                            backgroundGradientTo: "#4900E5",
-                            decimalPlaces: 2,
-                            color: (opacity = 1) =>
-                              `rgba(255, 255, 255, ${opacity})`,
-                            labelColor: (opacity = 1) =>
-                              `rgba(255, 255, 255, ${opacity})`,
-                            style: {
-                              borderRadius: 16
-                            },
-                            propsForDots: {
-                              r: "6",
-                              strokeWidth: "2",
-                              stroke: "#ffa726"
-                            }
-                          }}
-                          bezier
-                          style={{
-                            marginVertical: 8,
-                            borderRadius: 16
-                          }}
-                        />
-                      </View>
-
-                      <Button
-                        title="View Previous Results"
-                        onPress={() => setViewResults(false)}
-                      />
-                    </View>
-                  </View>
+                  <TestResult responseFreq={responseFreq} responsedB={responsedB} prevResults={prevResults} />
                 ) : (
                   <View
                     style={{
@@ -242,8 +168,10 @@ const TestScreen = () => {
                           height: 200,
                           borderRadius: 100,
                           alignSelf: "center",
-                        }}>
+                        }}
+                        onPress={userResponse}>
                         <TouchableOpacity
+                        onPress={userResponse}
                         style={{
                           backgroundColor: "#4900E5",
                           width: 100,
@@ -255,11 +183,14 @@ const TestScreen = () => {
                       <Text style={{ textAlign: "center", fontWeight: "400" }}>
                         Hold the Button and Stop when you can’t hear it.
                       </Text>
+                      <Text>{audioIndex}</Text>
+                      {/* {audioIndex < audioPlay.length ? <AudioPlay index={audioIndex} onUpdate={indexValues} /> : <Text>Nothing is playing</Text>} */}
                     </View>
                     <Button
-                      title={isPlaying ? "Stop" : "Start Playing"}
+                      title="Start Playing"
                       onPress={playSound}
                     />
+                    {/* <Button title="Check array of response" onPress={displayArray} /> */}
                     <Button
                       title="View Results"
                       onPress={() => setViewResults(true)}
