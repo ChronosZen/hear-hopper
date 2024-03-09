@@ -56,7 +56,7 @@ const reducer = (state, action) => {
 }
 
 const NoiseChecker = () => {
-    // console.log("Message from NoiseChecker component.")
+    // console.log("Message from NoiseChecker component.") -> OK
     const [state, dispatch] = useReducer(reducer, initialState);
 
     // Check microphone access and recording permission status.
@@ -91,8 +91,9 @@ const NoiseChecker = () => {
         }
     }
 
+
     let noiseCheckInterval = null
-    // console.log("noiseCheckInterval ->", noiseCheckInterval)
+    // console.log("noiseCheckInterval ->", noiseCheckInterval) // -> OK
 
     // Start noise check
     const startNoiseCheck = async () => {
@@ -103,7 +104,6 @@ const NoiseChecker = () => {
             if (state.recording !== null) {
                 await stopNoiseCheck()
             }
-
             await Audio.setAudioModeAsync({
                 allowsRecordingIOS: true,
                 playsInSilentModeIOS: true,
