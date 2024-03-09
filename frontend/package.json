@@ -4,8 +4,8 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web"
   },
   "dependencies": {
@@ -15,7 +15,6 @@
     "@gluestack-style/react": "^1.0.48",
     "@gluestack-ui/config": "^1.1.8",
     "@gluestack-ui/themed": "^1.1.8",
-    "@react-native-google-signin/google-signin": "^11.0.0",
     "@react-native-picker/picker": "^2.6.1",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
@@ -27,17 +26,21 @@
     "expo-font": "~11.10.3",
     "expo-media-library": "^15.9.1",
     "expo-sharing": "^11.10.0",
-    "expo-status-bar": "~1.11.1",
-    "react": "18.2.0",
-    "react-native": "0.73.4",
     "react-native-chart-kit": "^6.12.0",
     "react-native-google-signin": "^2.1.1",
     "react-native-paper": "^5.12.3",
+    "expo-file-system": "~16.0.7",
+    "expo-splash-screen": "^0.26.4",
+    "expo-status-bar": "~1.11.1",
+    "react": "18.2.0",
+    "react-native": "0.73.4",
     "react-native-safe-area-context": "^4.8.2",
     "react-native-screens": "^3.29.0",
+    "react-native-svg": "^14.1.0",
     "react-native-tab-view": "^3.5.2",
-    "react-native-svg": "14.1.0",
-    "expo-file-system": "~16.0.7"
+    "react-native-volume-manager": "^1.10.0",
+    "expo-dev-client": "~3.3.9",
+    "expo-secure-store": "~12.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
