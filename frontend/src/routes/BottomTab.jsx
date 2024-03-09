@@ -57,7 +57,8 @@ const BottomTab = ({ userData }) => {
       }}>
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        // component={HomeScreen}
+        // component={(navigation, route) => <HomeScreen navigation={navigation} route={route} />}
         options={{
           tabBarLabel: ({ focused }) => (
             <Text style={focused ? styles.hNavActive : styles.hNav}>Home</Text>
@@ -71,7 +72,11 @@ const BottomTab = ({ userData }) => {
             />
           ),
         }}
-      />
+      >
+        {({ navigation, route }) => (
+          <HomeScreen navigation={navigation} route={route} userData={userData} />
+        )}
+      </Tab.Screen>
       <Tab.Screen
         name="Test"
         component={TestScreen}
