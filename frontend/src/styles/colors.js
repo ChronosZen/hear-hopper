@@ -35,5 +35,7 @@ const gs = {
   gs2: "#505255",
   gs3: "#7E8082",
   gs4: "#A1A3A4",
+  gs5: "#C5C5C6",
+  gs6: "#E8E8E8",
 };
 export { primary, secondary, accent, gs };

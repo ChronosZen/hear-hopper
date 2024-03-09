@@ -16,5 +16,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: Spacing.s,
     ...Typography.heading.h2,
+    color: Colors.gs.black,
   },
 });
