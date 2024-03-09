@@ -24,7 +24,6 @@ const TrainScreen = ({ navigation }) => {
         <HeaderText text="Ear Training" />
         <SVG xml={infoIcon} width="24" height="24" />
       </HStack>
-
       <TrainSection navigateFindAnimals={navigateFindAnimals} />
       <NoiseChecker />
     </View>

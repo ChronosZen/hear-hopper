@@ -8,7 +8,8 @@ const TestResult = () => {
             <View style={styles.spacingView}>
                 <Text style={{fontWeight: 'bold', marginLeft: 12, fontSize: 30}}>Test Results</Text>
             </View>
-            <View style={styles.spacingView, {flexDirection: 'row', justifyContent: 'space-around'}}>
+            {/* <View style={styles.spacingView, {flexDirection: 'row', justifyContent: 'space-around'}}> */}
+            <View style={[styles.spacingView, {flexDirection: 'row', justifyContent: 'space-around'}]}>
                 <View>
                     <Text>Left Ear</Text>
                     <Text style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>95</Text>
