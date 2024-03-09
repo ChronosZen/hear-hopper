@@ -16,6 +16,9 @@ import {
   trainingIcon,
 } from "../components/svg/svgs";
 import { Colors, Typography } from "../styles";
+import TrainSection from "../components/train/TrainSection";
+import StartSection from "../components/train/StartSection";
+import QuizSection from "../components/train/QuizSection";
 
 const ProfileStack = createNativeStackNavigator();
 
@@ -27,15 +30,26 @@ function ProfileStackScreen({ route }) {
       <ProfileStack.Screen
         name="MainProfile"
         initialParams={{ userData }}
-        component={ProfileScreen}></ProfileStack.Screen>
+        component={ProfileScreen}
+      />
       <ProfileStack.Screen
         name="AddProfile"
         initialParams={{ userData }}
-        component={AddProfileScreen}></ProfileStack.Screen>
-      <ProfileStack.Screen
-        name="Example"
-        component={ExampleScreen}></ProfileStack.Screen>
+        component={AddProfileScreen}
+      />
+      <ProfileStack.Screen name="Example" component={ExampleScreen} />
     </ProfileStack.Navigator>
+  );
+}
+
+const TrainStack = createNativeStackNavigator();
+function TrainStackScreen() {
+  return (
+    <TrainStack.Navigator screenOptions={{ headerShown: true }}>
+      <TrainStack.Screen name="TrainSection" component={TrainScreen} />
+      <TrainStack.Screen name="QuizSection" component={QuizSection} />
+      <TrainStack.Screen name="StartSection" component={StartSection} />
+    </TrainStack.Navigator>
   );
 }
 
@@ -96,7 +110,7 @@ const BottomTab = ({ userData }) => {
       />
       <Tab.Screen
         name="Train"
-        component={TrainScreen}
+        component={TrainStackScreen}
         options={{
           tabBarLabel: ({ focused }) => (
             <Text style={focused ? styles.hNavActive : styles.hNav}>
