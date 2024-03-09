@@ -24,7 +24,11 @@ ProfileScreen = ({ navigation, route }) => {
       </VStack>
       <VStack justifyContent="center" alignItems="start" gap={8}>
         {kidArr.map((kid) => (
-          <KidDisplay image={kid.image} childName={kid.childName} />
+          <KidDisplay
+            image={kid.image}
+            childName={kid.childName}
+            key={kid.kidID}
+          />
         ))}
       </VStack>
       <View style={{ flex: 1, alignItems: "center", gap: 32 }}>
