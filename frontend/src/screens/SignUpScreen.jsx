@@ -1,165 +1,184 @@
+import React, { useState } from "react";
 import {
   StyleSheet,
-  Text,
-  View,
-  TextInput,
   SafeAreaView,
-  Button,
+  View,
+  Text,
   Platform,
   Modal,
   Pressable,
-  Keyboard,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React, { useState } from "react";
-const API_URL =
-  Platform.OS === "ios" ? "http://localhost:5000" : "http://10.0.2.2:5000";
+import {
+  FormControl,
+  VStack,
+  Input,
+  InputField,
+  InputSlot,
+} from "@gluestack-ui/themed";
+import ButtonFunc from "../components/reusable/ButtonFunc";
+import HeaderText from "../components/reusable/HeaderText";
+import { Typography, Colors } from "../styles";
 
-const CustomAlert = (props) => {
+const API_URL = "https://hearhopper.wmdd4950.com";
+
+const CustomAlert = ({ modalVisible, setModalVisible, errorMessage }) => {
   return (
     <Modal
-      style={styles.modal}
       animationType="fade"
       transparent={true}
-      visible={props.modalVisible}
+      visible={modalVisible}
       onRequestClose={() => {
-        props.setModalVisible(false);
+        setModalVisible(false);
       }}>
       <Pressable
         style={[
           Platform.OS === "ios" ? styles.iOSBackdrop : styles.androidBackdrop,
           styles.backdrop,
         ]}
-        onPress={() => props.setModalVisible(false)}>
+        onPress={() => setModalVisible(false)}>
         <View>
-          <Text style={styles.error}>Wrong UserId or Password</Text>
+          <Text style={styles.error}>{errorMessage}</Text>
         </View>
       </Pressable>
     </Modal>
   );
 };
-const SignUpScreen = ({ navigation, route, setIsSignedIn }) => {
-  const [email, onChangeEmail] = useState("");
+
+const SignUpScreen = ({ setIsSignedIn }) => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState({ check: false, message: "" });
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-  const toggleShowConfirmPassword = () => {
+
+  const toggleShowPassword = () => setShowPassword(!showPassword);
+  const toggleShowConfirmPassword = () =>
     setShowConfirmPassword(!showConfirmPassword);
-  };
-  const validate = () => {
-    Keyboard.dismiss();
-    let isValid = true;
-    if (password !== confirmPassword) {
-      setError({ check: true, message: "Both password is unmatch" });
-      isValid = false;
+
+  const validateAndSignup = async () => {
+    // Basic validation checks
+    if (!email) {
+      setModalVisible(true);
+      setErrorMessage("Email is required");
+      return;
     }
 
-    if (isValid) {
-      Signup();
+    if (!password) {
+      setModalVisible(true);
+      setErrorMessage("Password is required");
+      return;
     }
-  };
-  const Signup = async () => {
+
+    if (password.length < 8) {
+      setModalVisible(true);
+      setErrorMessage("Password must be at least 8 characters long");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setModalVisible(true);
+      setErrorMessage("Passwords do not match");
+      return;
+    }
     const payload = {
       email: email,
-      password: String(password),
+      password: password,
     };
-    fetch(`${API_URL}/signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(payload),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          setModalVisible(true);
-          throw new Error(`HTTP error! status: ${response.status}`);
-        } else {
-          return response.status;
-        }
-      })
-      .then(() => setIsSignedIn(true))
-      .catch((error) => {
-        console.error("There has been a problem with your fetch:", error);
-        setModalVisible(true);
-        setErrorMessage(error.message);
+
+    try {
+      const response = await fetch(`${API_URL}/users/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
       });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      setIsSignedIn(true);
+    } catch (error) {
+      console.error(
+        "There has been a problem with your fetch operation:",
+        error
+      );
+      setModalVisible(true);
+      setErrorMessage(error.message);
+    }
   };
   return (
     <SafeAreaView style={styles.mainContainer}>
       <CustomAlert
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        errorMessage={errorMessage}
       />
-      <View>
-        <Text>email</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeEmail}
-          value={email}
-          placeholder="eg. chris@gmail.com"
-        />
-      </View>
-      <View>
-        <Text>Password</Text>
-        <TextInput
-          secureTextEntry={!showPassword}
-          value={password}
-          onChangeText={setPassword}
-          style={[
-            styles.input,
-            {
-              borderColor: error.check ? "red" : "black",
-            },
-          ]}
-          placeholder="Enter Password"
-          placeholderTextColor="#aaa"
-        />
-        <MaterialCommunityIcons
-          name={showPassword ? "eye-off" : "eye"}
-          size={24}
-          color="#aaa"
-          style={styles.icon}
-          onPress={toggleShowPassword}
-        />
-      </View>
-      <View>
-        <Text>Confirm Password</Text>
-        <TextInput
-          secureTextEntry={!showConfirmPassword}
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          style={[
-            styles.input,
-            {
-              borderColor: error.check ? "red" : "black",
-            },
-          ]}
-          placeholder="Enter Password"
-          placeholderTextColor="#aaa"
-        />
-        {error.check ? <Text>{error.message}</Text> : <></>}
-        <MaterialCommunityIcons
-          name={showConfirmPassword ? "eye-off" : "eye"}
-          size={24}
-          color="#aaa"
-          style={styles.icon}
-          onPress={toggleShowConfirmPassword}
-        />
-      </View>
-      <Button
-        title="Sign up"
-        onPress={() => {
-          validate();
-        }}
-      />
+      <FormControl>
+        <VStack space="xl">
+          <HeaderText text="Sign Up" />
+          <VStack space="xs">
+            <Text color="$text500" lineHeight="$xs">
+              Email
+            </Text>
+            <Input>
+              <InputField
+                type="text"
+                placeholder="Enter Email"
+                onChangeText={setEmail}
+                value={email}
+              />
+            </Input>
+          </VStack>
+          <VStack space="xs">
+            <Text color="$text500" lineHeight="$xs">
+              Password
+            </Text>
+            <Input textAlign="center">
+              <InputField
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter Password"
+                value={password}
+                onChangeText={setPassword}
+              />
+              <InputSlot pr="$3" onPress={toggleShowPassword}>
+                <MaterialCommunityIcons
+                  name={showPassword ? "eye-off" : "eye"}
+                  size={24}
+                  color="#aaa"
+                />
+              </InputSlot>
+            </Input>
+          </VStack>
+          <VStack space="xs">
+            <Text color="$text500" lineHeight="$xs">
+              Confirm Password
+            </Text>
+            <Input textAlign="center">
+              <InputField
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+              />
+              <InputSlot pr="$3" onPress={toggleShowConfirmPassword}>
+                <MaterialCommunityIcons
+                  name={showConfirmPassword ? "eye-off" : "eye"}
+                  size={24}
+                  color="#aaa"
+                />
+              </InputSlot>
+            </Input>
+            {errorMessage ? (
+              <Text style={styles.errorText}>{errorMessage}</Text>
+            ) : null}
+          </VStack>
+          <ButtonFunc handleOnPress={validateAndSignup} text="Sign Up" />
+        </VStack>
+      </FormControl>
     </SafeAreaView>
   );
 };

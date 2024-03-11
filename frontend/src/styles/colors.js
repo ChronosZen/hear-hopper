@@ -31,9 +31,11 @@ const accent = {
 const gs = {
   black: "#15181C",
   white: "#FFFFFF",
-  gs1: "#6E6E74",
-  gs2: "#C7C8D1",
-  gs3: "#EEEEF1",
-  gs4: "#F6F6F8",
+  gs1: "#383B3E",
+  gs2: "#505255",
+  gs3: "#7E8082",
+  gs4: "#A1A3A4",
+  gs5: "#C5C5C6",
+  gs6: "#E8E8E8",
 };
 export { primary, secondary, accent, gs };
