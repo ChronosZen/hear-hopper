@@ -19,6 +19,8 @@ import { Colors, Typography } from "../styles";
 import TrainSection from "../components/train/TrainSection";
 import StartSection from "../components/train/StartSection";
 import QuizSection from "../components/train/QuizSection";
+import TestTutorial from "../components/hearingTest/TestTutorial";
+import EarTestScreen from "../screens/EarTestScreen";
 
 const ProfileStack = createNativeStackNavigator();
 
@@ -50,6 +52,17 @@ function TrainStackScreen() {
       <TrainStack.Screen name="QuizSection" component={QuizSection} />
       <TrainStack.Screen name="StartSection" component={StartSection} />
     </TrainStack.Navigator>
+  );
+}
+
+const HearinTestStack = createNativeStackNavigator();
+function HearingTestStackScreen() {
+  return (
+    <HearinTestStack.Navigator screenOptions={{ headerShown: true }}>
+      <HearinTestStack.Screen name="HearingTest" component={TestScreen} />
+      <HearinTestStack.Screen name="Tutorial" component={TestTutorial} />
+      <HearinTestStack.Screen name="Ear Test" component={EarTestScreen} />
+    </HearinTestStack.Navigator>
   );
 }
 
@@ -93,7 +106,7 @@ const BottomTab = ({ userData }) => {
       </Tab.Screen>
       <Tab.Screen
         name="Test"
-        component={TestScreen}
+        component={HearingTestStackScreen}
         options={{
           tabBarLabel: ({ focused }) => (
             <Text style={focused ? styles.hNavActive : styles.hNav}>Test</Text>
