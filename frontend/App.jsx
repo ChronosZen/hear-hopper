@@ -30,7 +30,6 @@ const queryClient = new QueryClient()
 const Stack = createNativeStackNavigator();
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const [userData, setUserData] = useState({});
   let [fontsLoaded, fontError] = useFonts({
     Outfit_400Regular,
     Outfit_600SemiBold,
@@ -48,7 +47,7 @@ export default function App() {
     <GluestackUIProvider config={config}>
       <NavigationContainer>
         {isSignedIn ? (
-          <BottomTab userData={userData} />
+          <BottomTab/>
         ) : (
           <Stack.Navigator>
             <Stack.Screen name="Log in">
@@ -56,7 +55,6 @@ export default function App() {
                 <LoginScreen
                   {...props}
                   setIsSignedIn={setIsSignedIn}
-                  setUserData={setUserData}
                 />
               )}
             </Stack.Screen>

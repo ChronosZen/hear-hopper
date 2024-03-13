@@ -21,6 +21,7 @@ import StartSection from "../components/train/StartSection";
 import QuizSection from "../components/train/QuizSection";
 import TestTutorial from "../components/hearingTest/TestTutorial";
 import EarTestScreen from "../screens/EarTestScreen";
+import { useQuery } from "@tanstack/react-query";
 
 const ProfileStack = createNativeStackNavigator();
 
@@ -68,7 +69,24 @@ function HearingTestStackScreen() {
 
 const Tab = createBottomTabNavigator();
 
-const BottomTab = ({ userData }) => {
+const BottomTab = () => {
+  const { isPending, error, data } = useQuery({
+    queryKey: ["myData"],
+    queryFn: () =>
+      fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/me`, {
+        headers: {
+          Authorization: `Bearer ${process.env.EXPO_PUBLIC_MOCK_JWT}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((json) => json.data),
+  });
+
+  if (isPending) return "Loading...";
+
+  if (error) return "An error has occurred: " + error.message;
+
+  const userData = data;
   return (
     <Tab.Navigator
       style={styles.tab}
@@ -81,7 +99,8 @@ const BottomTab = ({ userData }) => {
           paddingTop: 11,
           paddingBottom: 11,
         },
-      }}>
+      }}
+    >
       <Tab.Screen
         name="Home"
         // component={HomeScreen}
@@ -101,7 +120,11 @@ const BottomTab = ({ userData }) => {
         }}
       >
         {({ navigation, route }) => (
-          <HomeScreen navigation={navigation} route={route} userData={userData} />
+          <HomeScreen
+            navigation={navigation}
+            route={route}
+            userData={userData}
+          />
         )}
       </Tab.Screen>
       <Tab.Screen
