@@ -15,14 +15,21 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   const user = await User.findOne({ email: req.body.email }).lean().exec();
 
-  const isValid = await comparePasswords(req.body.password, user.password);
-
-  if (!isValid) {
-    res.status(401);
-    res.json({ message: "Incorrect email or password" });
+  if (!user) {
+    res.status(400);
+    // Keep it cryptic to reveal less info to potentially malicious actors
+    res.json({ message: "Incorrect username or password" });
   } else {
-    const token = createJWT(user);
-    res.json({ token });
+    const isValid = await comparePasswords(req.body.password, user.password);
+
+    if (!isValid) {
+      res.status(400);
+      // Keep it cryptic to reveal less info to potentially malicious actors
+      res.json({ message: "Incorrect username or password" });
+    } else {
+      const token = createJWT(user);
+      res.json({ token });
+    }
   }
 };
 
