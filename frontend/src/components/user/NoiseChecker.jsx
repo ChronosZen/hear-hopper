@@ -3,6 +3,8 @@ import { Audio } from 'expo-av';
 import { View } from "react-native";
 import ButtonFunc from "../reusable/ButtonFunc";
 import { Colors } from "../../styles";
+import { UserPermissions } from "./UserPermissions"
+
 import {
     Heading,
     Text,
@@ -59,37 +61,39 @@ const NoiseChecker = () => {
     // console.log("Message from NoiseChecker component.") -> OK
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    // Check microphone access and recording permission status.
-    const checkPermissions = async () => {
-        try {
-            const microphonePermission = await Audio.getPermissionsAsync()
-            dispatch({ type: "SET_MICROPHONE_PERM_GRANTED", payload: microphonePermission.status === "granted" })
-            // console.log("microphone Permissions -> ", microphonePermission.status) // -> OK
+    const { checkPermissions, requestPermissions } = UserPermissions()
 
-            const recordingPermission = await Audio.getPermissionsAsync()
-            dispatch({ type: "SET_RECORDING_PERM_GRANTED", payload: recordingPermission.status === "granted" })
-            // console.log("recording Permission -> ", recordingPermission.status) // -> OK
-        } catch (error) {
-            console.error("checkPermissions is Error: ", error)
-        }
-    }
+    // Check microphone access and recording permission status.
+    // const checkPermissions = async () => {
+    //     try {
+    //         const microphonePermission = await Audio.getPermissionsAsync()
+    //         dispatch({ type: "SET_MICROPHONE_PERM_GRANTED", payload: microphonePermission.status === "granted" })
+    //         // console.log("microphone Permissions -> ", microphonePermission.status) // -> OK
+
+    //         const recordingPermission = await Audio.getPermissionsAsync()
+    //         dispatch({ type: "SET_RECORDING_PERM_GRANTED", payload: recordingPermission.status === "granted" })
+    //         // console.log("recording Permission -> ", recordingPermission.status) // -> OK
+    //     } catch (error) {
+    //         console.error("checkPermissions is Error: ", error)
+    //     }
+    // }
 
     // Request microphone and recording access to the first time user or previous denying user .
-    const requestPermissions = async () => {
-        try {
-            if (!state.isMicrophonePermGranted) {
-                const newMicrophonePermission = await Audio.requestPermissionsAsync()
-                dispatch({ type: "SET_MICROPHONE_PERM_GRANTED", payload: newMicrophonePermission.status === "granted" })
-            }
+    // const requestPermissions = async () => {
+    //     try {
+    //         if (!state.isMicrophonePermGranted) {
+    //             const newMicrophonePermission = await Audio.requestPermissionsAsync()
+    //             dispatch({ type: "SET_MICROPHONE_PERM_GRANTED", payload: newMicrophonePermission.status === "granted" })
+    //         }
 
-            if (state.isRecordingPermGranted) {
-                const newRecordingPermission = await Audio.requestPermissionsAsync()
-                dispatch({ type: "SET_RECORDING_PERM_GRANTED", payload: newRecordingPermission.status === "granted" })
-            }
-        } catch (error) {
-            console.error("requestPermissions is Error: ", error)
-        }
-    }
+    //         if (state.isRecordingPermGranted) {
+    //             const newRecordingPermission = await Audio.requestPermissionsAsync()
+    //             dispatch({ type: "SET_RECORDING_PERM_GRANTED", payload: newRecordingPermission.status === "granted" })
+    //         }
+    //     } catch (error) {
+    //         console.error("requestPermissions is Error: ", error)
+    //     }
+    // }
 
 
     let noiseCheckInterval = null
