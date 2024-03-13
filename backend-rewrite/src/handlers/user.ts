@@ -9,6 +9,7 @@ export const signup = async (req, res) => {
   });
 
   const token = createJWT(user);
+  res.status(201);
   res.json({ token });
 };
 
