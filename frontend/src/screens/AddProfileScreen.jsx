@@ -34,7 +34,6 @@ import {
 import { InputField } from "@gluestack-ui/themed";
 import { FormControl } from "@gluestack-ui/themed";
 import CameraProfile from "../components/user/CameraProfile";
-const API_URL = "https://hearhopper.wmdd4950.com";
 
 const initialState = {
   page: 1,
@@ -115,7 +114,7 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
       hearingAid: { left, right },
     };
     console.log(payload);
-    fetch(`${API_URL}/users/updateKidInfo/${userData.id}`, {
+    fetch(`${process.env.EXPO_PUBLIC_API_URL}/users/updateKidInfo/${userData.id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
