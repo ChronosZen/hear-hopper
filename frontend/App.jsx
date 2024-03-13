@@ -66,6 +66,9 @@ export default function App() {
             <Stack.Screen name="Add Profile">
               {(props) => <AddProfileScreen {...props} />}
             </Stack.Screen>
+            <Stack.Screen name="Parental Control">
+                {(props) => <ParentalControlScreen {...props} />}
+            </Stack.Screen>
           </Stack.Navigator>
         )}
       </NavigationContainer>
