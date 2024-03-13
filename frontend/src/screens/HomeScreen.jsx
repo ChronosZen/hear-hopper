@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 import ButtonFunc from "../components/reusable/ButtonFunc";
 import React from "react";
 import { Colors } from "../styles";
-import TestResult from "../components/TestResult";
+import TestResult from "../components/hearingTest/TestResult";
 import {
   HStack,
   VStack,

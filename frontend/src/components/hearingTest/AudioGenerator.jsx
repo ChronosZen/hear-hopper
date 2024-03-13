@@ -2,15 +2,19 @@ import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import { useState, useEffect, useReducer } from 'react';
 import { Audio } from 'expo-av';
 
-const VoiceGenerator = () => {
+const AudioGenerator = () => {
     const [sound, setSound] = useState();
     const [isPlaying, setIsPlaying] = useState(false);
-    const audioFile = [{uri: '../../assets/audioFiles/1000hz.wav', volume: 0.8}, {uri: '../../assets/audioFiles/2000hz.wav', volume: 0.5}, {uri: '../../assets/audioFiles/5000hz.wav', volume: 0.7}, {uri: '../../assets/audioFiles/8000hz.wav', volume: 0.8}]
+    const audioFile = [
+      {uri: '../../../assets/audioFiles/1000hz.wav', volume: 0.8}, 
+      {uri: '../../../assets/audioFiles/2000hz.wav', volume: 0.5}, 
+      {uri: '../../../assets/audioFiles/5000hz.wav', volume: 0.7}, 
+      {uri: '../../../assets/audioFiles/8000hz.wav', volume: 0.8}]
 
     try{
       async function loadSound({uri, volume}) {
           console.log("uri: ",uri," vol: ",volume)
-          const { sound } = await Audio.Sound.createAsync( require(`../../assets/audioFiles/2000hz.wav`)
+          const { sound } = await Audio.Sound.createAsync( require(`../../../assets/audioFiles/2000hz.wav`)
           );
           await sound.setVolumeAsync(volume)
           // await sound.setPitchAsync(1.5)
@@ -88,7 +92,7 @@ const VoiceGenerator = () => {
     );
 };
 
-export default VoiceGenerator;
+export default AudioGenerator;
 
 const styles = StyleSheet.create({
     container: {
