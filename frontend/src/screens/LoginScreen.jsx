@@ -22,7 +22,6 @@ import { Typography, Colors } from "../styles";
 import HeaderText from "../components/reusable/HeaderText";
 import ButtonFunc from "../components/reusable/ButtonFunc";
 
-const API_URL = "https://hearhopper.wmdd4950.com";
 const CustomAlert = (props) => {
   return (
     <Modal
@@ -60,7 +59,7 @@ const LoginScreen = ({ navigation, route, setIsSignedIn, setUserData }) => {
       email: email,
       password: String(password),
     };
-    fetch(`${API_URL}/users/login`, {
+    fetch(`${process.env.EXPO_PUBLIC_API_URL}/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
