@@ -82,11 +82,12 @@ const BottomTab = () => {
         .then((json) => json.data),
   });
 
-  if (isPending) return "Loading...";
+  if (isPending) return  <Text>Loading...</Text>;
 
-  if (error) return "An error has occurred: " + error.message;
+  if (error) return <Text>An error has occurred: ${error.message}</Text>;
 
   const userData = data;
+  console.log("Here's the user's kids. You should see this after the query has refetched ->", userData.kids.map(kid => kid.firstName))
   return (
     <Tab.Navigator
       style={styles.tab}
