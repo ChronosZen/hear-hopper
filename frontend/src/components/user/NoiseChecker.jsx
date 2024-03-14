@@ -3,7 +3,8 @@ import { Audio } from 'expo-av';
 import { View } from "react-native";
 import ButtonFunc from "../reusable/ButtonFunc";
 import { Colors } from "../../styles";
-import { UserPermissions } from "./UserPermissions"
+import { checkPermissions, requestPermissions } from "./UserPermissions"
+
 import {
     Heading,
     Text,
@@ -60,49 +61,22 @@ const NoiseChecker = () => {
     // console.log("Message from NoiseChecker component.") -> OK
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    // const { checkPermissions, requestPermissions } = UserPermissions()
 
     // Check microphone access and recording permission status.
-    const checkPermissions = async () => {
-        try {
-            const microphonePermission = await Audio.getPermissionsAsync()
-            dispatch({ type: "SET_MICROPHONE_PERM_GRANTED", payload: microphonePermission.status === "granted" })
-            // console.log("microphone Permissions -> ", microphonePermission.status) // -> OK
-
-            const recordingPermission = await Audio.getPermissionsAsync()
-            dispatch({ type: "SET_RECORDING_PERM_GRANTED", payload: recordingPermission.status === "granted" })
-            // console.log("recording Permission -> ", recordingPermission.status) // -> OK
-        } catch (error) {
-            console.error("checkPermissions is Error: ", error)
-        }
+    const handleCheckPermissions = async () => {
+        await checkPermissions(dispatch)
     }
+    console.log("handleCheckPermission is working ->", state)
 
-    // Request microphone and recording access to the first time user or previous denying user .
-    const requestPermissions = async () => {
-        try {
-            if (!state.isMicrophonePermGranted) {
-                const newMicrophonePermission = await Audio.requestPermissionsAsync()
-                dispatch({ type: "SET_MICROPHONE_PERM_GRANTED", payload: newMicrophonePermission.status === "granted" })
-            }
-
-            if (state.isRecordingPermGranted) {
-                const newRecordingPermission = await Audio.requestPermissionsAsync()
-                dispatch({ type: "SET_RECORDING_PERM_GRANTED", payload: newRecordingPermission.status === "granted" })
-            }
-        } catch (error) {
-            console.error("requestPermissions is Error: ", error)
-        }
+    const handleRequestPermissions = async () => {
+        await requestPermissions(dispatch, state)
     }
-
-
-    let noiseCheckInterval = null
-    // console.log("noiseCheckInterval ->", noiseCheckInterval) // -> OK
 
     // Start noise check
     const startNoiseCheck = async () => {
         try {
             if ((!state.isPermissionGranted) || (!state.isRecordingPermGranted)) {
-                requestPermissions()
+                handleRequestPermissions()
             }
             if (state.recording !== null) {
                 await stopNoiseCheck()
@@ -122,8 +96,6 @@ const NoiseChecker = () => {
             dispatch({ type: "SET_IS_NOISE_CHECKING", payload: true })
             dispatch({ type: "SET_RECORDING", payload: recordingObj })
             // console.log("check the state of recording after start the recording ->", recordingObj)
-
-            // const recordingStatus = await recordingObj.getStatusAsync();
 
             const noiseCheckInterval = setInterval(async () => {
                 try {
@@ -177,25 +149,14 @@ const NoiseChecker = () => {
     }
 
     useEffect(() => {
-        checkPermissions()
+        handleCheckPermissions()
         if (!state.isMicrophonePermGranted) {
-            requestPermissions()
+            handleRequestPermissions()
         }
     }, [])
 
     return (
         <>
-            <ButtonFunc
-                handleOnPress={state.isNoiseChecking ? stopNoiseCheck : startNoiseCheck}
-                disabled={!state.isMicrophonePermGranted || !state.isRecordingPermGranted}
-                text={state.isNoiseChecking ? "STOP NOISE CHECK" : "START NOISE CHECK"}
-            />
-            {/* <Text>
-                {state.isNoiseChecking
-                    ? `Current Noise is ${state.noiseLevel} dB`
-                    : ""
-                }
-            </Text> */}
             {state.isNoiseChecking && (
                 <>
                     {
@@ -221,6 +182,18 @@ const NoiseChecker = () => {
                     )}
                 </>
             )}
+            <ButtonFunc
+                handleOnPress={state.isNoiseChecking ? stopNoiseCheck : startNoiseCheck}
+                disabled={!state.isMicrophonePermGranted || !state.isRecordingPermGranted}
+                text={state.isNoiseChecking ? "STOP NOISE CHECK" : "START NOISE CHECK"}
+            />
+            {/* <Text>
+                {state.isNoiseChecking
+                    ? `Current Noise is ${state.noiseLevel} dB`
+                    : ""
+                }
+            </Text> */}
+
         </>
     )
 }
