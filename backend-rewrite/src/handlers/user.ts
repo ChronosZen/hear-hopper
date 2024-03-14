@@ -36,6 +36,7 @@ export const login = async (req, res) => {
 
 export const getAllUserData = async (req, res) => {
   const userData = await User.findById(req.user.id)
+    .select('-password')
     .populate({
       path: "kids",
       populate: {
