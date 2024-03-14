@@ -2,7 +2,7 @@ import { Router } from "express";
 import { body } from "express-validator";
 import { handleInputErrors } from "./modules/middleware";
 import { getAllUserData, updateUserProfile } from "./handlers/user";
-import { registerKid } from "./handlers/kid";
+import { registerKid, updateQuizScore } from "./handlers/kid";
 import { addAudiogram } from "./handlers/audiogram";
 
 const router = Router();
@@ -23,12 +23,20 @@ router.patch(
 router.post(
   "/kid",
   body("firstName").exists().isString(),
-  body("birthYear").exists(),
+  body("birthYear").exists().isNumeric(),
   body("gender").exists().isIn(["Boy", "Girl", "Non-binary","Prefer not to say"]),
   body("hearingAid").exists(),
   handleInputErrors,
   registerKid
 );
+
+// Patch the kid's training score
+router.patch(
+  "/quiz/:kidId",
+  body("quizScore").exists().isNumeric().isIn([1,2,3,4,5]),
+  handleInputErrors,
+  updateQuizScore
+)
 
 // Add audiogram
 router.post(
