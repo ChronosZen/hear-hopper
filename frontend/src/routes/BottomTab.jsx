@@ -2,6 +2,8 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react"; // 'useState' import removed as it's not used in this snippet
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
+import ParentalControlScreen from "../screens/ParentalControlScreen";
+import NoiseCheckScreen from "../screens/NoiseCheckScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import TestScreen from "../screens/TestScreen";
 import TrainScreen from "../screens/TrainScreen";
@@ -24,10 +26,8 @@ import EarTestScreen from "../screens/EarTestScreen";
 import { useQuery } from "@tanstack/react-query";
 
 const ProfileStack = createNativeStackNavigator();
-
 function ProfileStackScreen({ route }) {
   const { userData } = route.params;
-
   return (
     <ProfileStack.Navigator screenOptions={{ headerShown: true }}>
       <ProfileStack.Screen
@@ -44,6 +44,52 @@ function ProfileStackScreen({ route }) {
     </ProfileStack.Navigator>
   );
 }
+
+const HomeStack = createNativeStackNavigator();
+function HomeStackScreen({ route }) {
+  try {
+    const { userData } = route.params;
+    // console.log("userData from home stack -> ", userData)
+    return (
+      <HomeStack.Navigator screenOptions={{ headerShown: true }}>
+        <HomeStack.Screen
+          name="Go back"
+          initialParams={{ userData }}
+          component={HomeScreen}
+        />
+        <HomeStack.Screen
+          name="ParentalControl"
+          component={ParentalControlScreen}
+        />
+        <HomeStack.Screen
+          name="Noise Check"
+          component={NoiseCheckScreen}
+        />
+      </HomeStack.Navigator>
+    )
+  } catch (e) {
+    console.log("error from home stack -> ", e)
+
+  }
+}
+
+const TestStack = createNativeStackNavigator()
+function TestStackScreen() {
+  return (
+    <TestStack.Navigator screenOptions={{ headerShown: false}}>
+      <TestStack.Screen
+        name="Hearing Test"
+        initialParams={{ userData}}
+        component={TestScreen}
+      />
+      <TestStack.Screen
+        name="Noise Check"
+        component={NoiseCheckScreen}
+      />
+    </TestStack.Navigator>
+  )
+}
+
 
 const TrainStack = createNativeStackNavigator();
 function TrainStackScreen() {
@@ -104,8 +150,8 @@ const BottomTab = () => {
     >
       <Tab.Screen
         name="Home"
-        // component={HomeScreen}
-        // component={(navigation, route) => <HomeScreen navigation={navigation} route={route} />}
+        component={HomeStackScreen}
+        initialParams={{ userData }}
         options={{
           tabBarLabel: ({ focused }) => (
             <Text style={focused ? styles.hNavActive : styles.hNav}>Home</Text>
@@ -119,15 +165,7 @@ const BottomTab = () => {
             />
           ),
         }}
-      >
-        {({ navigation, route }) => (
-          <HomeScreen
-            navigation={navigation}
-            route={route}
-            userData={userData}
-          />
-        )}
-      </Tab.Screen>
+      />
       <Tab.Screen
         name="Test"
         component={HearingTestStackScreen}
