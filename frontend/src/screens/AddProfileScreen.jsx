@@ -34,6 +34,7 @@ import {
 import { InputField } from "@gluestack-ui/themed";
 import { FormControl } from "@gluestack-ui/themed";
 import CameraProfile from "../components/user/CameraProfile";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 
 const initialState = {
   page: 1,
@@ -97,41 +98,42 @@ function reducer(state, action) {
 const AddProfileScreen = ({ navigation: { goBack }, route }) => {
   const [{ page, birthYear, gender, image, firstName, left, right }, dispatch] =
     useReducer(reducer, initialState);
-  const { userData } = route.params;
-  const onSubmitKid = async () => {
-    const payload = {
-      birthYear: parseInt(birthYear),
-      gender,
-      image,
-      firstName,
-      hearingAid: { left, right },
-    };
-    console.log(payload);
-    fetch(`${process.env.EXPO_PUBLIC_API_URL}/users/updateKidInfo/${userData.id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(payload),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        } else {
-          return response.json();
-        }
+  const { isPending, error, data } = useQuery({
+    queryKey: ["myData"],
+    queryFn: () =>
+      fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/me`, {
+        headers: {
+          Authorization: `Bearer ${process.env.EXPO_PUBLIC_MOCK_JWT}`,
+        },
       })
-      // .then((data) => {
-      //   console.log(data);
-      // })
-      .catch((error) => {
-        console.error(
-          "There has been a problem with your fetch(updateKidInfo):",
-          error
-        );
+        .then((res) => res.json())
+        .then((json) => json.data),
+  });
+
+  if (isPending) return <Text>Loading...</Text>;
+
+  if (error) return <Text>An error has occurred: ${error.message}</Text>;
+
+  const userData = data;
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (payload) => {
+      return fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/kid`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${process.env.EXPO_PUBLIC_MOCK_JWT}`,
+        },
+        body: JSON.stringify(payload),
       });
-  };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myData"] });
+      console.log("");
+    },
+  });
+
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <HeaderText
@@ -145,7 +147,8 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
           size="md"
           isDisabled={false}
           isInvalid={false}
-          isReadOnly={false}>
+          isReadOnly={false}
+        >
           <InputField
             placeholder="Enter Year here"
             autoComplete="birthdate-year"
@@ -160,7 +163,8 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
           value={gender}
           onChange={(newGender) =>
             dispatch({ type: "gender", payload: newGender })
-          }>
+          }
+        >
           <HStack space="2xl">
             <Radio value="Girl">
               <RadioIndicator mr="$2">
@@ -197,7 +201,8 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
           size="md"
           isDisabled={false}
           isInvalid={false}
-          isReadOnly={false}>
+          isReadOnly={false}
+        >
           <InputField
             placeholder="Enter Name here"
             onChangeText={(newfirstName) =>
@@ -218,7 +223,8 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
               dispatch({ type: "left", payload: newValue });
             }}
             variant="outline"
-            size="md">
+            size="md"
+          >
             <SelectTrigger variant="outline" size="md">
               <SelectInput placeholder="Select option" />
               <SelectIcon mr="$3">
@@ -246,7 +252,8 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
               dispatch({ type: "right", payload: newValue });
             }}
             variant="outline"
-            size="md">
+            size="md"
+          >
             <SelectTrigger variant="outline" size="md">
               <SelectInput placeholder="Select option" />
               <SelectIcon mr="$3">
@@ -298,7 +305,13 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
       ) : page === 5 ? (
         <ButtonFunc
           handleOnPress={() => {
-            onSubmitKid();
+            mutation.mutate({
+              birthYear: parseInt(birthYear),
+              gender,
+              image,
+              firstName,
+              hearingAid: { left, right },
+            });
             dispatch({ type: "submit" });
           }}
           text="Submit"
