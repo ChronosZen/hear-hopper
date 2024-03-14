@@ -40,9 +40,9 @@ const initialState = {
   birthYear: "",
   gender: "",
   image: "",
-  childName: "",
-  left: "",
-  right: "",
+  firstName: "",
+  left: false,
+  right: false,
 };
 function reducer(state, action) {
   switch (action.type) {
@@ -56,10 +56,10 @@ function reducer(state, action) {
         ...state,
         gender: action.payload,
       };
-    case "childName":
+    case "firstName":
       return {
         ...state,
-        childName: action.payload,
+        firstName: action.payload,
       };
     case "image":
       return {
@@ -93,24 +93,17 @@ function reducer(state, action) {
       };
   }
 }
-const getRandomIntInclusive = (min, max) => {
-  const minCeiled = Math.ceil(min);
-  const maxFloored = Math.floor(max);
-  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is inclusive and the minimum is inclusive
-};
 
 const AddProfileScreen = ({ navigation: { goBack }, route }) => {
-  const [{ page, birthYear, gender, image, childName, left, right }, dispatch] =
+  const [{ page, birthYear, gender, image, firstName, left, right }, dispatch] =
     useReducer(reducer, initialState);
   const { userData } = route.params;
   const onSubmitKid = async () => {
-    const kidID = getRandomIntInclusive(1, 10000);
     const payload = {
-      kidID,
-      birthYear,
+      birthYear: parseInt(birthYear),
       gender,
       image,
-      childName,
+      firstName,
       hearingAid: { left, right },
     };
     console.log(payload);
@@ -155,6 +148,7 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
           isReadOnly={false}>
           <InputField
             placeholder="Enter Year here"
+            autoComplete="birthdate-year"
             onChangeText={(newBirthYear) =>
               dispatch({ type: "birthYear", payload: newBirthYear })
             }
@@ -168,17 +162,29 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
             dispatch({ type: "gender", payload: newGender })
           }>
           <HStack space="2xl">
-            <Radio value="female">
+            <Radio value="Girl">
               <RadioIndicator mr="$2">
                 <RadioIcon as={CircleIcon} />
               </RadioIndicator>
-              <RadioLabel>Female</RadioLabel>
+              <RadioLabel>Girl</RadioLabel>
             </Radio>
-            <Radio value="male">
+            <Radio value="Boy">
               <RadioIndicator mr="$2">
                 <RadioIcon as={CircleIcon} />
               </RadioIndicator>
-              <RadioLabel>Male</RadioLabel>
+              <RadioLabel>Boy</RadioLabel>
+            </Radio>
+            <Radio value="Non-binary">
+              <RadioIndicator mr="$2">
+                <RadioIcon as={CircleIcon} />
+              </RadioIndicator>
+              <RadioLabel>Non-binary</RadioLabel>
+            </Radio>
+            <Radio value="Prefer not to say">
+              <RadioIndicator mr="$2">
+                <RadioIcon as={CircleIcon} />
+              </RadioIndicator>
+              <RadioLabel>Prefer not to say</RadioLabel>
             </Radio>
           </HStack>
         </RadioGroup>
@@ -194,8 +200,8 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
           isReadOnly={false}>
           <InputField
             placeholder="Enter Name here"
-            onChangeText={(newChildName) =>
-              dispatch({ type: "childName", payload: newChildName })
+            onChangeText={(newfirstName) =>
+              dispatch({ type: "firstName", payload: newfirstName })
             }
           />
         </Input>
@@ -225,8 +231,8 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
                 <SelectDragIndicatorWrapper>
                   <SelectDragIndicator />
                 </SelectDragIndicatorWrapper>
-                <SelectItem label="No" value="no" />
-                <SelectItem label="Yes" value="yes" />
+                <SelectItem label="No" value={false} />
+                <SelectItem label="Yes" value={true} />
               </SelectContent>
             </SelectPortal>
           </Select>
@@ -253,8 +259,8 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
                 <SelectDragIndicatorWrapper>
                   <SelectDragIndicator />
                 </SelectDragIndicatorWrapper>
-                <SelectItem label="No" value="no" />
-                <SelectItem label="Yes" value="yes" />
+                <SelectItem label="No" value={false} />
+                <SelectItem label="Yes" value={true} />
               </SelectContent>
             </SelectPortal>
           </Select>
@@ -267,7 +273,7 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
       )}
       <Text>
         ID:{userData.id}
-        {childName}
+        {firstName}
         {gender}
         {birthYear}
         {page}
