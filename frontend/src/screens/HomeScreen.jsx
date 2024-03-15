@@ -19,11 +19,9 @@ import {
   SafeAreaView
 } from '@gluestack-ui/themed';
 
-const HomeScreen = ({ navigation, route, userData }) => {
-
-  // console.log("navigation", navigation);
-  // console.log("route", route);
-  // console.log("userData", userData);
+const HomeScreen = ({ navigation, route }) => {
+   const { userData } = route.params;
+  // console.log("route.params from home screen -> ", route.params);
 
   const onClick = () => {
     console.log("card is clicked.")
@@ -37,8 +35,6 @@ const HomeScreen = ({ navigation, route, userData }) => {
   }]
 
   return (
-
-
     <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       {/* Header */}
       <Box minWidth={"$full"} backgroundColor={Colors.primary.p1}>
@@ -109,7 +105,7 @@ const HomeScreen = ({ navigation, route, userData }) => {
               if (index === 0) {
                 navigation.navigate("Train")
               } else {
-                navigation.navigate("Profile")
+                navigation.navigate("ParentalControl")
               }
             }}>
               <Card key={index} margin={16} borderWidth={1} borderColor={Colors.primary.p1} backgroundColor={Colors.primary.p5}  >
