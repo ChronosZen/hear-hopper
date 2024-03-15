@@ -27,57 +27,51 @@ const AnimalChoices = ({ dispatch, userAnswer, quizData, answerState }) => {
     let soundInterval;
 
     async function setupQuestionSound() {
-      const questionSoundInfo = quizData.sound;
-      if (questionSoundInfo) {
-        if (!questionSound) {
-          const { sound } = await Audio.Sound.createAsync(
-            questionSoundInfo.file
-          );
+      try {
+        if (!questionSound && quizData.sound) {
+          const { sound } = await Audio.Sound.createAsync(quizData.sound.file);
           questionSound = sound;
-          await questionSound.setVolumeAsync(questionSoundInfo.volume);
+          await questionSound.setVolumeAsync(quizData.sound.volume);
         }
-        if (answerState === "waiting") {
+        if (answerState === "waiting" && playCount < 5) {
           await questionSound.replayAsync();
           playCount++;
         }
+      } catch (error) {
+        console.error("Error setting up question sound:", error);
       }
     }
 
-    if (answerState === "waiting") {
-      soundInterval = setInterval(async () => {
-        if (playCount < 5 && answerState === "waiting") {
-          await setupQuestionSound();
-        } else {
-          clearInterval(soundInterval);
-          if (questionSound) {
-            questionSound.stopAsync();
-            questionSound.unloadAsync();
-          }
-        }
-      }, 1500);
-    }
-
     async function setupRainSound() {
-      const rainSoundInfo = {
-        file: require("../../../assets/audioFiles/training/heavy-rain_sound.wav"),
-        volume: 1,
-      };
-      if (answerState === "waiting") {
+      try {
+        const rainSoundInfo = {
+          file: require("../../../assets/audioFiles/training/heavy-rain_sound.wav"),
+          volume: 1,
+        };
         const { sound } = await Audio.Sound.createAsync(rainSoundInfo.file);
         rainSound = sound;
         await rainSound.setVolumeAsync(rainSoundInfo.volume);
         await rainSound.playAsync();
+      } catch (error) {
+        console.error("Error setting up rain sound:", error);
       }
     }
-
     setupRainSound();
+    if (answerState === "waiting") {
+      soundInterval = setInterval(setupQuestionSound, 2000);
+    }
 
+    // Cleanup function
     return () => {
       clearInterval(soundInterval);
-      questionSound?.stopAsync();
-      questionSound?.unloadAsync();
-      rainSound?.stopAsync();
-      rainSound?.unloadAsync();
+      if (questionSound) {
+        questionSound.stopAsync();
+        questionSound.unloadAsync();
+      }
+      if (rainSound) {
+        rainSound.stopAsync();
+        rainSound.unloadAsync();
+      }
     };
   }, [answerState, quizData]);
 
