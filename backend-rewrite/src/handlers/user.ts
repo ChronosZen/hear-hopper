@@ -9,6 +9,7 @@ export const signup = async (req, res) => {
   });
 
   const token = createJWT(user);
+  res.status(201);
   res.json({ token });
 };
 
@@ -35,6 +36,7 @@ export const login = async (req, res) => {
 
 export const getAllUserData = async (req, res) => {
   const userData = await User.findById(req.user.id)
+    .select('-password')
     .populate({
       path: "kids",
       populate: {

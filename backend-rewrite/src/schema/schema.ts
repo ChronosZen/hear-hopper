@@ -213,8 +213,8 @@ audiogram.virtual("rightAverage").get(
     }
 ) */
 
-console.log("user's virtual fields =>", user.virtuals);
-console.log("user's virtual fields =>", kid.virtuals);
+// console.log("user's virtual fields =>", user.virtuals);
+// console.log("user's virtual fields =>", kid.virtuals);
 const User = mongoose.model("user", user);
 const Kid = mongoose.model("kid", kid);
 const Audiogram = mongoose.model("audiogram", audiogram);

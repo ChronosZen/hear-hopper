@@ -22,7 +22,6 @@ import { Typography, Colors } from "../styles";
 import HeaderText from "../components/reusable/HeaderText";
 import ButtonFunc from "../components/reusable/ButtonFunc";
 
-const API_URL = "https://hearhopper.wmdd4950.com";
 const CustomAlert = (props) => {
   return (
     <Modal
@@ -46,7 +45,7 @@ const CustomAlert = (props) => {
     </Modal>
   );
 };
-const LoginScreen = ({ navigation, route, setIsSignedIn, setUserData }) => {
+const LoginScreen = ({ navigation, route, setIsSignedIn }) => {
   const [email, onChangeEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -60,7 +59,7 @@ const LoginScreen = ({ navigation, route, setIsSignedIn, setUserData }) => {
       email: email,
       password: String(password),
     };
-    fetch(`${API_URL}/users/login`, {
+    fetch(`${process.env.EXPO_PUBLIC_API_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -78,7 +77,7 @@ const LoginScreen = ({ navigation, route, setIsSignedIn, setUserData }) => {
       })
       .then((data) => {
         console.log("this is data after login", data);
-        setUserData(data);
+        // setUserData(data);
         setIsSignedIn(true);
       })
       .catch((error) => {

@@ -17,6 +17,7 @@ export const addAudiogram = async (req, res) => {
       rightEar,
       owner,
     });
-    res.json({data: newAudiogram})
+    res.status(201);
+    res.json({ data: newAudiogram });
   }
 };

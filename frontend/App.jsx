@@ -20,12 +20,16 @@ import {
 } from "@expo-google-fonts/spline-sans";
 import { config } from "@gluestack-ui/config";
 import { GluestackUIProvider } from "@gluestack-ui/themed";
+import {
+  QueryClient,
+  QueryClientProvider
+} from '@tanstack/react-query'
 import AddProfileScreen from "./src/screens/AddProfileScreen";
 
+const queryClient = new QueryClient()
 const Stack = createNativeStackNavigator();
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const [userData, setUserData] = useState({});
   let [fontsLoaded, fontError] = useFonts({
     Outfit_400Regular,
     Outfit_600SemiBold,
@@ -39,10 +43,11 @@ export default function App() {
     return null;
   }
   return (
+    <QueryClientProvider client={queryClient}>
     <GluestackUIProvider config={config}>
       <NavigationContainer>
         {isSignedIn ? (
-          <BottomTab userData={userData} />
+          <BottomTab/>
         ) : (
           <Stack.Navigator>
             <Stack.Screen name="Log in">
@@ -50,7 +55,6 @@ export default function App() {
                 <LoginScreen
                   {...props}
                   setIsSignedIn={setIsSignedIn}
-                  setUserData={setUserData}
                 />
               )}
             </Stack.Screen>
@@ -66,6 +70,7 @@ export default function App() {
         )}
       </NavigationContainer>
     </GluestackUIProvider>
+    </QueryClientProvider>
   );
 }
 
