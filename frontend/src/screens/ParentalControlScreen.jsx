@@ -28,7 +28,7 @@ const ParentalControlScreen = ( { navigation }) => {
             >
                 <Box>
                     <Pressable onPress={() => {
-                        navigation.navigate("NoiseCheck")
+                        navigation.navigate("Parental Control Noise Check")
                     } }>
 
                         <Heading>Noise Check</Heading>

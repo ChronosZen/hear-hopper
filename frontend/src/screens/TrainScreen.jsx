@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import NoiseChecker from "../components/user/NoiseChecker";
 import TrainSection from "../components/train/TrainSection";
 import HeaderText from "../components/reusable/HeaderText";
 import { HStack } from "@gluestack-ui/themed";
@@ -25,7 +24,6 @@ const TrainScreen = ({ navigation }) => {
         <SVG xml={infoIcon} width="24" height="24" />
       </HStack>
       <TrainSection navigateFindAnimals={navigateFindAnimals} />
-      <NoiseChecker />
     </View>
   );
 };

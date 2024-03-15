@@ -3,7 +3,8 @@ import React from "react"; // 'useState' import removed as it's not used in this
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
 import ParentalControlScreen from "../screens/ParentalControlScreen";
-import NoiseCheckScreen from "../screens/NoiseCheckScreen";
+import ParentalControlNoiseCheckScreen from "../screens/ParentalControlNoiseCheckScreen";
+import TestNoiseCheckScreen from "../screens/TestNoiseCheckScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import TestScreen from "../screens/TestScreen";
 import TrainScreen from "../screens/TrainScreen";
@@ -27,7 +28,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const ProfileStack = createNativeStackNavigator();
 function ProfileStackScreen({ route }) {
-  const { userData } = route.params;
+
   return (
     <ProfileStack.Navigator screenOptions={{ headerShown: true }}>
       <ProfileStack.Screen
@@ -62,8 +63,8 @@ function HomeStackScreen({ route }) {
           component={ParentalControlScreen}
         />
         <HomeStack.Screen
-          name="Noise Check"
-          component={NoiseCheckScreen}
+          name="Parental Control Noise Check"
+          component={ParentalControlNoiseCheckScreen}
         />
       </HomeStack.Navigator>
     )
@@ -72,24 +73,6 @@ function HomeStackScreen({ route }) {
 
   }
 }
-
-const TestStack = createNativeStackNavigator()
-function TestStackScreen() {
-  return (
-    <TestStack.Navigator screenOptions={{ headerShown: false}}>
-      <TestStack.Screen
-        name="Hearing Test"
-        initialParams={{ userData}}
-        component={TestScreen}
-      />
-      <TestStack.Screen
-        name="Noise Check"
-        component={NoiseCheckScreen}
-      />
-    </TestStack.Navigator>
-  )
-}
-
 
 const TrainStack = createNativeStackNavigator();
 function TrainStackScreen() {
@@ -107,6 +90,7 @@ function HearingTestStackScreen() {
   return (
     <HearinTestStack.Navigator screenOptions={{ headerShown: true }}>
       <HearinTestStack.Screen name="HearingTest" component={TestScreen} />
+      <HearinTestStack.Screen name="Noise Check" component={TestNoiseCheckScreen} />
       <HearinTestStack.Screen name="Tutorial" component={TestTutorial} />
       <HearinTestStack.Screen name="Ear Test" component={EarTestScreen} />
     </HearinTestStack.Navigator>
