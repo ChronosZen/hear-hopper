@@ -1,110 +1,92 @@
 import { useState, useEffect } from "react";
 import { HStack } from "@gluestack-ui/themed";
 import AnimalCard from "./AnimalCard";
-import { catIcon, dogIcon, cowIcon } from "../svg/svgs";
 import { Audio } from "expo-av";
+import { catIcon, dogIcon, cowIcon, goatIcon, tigerIcon } from "../svg/svgs";
 
-const AnimalChoices = () => {
-  const [activeAnimal, setActiveAnimal] = useState(null);
-  const animalSounds = [
-    {
-      name: "cat",
-      file: require("../../../assets/audioFiles/training/cat_sound.wav"),
-      volume: 0.15,
-    },
-    {
-      name: "cow",
-      file: require("../../../assets/audioFiles/training/cow_sound.wav"),
-      volume: 0.5,
-    },
-    {
-      name: "goat",
-      file: require("../../../assets/audioFiles/training/goat_sound.wav"),
-      volume: 0.5,
-    },
-    {
-      name: "tiger",
-      file: require("../../../assets/audioFiles/training/tiger_sound.wav"),
-      volume: 0.5,
-    },
-    {
-      name: "dog",
-      file: require("../../../assets/audioFiles/training/dog_sound.wav"),
-      volume: 0.5,
-    },
-    {
-      name: "wind",
-      file: require("../../../assets/audioFiles/training/wind_sound.wav"),
-      volume: 1,
-    },
-  ];
+const animalIcons = {
+  Cat: catIcon,
+  Dog: dogIcon,
+  Cow: cowIcon,
+  Goat: goatIcon,
+  Tiger: tigerIcon,
+};
+
+const AnimalChoices = ({ dispatch, userAnswer, quizData, answerState }) => {
+  const handleUserSelection = (answer) => {
+    dispatch({
+      type: "selectAnswer",
+      payload: answer,
+    });
+  };
 
   useEffect(() => {
-    let soundInterval;
+    let questionSound;
+    let rainSound;
     let playCount = 0;
-    let catSound;
+    let soundInterval;
 
-    async function playSound() {
-      const catSoundInfo = animalSounds.find((a) => a.name === "cat");
-      if (catSoundInfo) {
-        if (!catSound) {
-          const { sound } = await Audio.Sound.createAsync(catSoundInfo.file);
-          catSound = sound;
-          catSound.setVolumeAsync(catSoundInfo.volume);
+    async function setupQuestionSound() {
+      try {
+        if (!questionSound && quizData.sound) {
+          const { sound } = await Audio.Sound.createAsync(quizData.sound.file);
+          questionSound = sound;
+          await questionSound.setVolumeAsync(quizData.sound.volume);
         }
-        await catSound.replayAsync();
-        playCount++;
-        if (playCount >= 5) {
-          clearInterval(soundInterval);
+        if (answerState === "waiting" && playCount < 5) {
+          await questionSound.replayAsync();
+          playCount++;
         }
+      } catch (error) {
+        console.error("Error setting up question sound:", error);
       }
     }
 
-    soundInterval = setInterval(playSound, 1500);
-
-    let windSound;
-    async function playWindSound() {
-      const windSoundInfo = animalSounds.find((a) => a.name === "wind");
-      if (windSoundInfo) {
-        const { sound } = await Audio.Sound.createAsync(windSoundInfo.file);
-        windSound = sound;
-        await windSound.setVolumeAsync(windSoundInfo.volume);
-        await windSound.playAsync();
-        setTimeout(() => {
-          windSound.stopAsync();
-        }, 10000);
+    async function setupRainSound() {
+      try {
+        const rainSoundInfo = {
+          file: require("../../../assets/audioFiles/training/heavy-rain_sound.wav"),
+          volume: 1,
+        };
+        const { sound } = await Audio.Sound.createAsync(rainSoundInfo.file);
+        rainSound = sound;
+        await rainSound.setVolumeAsync(rainSoundInfo.volume);
+        await rainSound.playAsync();
+      } catch (error) {
+        console.error("Error setting up rain sound:", error);
       }
     }
+    setupRainSound();
+    if (answerState === "waiting") {
+      soundInterval = setInterval(setupQuestionSound, 2000);
+    }
 
-    playWindSound();
-    // Cleanup function to unload sounds and clear intervals when component unmounts
+    // Cleanup function
     return () => {
-      if (soundInterval) clearInterval(soundInterval);
-      catSound?.unloadAsync();
-      windSound?.unloadAsync();
+      clearInterval(soundInterval);
+      if (questionSound) {
+        questionSound.stopAsync();
+        questionSound.unloadAsync();
+      }
+      if (rainSound) {
+        rainSound.stopAsync();
+        rainSound.unloadAsync();
+      }
     };
-  }, []);
+  }, [answerState, quizData]);
 
   return (
     <HStack justifyContent="center" gap={8} height={132}>
-      <AnimalCard
-        icon={catIcon}
-        name="Cat"
-        isActive={activeAnimal === "Cat"}
-        onPress={() => setActiveAnimal("Cat")}
-      />
-      <AnimalCard
-        icon={dogIcon}
-        name="Dog"
-        isActive={activeAnimal === "Dog"}
-        onPress={() => setActiveAnimal("Dog")}
-      />
-      <AnimalCard
-        icon={cowIcon}
-        name="Cow"
-        isActive={activeAnimal === "Cow"}
-        onPress={() => setActiveAnimal("Cow")}
-      />
+      {quizData.options?.map((animal) => (
+        <AnimalCard
+          answerState={answerState}
+          key={animal}
+          icon={animalIcons[animal]}
+          name={animal}
+          isActive={userAnswer === animal}
+          onPress={() => handleUserSelection(animal)}
+        />
+      ))}
     </HStack>
   );
 };
