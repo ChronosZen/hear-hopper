@@ -4,11 +4,17 @@ import { View } from "react-native";
 import ButtonFunc from "../reusable/ButtonFunc";
 import { Colors } from "../../styles";
 import { checkPermissions, requestPermissions } from "./UserPermissions"
+import { useRoute, useNavigation } from "@react-navigation/native";
+import HeaderText from "../reusable/HeaderText";
 
 import {
     Heading,
     Text,
-    Card
+    Card,
+    HStack,
+    Pressable,
+    Icon,
+    CloseIcon
 } from '@gluestack-ui/themed';
 
 const initialState = {
@@ -18,6 +24,7 @@ const initialState = {
     noiseLevelUpdateInterval: null,
     isMicrophonePermGranted: false,
     isRecordingPermGranted: false,
+    isSafeLevel: false
 };
 
 const reducer = (state, action) => {
@@ -52,6 +59,11 @@ const reducer = (state, action) => {
                 ...state,
                 isRecordingPermGranted: action.payload
             }
+        case "SET_IS_SAFE_LEVEL":
+            return {
+                ...state,
+                isSafeLevel: action.payload
+            }
         default:
             return state;
     }
@@ -59,14 +71,22 @@ const reducer = (state, action) => {
 
 const NoiseChecker = () => {
     // console.log("Message from NoiseChecker component.") -> OK
-    const [state, dispatch] = useReducer(reducer, initialState);
+    // console.log("route name from noise checker", route.route.route.name)
 
+    const route = useRoute()
+    const routeName = route.name
+    // console.log("routeName", routeName)
+
+    const navigation = useNavigation()
+    // console.log(navigation);
+
+    const [state, dispatch] = useReducer(reducer, initialState);
 
     // Check microphone access and recording permission status.
     const handleCheckPermissions = async () => {
         await checkPermissions(dispatch)
     }
-    console.log("handleCheckPermission is working ->", state)
+    // console.log("handleCheckPermission is working ->", state)
 
     const handleRequestPermissions = async () => {
         await requestPermissions(dispatch, state)
@@ -120,14 +140,13 @@ const NoiseChecker = () => {
             console.error("startNoiseCheck is Error: ", error)
         }
     }
-    // console.log('Recording started or stopped and isNoiseChecking ->', state.isNoiseChecking);
+    console.log('Recording started or stopped and isNoiseChecking ->', state.isNoiseChecking);
 
     const stopNoiseCheck = async () => {
         try {
             // console.log("check if the recording instance insn't null ->", state.recording)
-
             if (state.recording !== null) {
-                // console.log("this is from stopNoiseCheck function and in side of if(state.recording !== null) statement.")
+                console.log("this is from stopNoiseCheck function and in side of if(state.recording !== null) statement.")
                 await state.recording.stopAndUnloadAsync();
                 await Audio.setAudioModeAsync(
                     {
@@ -141,7 +160,7 @@ const NoiseChecker = () => {
                 clearInterval(state.noiseLevelUpdateInterval)
 
                 dispatch({ type: "SET_NOISE_LEVEL_UPDATE_INTERVAL", payload: null })
-                // console.log("noiseCheckInterval is cleared? ->", noiseCheckInterval)
+                console.log("noiseCheckInterval is cleared? ->", state.noiseLevelUpdateInterval)
             }
         } catch (error) {
             console.error("stopNoiseCheck is Error: ", error)
@@ -157,16 +176,25 @@ const NoiseChecker = () => {
 
     return (
         <>
+            <HStack space="xl">
+                <HeaderText text="Noise Check" />
+                <Pressable onPress={() => {
+                    stopNoiseCheck();
+                    navigation.navigate("ParentalControl")
+                }}
+                >
+                    <Icon as={CloseIcon} m="$2" w="$4" h="$4" />
+                </Pressable>
+            </HStack>
+            <Text>We will conduct an Environmental Noise Check before starting the test.</Text>
             {state.isNoiseChecking && (
                 <>
-                    {
-                        state.noiseLevel > -10 && (
-                            <Card backgroundColor={Colors.accent.p3} margin={16}>
-                                <Heading>High Risk</Heading>
-                                <Text>Avoid being in this environment 45 minutes or more.</Text>
-                            </Card>
-                        )}
-
+                    {state.noiseLevel <= -12 && (
+                        <Card backgroundColor={Colors.secondary.g5} margin={16}>
+                            <Heading>Safe</Heading>
+                            <Text>No risk of hearing loss, no matter how long you listen.</Text>
+                        </Card>
+                    )}
                     {state.noiseLevel <= -10 && state.noiseLevel > -12 && (
                         <Card backgroundColor={Colors.accent.y3} margin={16}>
                             <Heading>Moderate Risk</Heading>
@@ -174,41 +202,38 @@ const NoiseChecker = () => {
                         </Card>
                     )}
 
-                    {state.noiseLevel <= -12 && (
-                        <Card backgroundColor={Colors.secondary.g5} margin={16}>
-                            <Heading>Safe</Heading>
-                            <Text>No risk of hearing loss, no matter how long you listen.</Text>
+                    {state.noiseLevel > -10 && (
+                        <Card backgroundColor={Colors.accent.p3} margin={16}>
+                            <Heading>High Risk</Heading>
+                            <Text>Avoid being in this environment 45 minutes or more.</Text>
                         </Card>
                     )}
                 </>
             )}
-            <ButtonFunc
-                handleOnPress={state.isNoiseChecking ? stopNoiseCheck : startNoiseCheck}
-                disabled={!state.isMicrophonePermGranted || !state.isRecordingPermGranted}
-                text={state.isNoiseChecking ? "STOP NOISE CHECK" : "START NOISE CHECK"}
-            />
-            {/* <Text>
-                {state.isNoiseChecking
-                    ? `Current Noise is ${state.noiseLevel} dB`
-                    : ""
-                }
-            </Text> */}
 
+            {routeName === "Parental Control Noise Check"
+                ? (state.isNoiseChecking === false
+                    ? <ButtonFunc
+                        handleOnPress={startNoiseCheck}
+                        disabled={!state.isMicrophonePermGranted || !state.isRecordingPermGranted}
+                        text={"START NOISE CHECK"}
+                    />
+                    :
+                    <></>
+                )
+                :
+                <ButtonFunc
+                    handleOnPress={() => {state.isNoiseChecking 
+                        ? (stopNoiseCheck(),
+                          navigation.navigate("Tutorial"))
+                        : startNoiseCheck();
+                    }}
+                    disabled={!state.isMicrophonePermGranted || !state.isRecordingPermGranted}
+                    text={state.isNoiseChecking ? "Proceed to Test" : "CHECK"}
+                />
+            }
         </>
     )
 }
 
 export default NoiseChecker;
-
-// // Coverts Noise to a decibel
-// const amplitudeToDb = amplitude => {
-//     try {
-//         // console.log("amplitude -> ", amplitude);
-
-//         const decibel = 20 * Math.log10(amplitude);
-//         // console.log("decibel -> ", decibel);
-//         return decibel.toFixed(2);
-//     } catch (error) {
-//         console.log("Convert to decible is Error: ", error)
-//     }
-// };

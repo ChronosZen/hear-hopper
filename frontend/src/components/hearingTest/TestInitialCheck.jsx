@@ -10,7 +10,7 @@ const TestInitialCheck = ({navigation}) => {
 
     function changeSection(){
         if(setting === 1){
-            navigation.navigate("Tutorial")
+            navigation.navigate("Noise Check")
         }
         if(!setting){
             console.log("change section")
