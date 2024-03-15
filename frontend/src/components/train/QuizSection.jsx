@@ -31,7 +31,7 @@ const quizData = [
     sound: {
       name: "cat",
       file: require("../../../assets/audioFiles/training/cat_sound.wav"),
-      volume: 1,
+      volume: 0.7,
     },
   },
   {
@@ -40,7 +40,7 @@ const quizData = [
     sound: {
       name: "cow",
       file: require("../../../assets/audioFiles/training/cow_sound.wav"),
-      volume: 1,
+      volume: 0.6,
     },
   },
   {
@@ -49,7 +49,7 @@ const quizData = [
     sound: {
       name: "goat",
       file: require("../../../assets/audioFiles/training/goat_sound.wav"),
-      volume: 1,
+      volume: 0.5,
     },
   },
   {
@@ -58,7 +58,7 @@ const quizData = [
     sound: {
       name: "tiger",
       file: require("../../../assets/audioFiles/training/tiger_sound.wav"),
-      volume: 1,
+      volume: 0.6,
     },
   },
   {
@@ -67,7 +67,7 @@ const quizData = [
     sound: {
       name: "dog",
       file: require("../../../assets/audioFiles/training/dog_sound.wav"),
-      volume: 1,
+      volume: 0.4,
     },
   },
 ];
