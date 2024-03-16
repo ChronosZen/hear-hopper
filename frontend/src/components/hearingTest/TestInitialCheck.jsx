@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
 import { useState, useEffect, useReducer } from "react";
-import {happyMascot, testIcon} from '../svg/svgs'
+import {testIcon, soundIcon, notification, mainMastcot} from '../svg/svgs'
 import SVG from "../svg/SVG";
 import ButtonFunc from "../reusable/ButtonFunc";
 import { Typography, Colors } from '../../styles/index';
-import { VStack } from "@gluestack-ui/themed";
+import { VStack, HStack } from "@gluestack-ui/themed";
 
 const TestInitialCheck = ({navigation}) => {
     const [setting, setSetting] = useState(0)
@@ -21,16 +21,18 @@ const TestInitialCheck = ({navigation}) => {
     return (
         <VStack style={{flex: 1, margin: 24}}>
             <VStack style={styles.container}>
-                <SVG xml={happyMascot} width="180" height="180" />
+                <SVG xml={mainMastcot} width="180" height="180" />
                 {setting ?
-                    <VStack style={{justifyContent: 'space-between', alignItems: 'center', gap: 32}}>
+                    <VStack style={{justifyContent: 'space-between', alignItems: 'start', gap: 32}}>
                         <Text style={{...Typography.heading.h4}}>Please make sure to Turn Off</Text>
-                        <VStack>
-                            <Text>Notifications</Text>
-                        </VStack>
-                        <VStack>
-                            <Text>Sound effects</Text>
-                        </VStack>
+                        <HStack marginHorizontal={56}>
+                            <SVG xml={notification} width="24" height="24" />
+                            <Text>  Notifications</Text>
+                        </HStack>
+                        <HStack marginHorizontal={56}>
+                            <SVG xml={soundIcon} width="24" height="24" />
+                            <Text>  Sound effects</Text>
+                        </HStack>
                     </VStack>
                     :
                     <VStack style={{alignItems: 'center'}}>
