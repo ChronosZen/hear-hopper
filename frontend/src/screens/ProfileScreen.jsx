@@ -8,7 +8,6 @@ import KidDisplay from "../components/user/KidDisplay";
 import { useQuery } from "@tanstack/react-query";
 
 ProfileScreen = ({ navigation, route }) => {
-  
   const { isPending, error, data } = useQuery({
     queryKey: ["myData"],
     queryFn: () =>
@@ -21,13 +20,15 @@ ProfileScreen = ({ navigation, route }) => {
         .then((json) => json.data),
   });
 
-  if (isPending) return  <Text>Loading...</Text>;
+  if (isPending) return <Text>Loading...</Text>;
 
   if (error) return <Text>An error has occurred: ${error.message}</Text>;
 
   const userData = data;
 
-  const kidArr = [...userData.kids].sort((kid1,kid2)=> new Date(kid2.createdAt) - new Date(kid1.createdAt));
+  const kidArr = [...userData.kids].sort(
+    (kid1, kid2) => new Date(kid2.createdAt) - new Date(kid1.createdAt)
+  );
   function navigateAddProfile() {
     navigation.navigate("AddProfile", { name: "Jane" });
   }
@@ -58,12 +59,12 @@ ProfileScreen = ({ navigation, route }) => {
           }}
         />
         <View style={{ flex: 1 }}>
-          <ButtonFunc
+          {/* <ButtonFunc
             text="View Sample"
             handleOnPress={() => {
               navigateSample();
             }}
-          />
+          /> */}
         </View>
       </View>
     </SafeAreaView>
