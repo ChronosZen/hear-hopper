@@ -29,19 +29,10 @@ import TestResult from "../components/hearingTest/TestResult";
 
 const ProfileStack = createNativeStackNavigator();
 function ProfileStackScreen({ route }) {
-
   return (
     <ProfileStack.Navigator screenOptions={{ headerShown: true }}>
-      <ProfileStack.Screen
-        name="MainProfile"
-        initialParams={{ userData }}
-        component={ProfileScreen}
-      />
-      <ProfileStack.Screen
-        name="AddProfile"
-        initialParams={{ userData }}
-        component={AddProfileScreen}
-      />
+      <ProfileStack.Screen name="MainProfile" component={ProfileScreen} />
+      <ProfileStack.Screen name="AddProfile" component={AddProfileScreen} />
       <ProfileStack.Screen name="Example" component={ExampleScreen} />
     </ProfileStack.Navigator>
   );
@@ -68,10 +59,9 @@ function HomeStackScreen({ route }) {
           component={ParentalControlNoiseCheckScreen}
         />
       </HomeStack.Navigator>
-    )
+    );
   } catch (e) {
-    console.log("error from home stack -> ", e)
-
+    console.log("error from home stack -> ", e);
   }
 }
 
@@ -91,7 +81,10 @@ function HearingTestStackScreen() {
   return (
     <HearinTestStack.Navigator screenOptions={{ headerShown: true }}>
       <HearinTestStack.Screen name="HearingTest" component={TestScreen} />
-      <HearinTestStack.Screen name="Noise Check" component={TestNoiseCheckScreen} />
+      <HearinTestStack.Screen
+        name="Noise Check"
+        component={TestNoiseCheckScreen}
+      />
       <HearinTestStack.Screen name="Tutorial" component={TestTutorial} />
       <HearinTestStack.Screen name="Ear Test" component={EarTestScreen} />
       <HearinTestStack.Screen name="Test Result" component={TestResult} />
@@ -114,12 +107,15 @@ const BottomTab = () => {
         .then((json) => json.data),
   });
 
-  if (isPending) return  <Text>Loading...</Text>;
+  if (isPending) return <Text>Loading...</Text>;
 
   if (error) return <Text>An error has occurred: ${error.message}</Text>;
 
   const userData = data;
-  console.log("Here's the user's kids. You should see this after the query has refetched ->", userData.kids.map(kid => kid.firstName))
+  console.log(
+    "Here's the user's kids. You should see this after the query has refetched ->",
+    userData.kids.map((kid) => kid.firstName)
+  );
   return (
     <Tab.Navigator
       style={styles.tab}
@@ -132,8 +128,7 @@ const BottomTab = () => {
           paddingTop: 11,
           paddingBottom: 11,
         },
-      }}
-    >
+      }}>
       <Tab.Screen
         name="Home"
         component={HomeStackScreen}
