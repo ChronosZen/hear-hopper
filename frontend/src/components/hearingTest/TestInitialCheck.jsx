@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
 import { useState, useEffect, useReducer } from "react";
-import {happyMascot} from '../svg/svgs'
+import {testIcon, soundIcon, notification, mainMastcot} from '../svg/svgs'
 import SVG from "../svg/SVG";
 import ButtonFunc from "../reusable/ButtonFunc";
-import { Typography } from '../../styles/index';
+import { Typography, Colors } from '../../styles/index';
+import { VStack, HStack } from "@gluestack-ui/themed";
 
 const TestInitialCheck = ({navigation}) => {
     const [setting, setSetting] = useState(0)
@@ -13,29 +14,35 @@ const TestInitialCheck = ({navigation}) => {
             navigation.navigate("Noise Check")
         }
         if(!setting){
-            console.log("change section")
             setSetting(1)
         }
     }
-  
+
     return (
-        <View style={{flex: 1, margin: 24}}>
-            <View style={styles.container}>
-                <SVG xml={happyMascot} width="180" height="180" />
-                {setting ? 
-                    <View style={{justifyContent: 'space-between', alignItems: 'center', gap: 32}}>
+        <VStack style={{flex: 1, margin: 24}}>
+            <VStack style={styles.container}>
+                <SVG xml={mainMastcot} width="180" height="180" />
+                {setting ?
+                    <VStack style={{justifyContent: 'space-between', alignItems: 'start', gap: 32}}>
                         <Text style={{...Typography.heading.h4}}>Please make sure to Turn Off</Text>
-                        <View>
-                            <Text>Notifications</Text>
-                        </View>
-                        <View>
-                            <Text>Sound effects</Text>
-                        </View>
-                    </View> 
-                    : <Text style={{...Typography.heading.h4, textAlign: 'center'}}>Please wear a Headphone for Accurate Results</Text>}
-            </View>
+                        <HStack marginHorizontal={56}>
+                            <SVG xml={notification} width="24" height="24" />
+                            <Text>  Notifications</Text>
+                        </HStack>
+                        <HStack marginHorizontal={56}>
+                            <SVG xml={soundIcon} width="24" height="24" />
+                            <Text>  Sound effects</Text>
+                        </HStack>
+                    </VStack>
+                    :
+                    <VStack style={{alignItems: 'center'}}>
+                        <Text style={{...Typography.heading.h4, textAlign: 'center'}}>Please wear a Headphone for Accurate Results</Text>
+                        <SVG xml={testIcon} width="120" height="120" fill={Colors.primary.p1} />
+                    </VStack>
+                    }
+            </VStack>
                 <ButtonFunc text="Proceed" handleOnPress={changeSection} />
-        </View>
+        </VStack>
     );
 };
 
