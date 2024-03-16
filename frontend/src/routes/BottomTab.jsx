@@ -25,6 +25,7 @@ import QuizSection from "../components/train/QuizSection";
 import TestTutorial from "../components/hearingTest/TestTutorial";
 import EarTestScreen from "../screens/EarTestScreen";
 import { useQuery } from "@tanstack/react-query";
+import TestResult from "../components/hearingTest/TestResult";
 
 const ProfileStack = createNativeStackNavigator();
 function ProfileStackScreen({ route }) {
@@ -93,6 +94,7 @@ function HearingTestStackScreen() {
       <HearinTestStack.Screen name="Noise Check" component={TestNoiseCheckScreen} />
       <HearinTestStack.Screen name="Tutorial" component={TestTutorial} />
       <HearinTestStack.Screen name="Ear Test" component={EarTestScreen} />
+      <HearinTestStack.Screen name="Test Result" component={TestResult} />
     </HearinTestStack.Navigator>
   );
 }
