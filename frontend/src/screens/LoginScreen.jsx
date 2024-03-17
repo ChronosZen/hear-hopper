@@ -21,7 +21,7 @@ import { InputField } from "@gluestack-ui/themed";
 import { Typography, Colors } from "../styles";
 import HeaderText from "../components/reusable/HeaderText";
 import ButtonFunc from "../components/reusable/ButtonFunc";
-
+import { useUser } from "../context/UserContext";
 const CustomAlert = (props) => {
   return (
     <Modal

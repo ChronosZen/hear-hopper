@@ -22,7 +22,7 @@ import { config } from "@gluestack-ui/config";
 import { GluestackUIProvider } from "@gluestack-ui/themed";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AddProfileScreen from "./src/screens/AddProfileScreen";
-
+import { UserProvider } from "./src/context/UserContext";
 const queryClient = new QueryClient();
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -42,29 +42,31 @@ export default function App() {
   }
   return (
     <QueryClientProvider client={queryClient}>
-      <GluestackUIProvider config={config}>
-        <NavigationContainer>
-          {isSignedIn ? (
-            <BottomTab userData={userData} />
-          ) : (
-            <Stack.Navigator>
-              <Stack.Screen name="Log in">
-                {(props) => (
-                  <LoginScreen {...props} setIsSignedIn={setIsSignedIn} />
-                )}
-              </Stack.Screen>
-              <Stack.Screen name="Sign up">
-                {(props) => (
-                  <SignUpScreen {...props} setIsSignedIn={setIsSignedIn} />
-                )}
-              </Stack.Screen>
-              <Stack.Screen name="Add Profile">
-                {(props) => <AddProfileScreen {...props} />}
-              </Stack.Screen>
-            </Stack.Navigator>
-          )}
-        </NavigationContainer>
-      </GluestackUIProvider>
+      <UserProvider>
+        <GluestackUIProvider config={config}>
+          <NavigationContainer>
+            {isSignedIn ? (
+              <BottomTab userData={userData} />
+            ) : (
+              <Stack.Navigator>
+                <Stack.Screen name="Log in">
+                  {(props) => (
+                    <LoginScreen {...props} setIsSignedIn={setIsSignedIn} />
+                  )}
+                </Stack.Screen>
+                <Stack.Screen name="Sign up">
+                  {(props) => (
+                    <SignUpScreen {...props} setIsSignedIn={setIsSignedIn} />
+                  )}
+                </Stack.Screen>
+                <Stack.Screen name="Add Profile">
+                  {(props) => <AddProfileScreen {...props} />}
+                </Stack.Screen>
+              </Stack.Navigator>
+            )}
+          </NavigationContainer>
+        </GluestackUIProvider>
+      </UserProvider>
     </QueryClientProvider>
   );
 }
