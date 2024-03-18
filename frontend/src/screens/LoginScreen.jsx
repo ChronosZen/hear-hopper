@@ -78,14 +78,14 @@ const LoginScreen = ({ navigation, route, setIsSignedIn }) => {
       })
       .then((data) => {
         secureStorage.setItemAsync("JwtToken", data.token);
-        console.log("this is the data.token ->", data);
+        // console.log("this is the data.token ->", data);
         // saveJwtToken(data.token);
         return data
       }).then(() => {
         const inDeviceJWT= secureStorage.getItemAsync("JwtToken");
         return inDeviceJWT
       }).then((JWT) => {
-        console.log("This is the JWT the user has in local storage ->", JWT)
+        // console.log("This is the JWT the user has in local storage ->", JWT)
         setIsSignedIn(true);
       })
       .catch((error) => {
