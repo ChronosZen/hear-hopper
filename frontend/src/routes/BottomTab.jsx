@@ -51,6 +51,7 @@ function HomeStackScreen({ route }) {
           name="Parental Control Noise Check"
           component={ParentalControlNoiseCheckScreen}
         />
+        <HomeStack.Screen name="Test Result" component={TestResult} />
       </HomeStack.Navigator>
     );
   } catch (e) {

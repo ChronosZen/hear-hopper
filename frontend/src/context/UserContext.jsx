@@ -6,7 +6,10 @@ const UserContext = createContext();
 const initialState = {
   firstName: "",
   kids: [],
-  quizScore: "",
+  selectedKidId: "",
+  selectedKidImage: "",
+  selectedKidQuizScore: "",
+  selectedKidAudiograms: "",
 };
 function reducer(state, action) {
   switch (action.type) {
@@ -15,10 +18,37 @@ function reducer(state, action) {
         ...state,
         ...action.payload,
       };
+    case "initialChild":
+      return {
+        ...state,
+        selectedKidId: action.payload.selectedKidId,
+        selectedKidImage: action.payload.selectedKidImage,
+        selectedKidQuizScore: action.payload.selectedKidQuizScore,
+        selectedKidAudiograms: action.payload.selectedKidAudiograms,
+      };
+    case "changeChild":
+      return {
+        ...state,
+        selectedKidId: action.payload.selectedKidId,
+        selectedKidImage: action.payload.selectedKidImage,
+        selectedKidQuizScore: action.payload.selectedKidQuizScore,
+        selectedKidAudiograms: action.payload.selectedKidAudiograms,
+      };
   }
 }
 const UserProvider = ({ children }) => {
-  const [{ id, firstName, kids }, dispatch] = useReducer(reducer, initialState);
+  const [
+    {
+      id,
+      firstName,
+      kids,
+      selectedKidId,
+      selectedKidImage,
+      selectedKidQuizScore,
+      selectedKidAudiograms,
+    },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   const { isPending, error, data } = useQuery({
     queryKey: ["myData"],
@@ -32,9 +62,17 @@ const UserProvider = ({ children }) => {
         .then((json) => json.data),
   });
   useEffect(() => {
-    if (data) {
-      dispatch({ type: "dataReceived", payload: data });
-    }
+    if (data) dispatch({ type: "dataReceived", payload: data });
+    if (data?.kids.length > 0)
+      dispatch({
+        type: "initialChild",
+        payload: {
+          selectedKidId: data.kids[0]._id,
+          selectedKidImage: data.kids[0].image,
+          selectedKidQuizScore: data.kids[0].quizScore,
+          selectedKidAudiograms: data.kids[0].audiograms,
+        },
+      });
   }, [data]);
   if (isPending) return <Text>Loading...</Text>;
   if (error) return <Text>An error has occurred: ${error.message}</Text>;
@@ -45,6 +83,11 @@ const UserProvider = ({ children }) => {
         id,
         firstName,
         kids,
+        selectedKidId,
+        selectedKidImage,
+        selectedKidQuizScore,
+        selectedKidAudiograms,
+        dispatch,
       }}>
       {children}
     </UserContext.Provider>
