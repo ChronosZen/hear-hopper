@@ -24,7 +24,6 @@ import StartSection from "../components/train/StartSection";
 import QuizSection from "../components/train/QuizSection";
 import TestTutorial from "../components/hearingTest/TestTutorial";
 import EarTestScreen from "../screens/EarTestScreen";
-import { useQuery } from "@tanstack/react-query";
 import TestResult from "../components/hearingTest/TestResult";
 
 const ProfileStack = createNativeStackNavigator();
@@ -41,15 +40,9 @@ function ProfileStackScreen({ route }) {
 const HomeStack = createNativeStackNavigator();
 function HomeStackScreen({ route }) {
   try {
-    const { userData } = route.params;
-    // console.log("userData from home stack -> ", userData)
     return (
       <HomeStack.Navigator screenOptions={{ headerShown: true }}>
-        <HomeStack.Screen
-          name="Go back"
-          initialParams={{ userData }}
-          component={HomeScreen}
-        />
+        <HomeStack.Screen name="Go back" component={HomeScreen} />
         <HomeStack.Screen
           name="ParentalControl"
           component={ParentalControlScreen}
@@ -58,6 +51,7 @@ function HomeStackScreen({ route }) {
           name="Parental Control Noise Check"
           component={ParentalControlNoiseCheckScreen}
         />
+        <HomeStack.Screen name="Test Result" component={TestResult} />
       </HomeStack.Navigator>
     );
   } catch (e) {
@@ -95,27 +89,6 @@ function HearingTestStackScreen() {
 const Tab = createBottomTabNavigator();
 
 const BottomTab = () => {
-  const { isPending, error, data } = useQuery({
-    queryKey: ["myData"],
-    queryFn: () =>
-      fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/me`, {
-        headers: {
-          Authorization: `Bearer ${process.env.EXPO_PUBLIC_MOCK_JWT}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((json) => json.data),
-  });
-
-  if (isPending) return <Text>Loading...</Text>;
-
-  if (error) return <Text>An error has occurred: ${error.message}</Text>;
-
-  const userData = data;
-  console.log(
-    "Here's the user's kids. You should see this after the query has refetched ->",
-    userData.kids.map((kid) => kid.firstName)
-  );
   return (
     <Tab.Navigator
       style={styles.tab}
@@ -132,7 +105,6 @@ const BottomTab = () => {
       <Tab.Screen
         name="Home"
         component={HomeStackScreen}
-        initialParams={{ userData }}
         options={{
           tabBarLabel: ({ focused }) => (
             <Text style={focused ? styles.hNavActive : styles.hNav}>Home</Text>
@@ -186,7 +158,6 @@ const BottomTab = () => {
       <Tab.Screen
         name="Profile"
         component={ProfileStackScreen}
-        initialParams={{ userData }}
         options={{
           tabBarLabel: ({ focused }) => (
             <Text style={focused ? styles.hNavActive : styles.hNav}>

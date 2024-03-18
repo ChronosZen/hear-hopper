@@ -3,6 +3,7 @@ import ButtonFunc from "../components/reusable/ButtonFunc";
 import React from "react";
 import { Colors } from "../styles";
 import TestResultCards from "../components/reusable/TestResultCards";
+import { useUser } from "../context/UserContext";
 import {
   HStack,
   VStack,
@@ -16,40 +17,40 @@ import {
   Icon,
   ChevronRightIcon,
   LinkText,
-  SafeAreaView
-} from '@gluestack-ui/themed';
+  SafeAreaView,
+} from "@gluestack-ui/themed";
+import ChildSelection from "../components/user/ChildSelection";
 
 const HomeScreen = ({ navigation, route }) => {
-   const { userData } = route.params;
-  // console.log("route.params from home screen -> ", route.params);
+  const { firstName } = useUser();
 
   const onClick = () => {
-    console.log("card is clicked.")
-  }
+    console.log("card is clicked.");
+  };
 
-  const homeCards = [{
-    title: "Child Ear Training"
-  },
-  {
-    title: "Parental Control"
-  }]
+  const homeCards = [
+    {
+      title: "Child Ear Training",
+    },
+    {
+      title: "Parental Control",
+    },
+  ];
 
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <SafeAreaView
+      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       {/* Header */}
       <Box minWidth={"$full"} backgroundColor={Colors.primary.p1}>
-        <HStack justifyContent="space-between" alignItems="center" paddingHorizontal={16}>
-          <VStack >
+        <HStack
+          justifyContent="space-between"
+          alignItems="center"
+          paddingHorizontal={16}>
+          <VStack>
             <Heading color="white">Welcome</Heading>
-            <Heading color="white">{userData.firstName}</Heading>
+            <Heading color="white">{firstName}</Heading>
           </VStack>
-          <Image
-            size="md"
-            borderRadius="$none"
-            alt="mascot"
-            source={{
-              uri: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-            }} />
+          <ChildSelection />
         </HStack>
       </Box>
 
@@ -60,9 +61,13 @@ const HomeScreen = ({ navigation, route }) => {
       <HStack margin={16} space="xl">
         <VStack margin={16}>
           <Heading>Test your child hearing</Heading>
-          <Text>Our hearing test is created keeping your child\'s ear sensitivity in mind.</Text>
-          <ButtonFunc text={"Take the test"} handleOnPress={() => navigation.navigate("Test")} >
-          </ButtonFunc>
+          <Text>
+            Our hearing test is created keeping your child\'s ear sensitivity in
+            mind.
+          </Text>
+          <ButtonFunc
+            text={"Take the test"}
+            handleOnPress={() => navigation.navigate("Test")}></ButtonFunc>
         </VStack>
 
         {/* <Image size="md"
@@ -79,22 +84,34 @@ const HomeScreen = ({ navigation, route }) => {
       {homeCards.map((homeCard, index) => {
         return (
           <View key={index}>
-            <Pressable onPress={() => {
-              if (index === 0) {
-                navigation.navigate("Train")
-              } else {
-                navigation.navigate("ParentalControl")
-              }
-            }}>
-              <Card key={index} margin={16} borderWidth={1} borderColor={Colors.primary.p1} backgroundColor={Colors.primary.p5}  >
-                <HStack justifyContent="space-between" >
+            <Pressable
+              onPress={() => {
+                if (index === 0) {
+                  navigation.navigate("Train");
+                } else {
+                  navigation.navigate("ParentalControl");
+                }
+              }}>
+              <Card
+                key={index}
+                margin={16}
+                borderWidth={1}
+                borderColor={Colors.primary.p1}
+                backgroundColor={Colors.primary.p5}>
+                <HStack justifyContent="space-between">
                   <Heading color={Colors.primary.p1}>{homeCard.title}</Heading>
-                  <Icon as={ChevronRightIcon} m="$2" w="$4" h="$4" color={Colors.primary.p1} />
+                  <Icon
+                    as={ChevronRightIcon}
+                    m="$2"
+                    w="$4"
+                    h="$4"
+                    color={Colors.primary.p1}
+                  />
                 </HStack>
               </Card>
             </Pressable>
           </View>
-        )
+        );
       })}
     </SafeAreaView>
   );

@@ -20,6 +20,7 @@
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
     "@tanstack/react-query": "^5.28.0",
+    "context": "^3.0.27",
     "expo": "~50.0.7",
     "expo-app-loading": "^2.1.1",
     "expo-av": "^13.10.5",

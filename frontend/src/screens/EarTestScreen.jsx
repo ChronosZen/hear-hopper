@@ -5,7 +5,7 @@ import {
   HStack,
   VStack,
   Progress,
-  ProgressFilledTrack
+  ProgressFilledTrack,
 } from "@gluestack-ui/themed";
 import SVG from "../components/svg/SVG";
 import HeaderText from "../components/reusable/HeaderText";
@@ -13,11 +13,12 @@ import {
   ear,
   testIcon,
   mainMastcot,
-  happyMascot
+  happyMascot,
 } from "../components/svg/svgs";
 import { Typography, Colors } from "../styles/index";
 import ButtonFunc from "../components/reusable/ButtonFunc";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useUser } from "../context/UserContext";
 
 const EarTestScreen = ({ navigation }) => {
   const [earOpt, setEarOpt] = useState("left");
@@ -28,148 +29,149 @@ const EarTestScreen = ({ navigation }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   // const [responsedB, setResponsedB] = useState([0,100,100,100,100])
   // const responseFreq = [0, 500, 1000, 2000, 5000, 8000]
+  const { selectedKidId } = useUser();
   const [response, setResponse] = useState({
     "500hz": 80,
     "1000hz": 80,
     "2000hz": 80,
     "5000hz": 80,
-    "8000hz": 80
+    "8000hz": 80,
   });
   const [rightResponse, setRightResponse] = useState({
     "500hz": 80,
     "1000hz": 80,
     "2000hz": 80,
     "5000hz": 80,
-    "8000hz": 80
+    "8000hz": 80,
   });
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: payload => {
+    mutationFn: (payload) => {
       return fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/audiogram`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Authorization: `Bearer ${process.env.EXPO_PUBLIC_MOCK_JWT}`
+          Authorization: `Bearer ${process.env.EXPO_PUBLIC_MOCK_JWT}`,
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
     },
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["myData"] });
-      response.json().then(data => {
-        navigation.navigate("Test Result", data)
-      })
-    }
+      response.json().then((data) => {
+        navigation.navigate("Test Result", data);
+      });
+    },
   });
 
   const audioPlay = [
     {
       uri: require("../../assets/audioFiles/0hz.wav"),
       freq: "0hz",
-      volume: 0
+      volume: 0,
     },
     {
       uri: require("../../assets/audioFiles/500hz.wav"),
       freq: "500hz",
-      volume: 0.6
+      volume: 0.6,
     },
     {
       uri: require("../../assets/audioFiles/500hz.wav"),
       freq: "500hz",
-      volume: 0.2
+      volume: 0.2,
     },
     {
       uri: require("../../assets/audioFiles/500hz.wav"),
       freq: "500hz",
-      volume: 0.1
+      volume: 0.1,
     },
     {
       uri: require("../../assets/audioFiles/0hz.wav"),
       freq: "0hz",
-      volume: 0
+      volume: 0,
     },
     {
       uri: require("../../assets/audioFiles/1000hz.wav"),
       freq: "1000hz",
-      volume: 0.7
+      volume: 0.7,
     },
     {
       uri: require("../../assets/audioFiles/1000hz.wav"),
       freq: "1000hz",
-      volume: 0.5
+      volume: 0.5,
     },
     {
       uri: require("../../assets/audioFiles/1000hz.wav"),
       freq: "1000hz",
-      volume: 0.2
+      volume: 0.2,
     },
     {
       uri: require("../../assets/audioFiles/0hz.wav"),
       freq: "0hz",
-      volume: 0
+      volume: 0,
     },
     {
       uri: require("../../assets/audioFiles/2000hz.wav"),
       freq: "2000hz",
-      volume: 0.5
+      volume: 0.5,
     },
     {
       uri: require("../../assets/audioFiles/2000hz.wav"),
       freq: "2000hz",
-      volume: 0.6
+      volume: 0.6,
     },
     {
       uri: require("../../assets/audioFiles/2000hz.wav"),
       freq: "2000hz",
-      volume: 0.1
+      volume: 0.1,
     },
     {
       uri: require("../../assets/audioFiles/0hz.wav"),
       freq: "0hz",
-      volume: 0
+      volume: 0,
     },
     {
       uri: require("../../assets/audioFiles/5000hz.wav"),
       freq: "5000hz",
-      volume: 0.4
+      volume: 0.4,
     },
     {
       uri: require("../../assets/audioFiles/5000hz.wav"),
       freq: "5000hz",
-      volume: 0.2
+      volume: 0.2,
     },
     {
       uri: require("../../assets/audioFiles/5000hz.wav"),
       freq: "5000hz",
-      volume: 0.3
+      volume: 0.3,
     },
     {
       uri: require("../../assets/audioFiles/0hz.wav"),
       freq: "0hz",
-      volume: 0
+      volume: 0,
     },
     {
       uri: require("../../assets/audioFiles/8000hz.wav"),
       freq: "8000hz",
-      volume: 0.4
+      volume: 0.4,
     },
     {
       uri: require("../../assets/audioFiles/8000hz.wav"),
       freq: "8000hz",
-      volume: 0.3
+      volume: 0.3,
     },
     {
       uri: require("../../assets/audioFiles/8000hz.wav"),
       freq: "8000hz",
-      volume: 0.5
+      volume: 0.5,
     },
     {
       uri: require("../../assets/audioFiles/0hz.wav"),
       freq: "0hz",
-      volume: 0
-    }
+      volume: 0,
+    },
   ];
 
   // const changeEar = () => {
@@ -184,7 +186,7 @@ const EarTestScreen = ({ navigation }) => {
   // playing the audio in sequence
   useEffect(() => {
     if (sound) {
-      sound.setOnPlaybackStatusUpdate(status => {
+      sound.setOnPlaybackStatusUpdate((status) => {
         if (status.isLoaded && status.didJustFinish) {
           // console.log('when is loaded and didJustFinish are true');
           nextAudio();
@@ -205,7 +207,7 @@ const EarTestScreen = ({ navigation }) => {
   const playAudio = async () => {
     // console.log("playaudio called", currentIndex);
     if (sound) {
-    //   console.log("if sound");
+      //   console.log("if sound");
       await sound.unloadAsync();
     }
     // if (earOpt === "right") {
@@ -218,14 +220,22 @@ const EarTestScreen = ({ navigation }) => {
     newSound.setVolumeAsync(audioPlay[currentIndex].volume, audioPanValu);
     setSound(newSound);
     // sound.stopAsync();
-    if (currentIndex !== 0 && (currentIndex === 5 || currentIndex === 7 || currentIndex === 11 || currentIndex === 15 || currentIndex === 19 || currentIndex === 20)) {
+    if (
+      currentIndex !== 0 &&
+      (currentIndex === 5 ||
+        currentIndex === 7 ||
+        currentIndex === 11 ||
+        currentIndex === 15 ||
+        currentIndex === 19 ||
+        currentIndex === 20)
+    ) {
       if (progress < 5) {
         // console.log("check the audio intervals")
-        setProgress(prev => {
+        setProgress((prev) => {
           return prev + 1;
         });
       }
-      setnextEar(next => {
+      setnextEar((next) => {
         return next + 1;
       });
     }
@@ -233,7 +243,7 @@ const EarTestScreen = ({ navigation }) => {
 
   //incrementing the index value to play next audio in array
   const nextAudio = () => {
-    setCurrentIndex(prevIndex => {
+    setCurrentIndex((prevIndex) => {
       return prevIndex + 1;
     });
     if (currentIndex <= audioPlay.length - 1) {
@@ -252,19 +262,19 @@ const EarTestScreen = ({ navigation }) => {
       // const audioArr = [...responsedB]
       // audioArr[key] = db
       // setResponsedB(audioArr)
-      setResponse(prevResp => ({
+      setResponse((prevResp) => ({
         ...prevResp,
-        [audioPlay[currentIndex].freq]: db
+        [audioPlay[currentIndex].freq]: db,
       }));
-      setRightResponse(rightResp => ({
+      setRightResponse((rightResp) => ({
         ...rightResp,
-        [audioPlay[currentIndex].freq]: db+10
+        [audioPlay[currentIndex].freq]: db + 10,
       }));
     }
     console.log(response);
   };
 
-  const volTodBCal = vol => {
+  const volTodBCal = (vol) => {
     console.log("volume to dB ", vol);
     return vol * 50;
   };
@@ -290,8 +300,7 @@ const EarTestScreen = ({ navigation }) => {
           flex={1}
           alignItems="center"
           justifyContent="space-between"
-          marginVertical={24}
-        >
+          marginVertical={24}>
           <VStack alignItems="center" marginBottom={12}>
             <SVG xml={mainMastcot} width="180" height="180" />
             <View>
@@ -306,17 +315,15 @@ const EarTestScreen = ({ navigation }) => {
               backgroundColor: Colors.primary.p2,
               width: 108,
               height: 108,
-              borderRadius: 54
+              borderRadius: 54,
             }}
-            onp
-          >
+            onp>
             <View
               style={{
                 flex: 1,
                 alignItems: "center",
-                justifyContent: "center"
-              }}
-            >
+                justifyContent: "center",
+              }}>
               <SVG
                 xml={testIcon}
                 width="48"
@@ -332,9 +339,7 @@ const EarTestScreen = ({ navigation }) => {
             <SVG xml={happyMascot} width="180" height="180" />
             <View>
               <Text style={styles.instructText}>
-                {earOpt === "left"
-                  ? "You Did Great!"
-                  : "You Did Great!"}
+                {earOpt === "left" ? "You Did Great!" : "You Did Great!"}
               </Text>
             </View>
           </VStack>
@@ -346,13 +351,13 @@ const EarTestScreen = ({ navigation }) => {
               mutation.mutate({
                 leftEar: response,
                 rightEar: {
-                    "500hz": 40,
-                    "1000hz": 60,
-                    "2000hz": 45,
-                    "5000hz": 60,
-                    "8000hz": 40
+                  "500hz": 40,
+                  "1000hz": 60,
+                  "2000hz": 45,
+                  "5000hz": 60,
+                  "8000hz": 40,
                 },
-                owner: "65ee715e28d618b42da6c397"
+                owner: selectedKidId,
               });
             }}
           />
@@ -365,10 +370,10 @@ const EarTestScreen = ({ navigation }) => {
 export default EarTestScreen;
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   instructText: {
     textAlign: "center",
-    ...Typography.body.bl
-  }
+    ...Typography.body.bl,
+  },
 });
