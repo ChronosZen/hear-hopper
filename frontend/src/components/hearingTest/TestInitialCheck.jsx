@@ -19,7 +19,7 @@ const TestInitialCheck = ({navigation}) => {
     }
 
     return (
-        <VStack style={{flex: 1, margin: 24}}>
+        <VStack style={{flex: 1}}>
             <VStack style={styles.container}>
                 <SVG xml={mainMastcot} width="180" height="180" />
                 {setting ?
@@ -41,7 +41,9 @@ const TestInitialCheck = ({navigation}) => {
                     </VStack>
                     }
             </VStack>
+            <View>
                 <ButtonFunc text="Proceed" handleOnPress={changeSection} />
+            </View>
         </VStack>
     );
 };
@@ -52,6 +54,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-evenly',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 24, 
+    marginHorizontal: 32
   }
 });
