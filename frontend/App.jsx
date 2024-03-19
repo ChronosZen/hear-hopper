@@ -42,31 +42,31 @@ export default function App() {
   }
   return (
     <QueryClientProvider client={queryClient}>
-      <UserProvider>
-        <GluestackUIProvider config={config}>
-          <NavigationContainer>
-            {isSignedIn ? (
+      <GluestackUIProvider config={config}>
+        <NavigationContainer>
+          {isSignedIn ? (
+            <UserProvider>
               <BottomTab userData={userData} />
-            ) : (
-              <Stack.Navigator>
-                <Stack.Screen name="Log in">
-                  {(props) => (
-                    <LoginScreen {...props} setIsSignedIn={setIsSignedIn} />
-                  )}
-                </Stack.Screen>
-                <Stack.Screen name="Sign up">
-                  {(props) => (
-                    <SignUpScreen {...props} setIsSignedIn={setIsSignedIn} />
-                  )}
-                </Stack.Screen>
-                <Stack.Screen name="Add Profile">
-                  {(props) => <AddProfileScreen {...props} />}
-                </Stack.Screen>
-              </Stack.Navigator>
-            )}
-          </NavigationContainer>
-        </GluestackUIProvider>
-      </UserProvider>
+              </UserProvider>
+          ) : (
+            <Stack.Navigator>
+              <Stack.Screen name="Log in">
+                {(props) => (
+                  <LoginScreen {...props} setIsSignedIn={setIsSignedIn} />
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="Sign up">
+                {(props) => (
+                  <SignUpScreen {...props} setIsSignedIn={setIsSignedIn} />
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="Add Profile">
+                {(props) => <AddProfileScreen {...props} />}
+              </Stack.Screen>
+            </Stack.Navigator>
+          )}
+        </NavigationContainer>
+      </GluestackUIProvider>
     </QueryClientProvider>
   );
 }

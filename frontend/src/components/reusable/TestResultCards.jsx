@@ -3,13 +3,15 @@ import { Card, Heading, Text, Pressable } from "@gluestack-ui/themed";
 import { View } from "react-native";
 import { useUser } from "../../context/UserContext";
 import { useNavigation } from "@react-navigation/native";
+
 const TestResultCards = () => {
   const { selectedKidAudiograms } = useUser();
+  console.log("selectedAudiograms", selectedKidAudiograms);
   const navigation = useNavigation();
-  const worstEars = selectedKidAudiograms?.map((audiogram) => {
+  const worstEars = selectedKidAudiograms ? selectedKidAudiograms?.map((audiogram) => {
     return Math.max(audiogram.leftAverage, audiogram.rightAverage);
-  });
-  // console.log("here is the worst ear data ->", worstEars[0]);
+  }) : [];
+  console.log("here is the worst ear data ->", worstEars[0]);
 
   const hearingZone = (avarage) => {
     if (avarage < 20) {
@@ -30,9 +32,9 @@ const TestResultCards = () => {
   });
   // console.log("hearing levels -> ", hearingLevels);
 
-  const dataOfCards = selectedKidAudiograms?.map((audiogram, index) => {
+  const dataOfCards = selectedKidAudiograms ? selectedKidAudiograms?.map((audiogram, index) => {
     return { ...audiogram, hearingLevel: hearingLevels[index] };
-  });
+  }) : [];
   // console.log(dataOfCards[0].createdAt);
 
   const latestAudiogram = dataOfCards[0];

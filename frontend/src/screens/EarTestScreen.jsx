@@ -19,6 +19,7 @@ import { Typography, Colors } from "../styles/index";
 import ButtonFunc from "../components/reusable/ButtonFunc";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "../context/UserContext";
+import * as secureStorage from 'expo-secure-store';
 
 const EarTestScreen = ({ navigation }) => {
   const [earOpt, setEarOpt] = useState("left");
@@ -47,13 +48,13 @@ const EarTestScreen = ({ navigation }) => {
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: (payload) => {
+    mutationFn: async (payload) => {
       return fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/audiogram`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Authorization: `Bearer ${process.env.EXPO_PUBLIC_MOCK_JWT}`,
+          Authorization: `Bearer ${await seureStrorage.getItemAsync('JwtToken')}`,
         },
         body: JSON.stringify(payload),
       });
