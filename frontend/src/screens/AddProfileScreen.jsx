@@ -35,6 +35,7 @@ import { InputField } from "@gluestack-ui/themed";
 import { FormControl } from "@gluestack-ui/themed";
 import CameraProfile from "../components/user/CameraProfile";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import * as secureStorage from 'expo-secure-store';
 
 const initialState = {
   page: 1,
@@ -100,10 +101,10 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
     useReducer(reducer, initialState);
   const { isPending, error, data } = useQuery({
     queryKey: ["myData"],
-    queryFn: () =>
+    queryFn: async () =>
       fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/me`, {
         headers: {
-          Authorization: `Bearer ${process.env.EXPO_PUBLIC_MOCK_JWT}`,
+          Authorization: `Bearer ${await secureStorage.getItemAsync('JwtToken')}`,
         },
       })
         .then((res) => res.json())
@@ -117,13 +118,13 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
   const userData = data;
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: (payload) => {
+    mutationFn: async (payload) => {
       return fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/kid`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Authorization: `Bearer ${process.env.EXPO_PUBLIC_MOCK_JWT}`,
+          Authorization: `Bearer ${await secureStorage.getItemAsync('JwtToken')}`,
         },
         body: JSON.stringify(payload),
       });
