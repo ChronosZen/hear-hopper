@@ -24,6 +24,8 @@ import AnimalChoices from "./AnimalChoices";
 import ButtonFunc from "../reusable/ButtonFunc";
 import { useReducer } from "react";
 import RevealAnswer from "./RevealAnswer";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useUser } from "../../context/UserContext";
 const quizData = [
   {
     correctAnswer: "Cat",
@@ -132,7 +134,7 @@ const QuizSection = ({ navigation }) => {
     { question, pageState, answerState, userAnswer, showModal, score },
     dispatch,
   ] = useReducer(reducer, initialState);
-
+  const { selectedKidId } = useUser();
   const checkAnswer = (userAnswer, correctAnswer, question) => {
     if (userAnswer === correctAnswer) {
       dispatch({
@@ -157,7 +159,27 @@ const QuizSection = ({ navigation }) => {
       }
     }
   };
-
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (payload) => {
+      return fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/api/quiz/${selectedKidId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${process.env.EXPO_PUBLIC_MOCK_JWT}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myData"] });
+      console.log("");
+    },
+  });
   const handleNext = () => {
     dispatch({ type: "next" });
   };
