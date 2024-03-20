@@ -6,7 +6,7 @@ import { Image, SafeAreaView, VStack } from "@gluestack-ui/themed";
 import Dad from "../../assets/dad.jpg";
 import KidDisplay from "../components/user/KidDisplay";
 import { useQuery } from "@tanstack/react-query";
-import * as secureStorage from 'expo-secure-store';
+import * as secureStorage from "expo-secure-store";
 
 ProfileScreen = ({ navigation, route }) => {
   const { isPending, error, data } = useQuery({
@@ -14,7 +14,9 @@ ProfileScreen = ({ navigation, route }) => {
     queryFn: async () =>
       fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/me`, {
         headers: {
-          Authorization: `Bearer ${await secureStorage.getItemAsync('JwtToken')}`,
+          Authorization: `Bearer ${await secureStorage.getItemAsync(
+            "JwtToken"
+          )}`,
         },
       })
         .then((res) => res.json())
