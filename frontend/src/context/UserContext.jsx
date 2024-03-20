@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createContext, useContext, useReducer, useEffect } from "react";
 import { Text, View } from "react-native";
+import * as secureStorage from 'expo-secure-store'; 
 
 const UserContext = createContext();
 const initialState = {
@@ -52,10 +53,10 @@ const UserProvider = ({ children }) => {
 
   const { isPending, error, data } = useQuery({
     queryKey: ["myData"],
-    queryFn: () =>
+    queryFn: async () =>
       fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/me`, {
         headers: {
-          Authorization: `Bearer ${process.env.EXPO_PUBLIC_MOCK_JWT}`,
+          Authorization: `Bearer ${await secureStorage.getItemAsync('JwtToken') }`,
         },
       })
         .then((res) => res.json())

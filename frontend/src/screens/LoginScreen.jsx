@@ -84,7 +84,7 @@ const LoginScreen = ({ navigation, route, setIsSignedIn }) => {
       }).then(() => {
         const inDeviceJWT= secureStorage.getItemAsync("JwtToken");
         return inDeviceJWT
-      }).then((JWT) => {
+      }).then(() => {
         // console.log("This is the JWT the user has in local storage ->", JWT)
         setIsSignedIn(true);
       })
