@@ -23,20 +23,6 @@ const TestTutorial = ({navigation}) => {
     
     const startCountDown = () => {
         setShowCountDown(true)
-        // for(let i=0; i<9; i++){
-        //     if(i%3 === 0){
-        //         console.log("count: ", state.count)
-        //         setTimeout(() => {
-        //             console.log("count timeout: ", state.count)
-        //             dispatch({type: 'dec'})
-        //         }, 5000)
-        //     }
-
-        // }
-
-        // setTimeout(() => {
-        //     console.log("count down not happening")
-        // }, 5000)
 
         navigation.navigate("Ear Test")
         setShowCountDown(false)
