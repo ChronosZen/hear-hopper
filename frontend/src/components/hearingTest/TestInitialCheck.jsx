@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
 import { useState, useEffect, useReducer } from "react";
-import {testIcon, soundIcon, notification, mainMastcot} from '../svg/svgs'
+import {headphone, soundIcon, notification, mainMastcot, speaker} from '../svg/svgs'
 import SVG from "../svg/SVG";
 import ButtonFunc from "../reusable/ButtonFunc";
 import { Typography, Colors } from '../../styles/index';
@@ -24,22 +24,22 @@ const TestInitialCheck = ({navigation}) => {
             <VStack style={styles.container}>
                 <SVG xml={mainMastcot} width="180" height="180" />
                 {setting ?
-                    <VStack style={{justifyContent: 'space-between', alignItems: 'start', gap: 32}}>
+                    <VStack style={{alignItems: 'center', gap: 32}}>
                         <Text style={{...Typography.heading.h4}}>Please make sure to Turn Off</Text>
-                        <HStack marginHorizontal={78}>
-                            <SVG xml={notification} width="24" height="24" />
-                            <Text>  Notifications</Text>
+                        <HStack alignItems='center'>
+                            <SVG xml={notification} width="40" height="40" />
+                            <Text style={Typography.body.bxl}> Notifications</Text>
                         </HStack>
-                        <HStack marginHorizontal={78}>
-                            <SVG xml={soundIcon} width="24" height="24" />
-                            <Text>  Sound effects</Text>
+                        <HStack alignItems='center'>
+                            <SVG xml={speaker} width="40" height="40" />
+                            <Text style={Typography.body.bxl}> Sound effects</Text>
                         </HStack>
                     </VStack>
                     :
                     <>
                     <Text style={{...Typography.heading.h4, textAlign: 'center'}}>Please wear a Headphone for Accurate Results</Text>
                     <VStack flex={1} alignItems= 'center' justifyContent= 'center'>
-                        <SVG xml={testIcon} width="120" height="120" fill={Colors.primary.p1} />
+                        <SVG xml={headphone} width="120" height="120" fill={Colors.primary.p1} />
                     </VStack>
                     </>
                     }
