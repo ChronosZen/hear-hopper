@@ -69,14 +69,14 @@ const TestResultCards = ({ viewSec }) => {
             (dataOfCards.length>0 ? (
             dataOfCards.map((data) => {
               return (
-                <>
-                  <Pressable key={data.id}>
+                <VStack key={data.id}>
+                  <Pressable>
                     {/* <Pressable
               onPress={() => {
                 navigation.navigate("Test Result", data);
               }}> */}
-                    <Card marginVertical={12}>
-                      <HStack alignItems="center" gap={12}>
+                    <Card marginVertical={12} >
+                      <HStack alignItems="center" gap={12} >
                         <VStack
                           style={{
                             backgroundColor: Colors.primary.p5,
@@ -96,7 +96,7 @@ const TestResultCards = ({ viewSec }) => {
                       </HStack>
                     </Card>
                   </Pressable>
-                </>
+                </VStack>
               );
             })
             ) : 
