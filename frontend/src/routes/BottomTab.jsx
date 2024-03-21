@@ -25,6 +25,7 @@ import QuizSection from "../components/train/QuizSection";
 import TestTutorial from "../components/hearingTest/TestTutorial";
 import EarTestScreen from "../screens/EarTestScreen";
 import TestResult from "../components/hearingTest/TestResult";
+import ViewAllResult from "../screens/ViewAllResult";
 
 const ProfileStack = createNativeStackNavigator();
 function ProfileStackScreen({ route }) {
@@ -82,6 +83,7 @@ function HearingTestStackScreen() {
       <HearinTestStack.Screen name="Tutorial" component={TestTutorial} />
       <HearinTestStack.Screen name="Ear Test" component={EarTestScreen} />
       <HearinTestStack.Screen name="Test Result" component={TestResult} />
+      <HearinTestStack.Screen name="All Results" component={ViewAllResult} />
     </HearinTestStack.Navigator>
   );
 }

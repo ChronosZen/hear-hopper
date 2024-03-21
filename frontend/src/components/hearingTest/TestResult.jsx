@@ -18,7 +18,7 @@ const TestResult = ({ route }) => {
   const { data } = route.params;
   console.log("this is audiogram object", data);
 
-  console.log("right left avg: ", data.leftAverage, data.rightAverage)
+  // console.log("right left avg: ", data.leftAverage, data.rightAverage)
   console.log("percentage: ", (100-(data.leftAverage*(100/91))).toFixed(0))
   const checkHearing = (avg) => {
     if(avg >=0 && avg<=25){
@@ -126,10 +126,7 @@ const TestResult = ({ route }) => {
           />
         </View>
 
-        {/* <Button
-                title="View Previous Results"
-                onPress={prevResults}
-                /> */}
+        <ButtonFunc text="View All Results" handleOnPress={() => navigation.navigate("All Results")} />
       </VStack>
     </VStack>
   );
