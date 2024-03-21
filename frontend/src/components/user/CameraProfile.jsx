@@ -13,6 +13,7 @@ import * as MediaLibrary from "expo-media-library";
 
 export default function CameraProfile({ dispatch }) {
   let cameraRef = useRef();
+  const [size, setSize] = useState(null);
   const [hasCameraPermission, setHasCameraPermission] = useState();
   const [photo, setPhoto] = useState();
 
@@ -24,6 +25,16 @@ export default function CameraProfile({ dispatch }) {
       setHasCameraPermission(cameraPermission.status === "granted");
     })();
   }, []);
+
+  // Set the image to be smallest resolution supported by 4:3 aspect ratio to make base64 string small
+  const setMinSize = async () => {
+    const sizes = await cameraRef.current.getAvailablePictureSizesAsync(
+      "4:3"
+    );
+    setSize(sizes[0]);
+  };
+
+  console.log("current camera size", size);
 
   if (hasCameraPermission === undefined) {
     return <Text>Requesting permissions...</Text>;
@@ -37,7 +48,7 @@ export default function CameraProfile({ dispatch }) {
 
   let takePic = async () => {
     let options = {
-      quality: 1,
+      quality: 0,
       base64: true,
       exif: false,
     };
@@ -63,7 +74,7 @@ export default function CameraProfile({ dispatch }) {
   }
 
   return (
-    <Camera style={styles.container} ref={cameraRef}>
+    <Camera style={styles.container} ref={cameraRef} pictureSize={size} onCameraReady={setMinSize}>
       <View style={styles.buttonContainer}>
         <Button title="Take Pic" onPress={takePic} />
       </View>
