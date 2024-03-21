@@ -46,9 +46,41 @@ const HomeScreen = ({ navigation, route }) => {
   return (
     <VStack flex={1} p="$4">
       {/* Header */}
-      <HStack justifyContent="space-between" alignItems="center">
-        <HeaderText text="Welcome"  ></HeaderText>
-        <ChildSelection />
+      <Box minWidth={"$full"} backgroundColor={Colors.primary.p1}>
+        <HStack
+          justifyContent="space-between"
+          alignItems="center"
+          paddingHorizontal={16}>
+          <VStack>
+            <Heading color="white">Welcome</Heading>
+            <Heading color="white">{firstName}</Heading>
+          </VStack>
+          <ChildSelection />
+        </HStack>
+      </Box>
+
+      {/*Latest Test result section*/}
+      <TestResultCards viewSec={1} />
+
+      {/* Hearing test section */}
+      <HStack margin={16} space="xl">
+        <VStack margin={16}>
+          <Heading>Test your child hearing</Heading>
+          <Text>
+            Our hearing test is created keeping your child\'s ear sensitivity in
+            mind.
+          </Text>
+          <ButtonFunc
+            text={"Take the test"}
+            handleOnPress={() => navigation.navigate("Test")}></ButtonFunc>
+        </VStack>
+
+        {/* <Image size="md"
+            borderRadius="$none"
+            source={{
+              uri: "https://picsum.photos/seed/picsum/200/300",
+            }}
+             /> */}
       </HStack>
 
       <TestResultCards />
