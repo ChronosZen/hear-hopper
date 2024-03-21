@@ -133,6 +133,9 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
       queryClient.invalidateQueries({ queryKey: ["myData"] });
       console.log("");
     },
+    onError: (error) => {
+      console.log(error);
+    }
   });
 
   return (
