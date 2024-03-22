@@ -5,16 +5,19 @@ import TestResult from "../components/hearingTest/TestResult";
 import CountDown from "../components/hearingTest/CountDown";
 import TestInitialCheck from "../components/hearingTest/TestInitialCheck";
 import TestTutorial from "../components/hearingTest/TestTutorial";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const TestScreen = ({navigation}) => {
+const TestScreen = ({ navigation }) => {
   // function navigateToTutorial(){
   //   navigation.navigate("Tutorial")
   // }
 
   return (
-    <View style={styles.container}>
-      <TestInitialCheck navigation={navigation} />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <TestInitialCheck navigation={navigation} />
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -25,5 +28,5 @@ const styles = StyleSheet.create({
     flex: 1,
     // justifyContent: 'center'
     // backgroundColor: 'pink',
-  }
+  },
 });

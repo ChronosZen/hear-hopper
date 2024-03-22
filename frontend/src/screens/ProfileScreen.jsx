@@ -2,19 +2,21 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import HeaderText from "../components/reusable/HeaderText";
 import ButtonFunc from "../components/reusable/ButtonFunc";
-import { Image, SafeAreaView, VStack } from "@gluestack-ui/themed";
+import { Image, VStack } from "@gluestack-ui/themed";
 import Dad from "../../assets/dad.jpg";
 import KidDisplay from "../components/user/KidDisplay";
 import { useQuery } from "@tanstack/react-query";
-import * as secureStorage from 'expo-secure-store';
-
+import * as secureStorage from "expo-secure-store";
+import { SafeAreaView } from "react-native-safe-area-context";
 ProfileScreen = ({ navigation, route }) => {
   const { isPending, error, data } = useQuery({
     queryKey: ["myData"],
     queryFn: async () =>
       fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/me`, {
         headers: {
-          Authorization: `Bearer ${await secureStorage.getItemAsync('JwtToken')}`,
+          Authorization: `Bearer ${await secureStorage.getItemAsync(
+            "JwtToken"
+          )}`,
         },
       })
         .then((res) => res.json())
