@@ -11,6 +11,7 @@
   "dependencies": {
     "@expo-google-fonts/outfit": "^0.2.3",
     "@expo-google-fonts/spline-sans": "^0.2.3",
+    "@expo/ngrok": "^2.5.0",
     "@expo/vector-icons": "^14.0.0",
     "@gluestack-style/react": "^1.0.48",
     "@gluestack-ui/config": "^1.1.8",
@@ -26,6 +27,7 @@
     "expo-app-loading": "^2.1.1",
     "expo-av": "^13.10.5",
     "expo-camera": "~14.0.5",
+    "expo-dev-client": "~3.3.11",
     "expo-file-system": "~16.0.7",
     "expo-font": "~11.10.3",
     "expo-media-library": "^15.9.1",
@@ -43,10 +45,12 @@
     "react-native-screens": "^3.29.0",
     "react-native-svg": "^14.1.0",
     "react-native-tab-view": "^3.5.2",
-    "react-native-volume-manager": "^1.10.0"
+    "react-native-volume-manager": "^1.10.0",
+    "expo-updates": "~0.24.12"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@expo/ngrok": "^4.1.0"
   },
   "private": true
 }
