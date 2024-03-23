@@ -57,12 +57,25 @@ const TestResultCards = ({ viewSec }) => {
   console.log(latestAudiogram);
   return (
     <>
+      <Pressable>
+        {/* <Pressable onPress={() => navigation.navigate("Test Result")}> */}
+        <Card marginHorizontal={0} marginVertical={24}>
+          <Heading>{latestAudiogram?.hearingLevel}</Heading>
+          <Text>{latestAudiogram?.createdAt}</Text>
+        </Card>
+      </Pressable>
+      {/* {dataOfCards.map((dataOfCard) => (
+        <Pressable
+          onPress={() => {
+            navigation.navigate("Test Result");
+          }}>
+          <Card>
+            <Heading>{dataOfCard.hearingLevel}</Heading>
+            <Text>{dataOfCard.createdAt}</Text>
       {viewSec === 1 ? (
         <Pressable>
           {/* <Pressable onPress={() => navigation.navigate("Test Result", latestAudiogram)}> */}
-          <Card margin={16}>
-            <Heading>{latestAudiogram?.hearingLevel}</Heading>
-            <Text>{latestAudiogram?.createdAt}</Text>
+
           </Card>
         </Pressable>
       ) : viewSec === 2 ?
