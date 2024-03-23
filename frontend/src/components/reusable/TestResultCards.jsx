@@ -43,7 +43,7 @@ const TestResultCards = () => {
     <>
       <Pressable>
         {/* <Pressable onPress={() => navigation.navigate("Test Result")}> */}
-        <Card margin={16}>
+        <Card marginHorizontal={0} marginVertical={24}>
           <Heading>{latestAudiogram?.hearingLevel}</Heading>
           <Text>{latestAudiogram?.createdAt}</Text>
         </Card>
