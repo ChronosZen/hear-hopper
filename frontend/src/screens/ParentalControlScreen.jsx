@@ -1,11 +1,19 @@
 import HeaderText from "../components/reusable/HeaderText"
 import {
+    HStack,
     VStack,
     Heading,
     Text,
+    Link,
+    Image,
     Box,
     Divider,
+    Card,
     Pressable,
+    Icon,
+    ChevronRightIcon,
+    LinkText,
+    SafeAreaView
 } from '@gluestack-ui/themed';
 import SVG from "../components/svg/SVG";
 
