@@ -50,9 +50,7 @@ const HomeScreen = ({ navigation, route }) => {
         <HeaderText text="Welcome"  ></HeaderText>
         <ChildSelection />
       </HStack>
-
       <TestResultCards />
-
       <VStack borderRadius={16} backgroundColor={Colors.primary.p5} softShadow={2}>
         <Heading size="xl" py="$2" px="$8">Test your kid's hearing</Heading>
         <Text px="$8" py="$2" fontSize={"$lg"}>Our hearing test is created keeping your kid's ear sensitivity in mind.</Text>
