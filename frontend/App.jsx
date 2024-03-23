@@ -26,7 +26,7 @@ import { UserProvider } from "./src/context/UserContext";
 const queryClient = new QueryClient();
 const Stack = createNativeStackNavigator();
 export default function App() {
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(true);
   const [userData, setUserData] = useState({});
   let [fontsLoaded, fontError] = useFonts({
     Outfit_400Regular,
