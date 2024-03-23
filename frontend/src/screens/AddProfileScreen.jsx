@@ -3,6 +3,7 @@ import React from "react";
 import { useEffect, useReducer } from "react";
 import ButtonFunc from "../components/reusable/ButtonFunc";
 import HeaderText from "../components/reusable/HeaderText";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   ChevronDownIcon,
   CircleIcon,
@@ -35,7 +36,7 @@ import { InputField } from "@gluestack-ui/themed";
 import { FormControl } from "@gluestack-ui/themed";
 import CameraProfile from "../components/user/CameraProfile";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import * as secureStorage from 'expo-secure-store';
+import * as secureStorage from "expo-secure-store";
 
 const initialState = {
   page: 1,
@@ -104,7 +105,9 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
     queryFn: async () =>
       fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/me`, {
         headers: {
-          Authorization: `Bearer ${await secureStorage.getItemAsync('JwtToken')}`,
+          Authorization: `Bearer ${await secureStorage.getItemAsync(
+            "JwtToken"
+          )}`,
         },
       })
         .then((res) => res.json())
@@ -124,7 +127,9 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Authorization: `Bearer ${await secureStorage.getItemAsync('JwtToken')}`,
+          Authorization: `Bearer ${await secureStorage.getItemAsync(
+            "JwtToken"
+          )}`,
         },
         body: JSON.stringify(payload),
       });
@@ -135,201 +140,198 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
     },
     onError: (error) => {
       console.log(error);
-    }
+    },
   });
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <HeaderText
-        text={page !== 5 ? "Create Profile" : "Hearing Aid"}
-        textAlign="center"
-      />
-      {page === 1 && (
-        <Input
-          m="$4"
-          variant="outline"
-          size="md"
-          isDisabled={false}
-          isInvalid={false}
-          isReadOnly={false}
-        >
-          <InputField
-            placeholder="Enter Year here"
-            autoComplete="birthdate-year"
-            onChangeText={(newBirthYear) =>
-              dispatch({ type: "birthYear", payload: newBirthYear })
-            }
-          />
-        </Input>
-      )}
-      {page === 2 && (
-        <RadioGroup
-          value={gender}
-          onChange={(newGender) =>
-            dispatch({ type: "gender", payload: newGender })
-          }
-        >
-          <HStack space="2xl">
-            <Radio value="Girl">
-              <RadioIndicator mr="$2">
-                <RadioIcon as={CircleIcon} />
-              </RadioIndicator>
-              <RadioLabel>Girl</RadioLabel>
-            </Radio>
-            <Radio value="Boy">
-              <RadioIndicator mr="$2">
-                <RadioIcon as={CircleIcon} />
-              </RadioIndicator>
-              <RadioLabel>Boy</RadioLabel>
-            </Radio>
-            <Radio value="Non-binary">
-              <RadioIndicator mr="$2">
-                <RadioIcon as={CircleIcon} />
-              </RadioIndicator>
-              <RadioLabel>Non-binary</RadioLabel>
-            </Radio>
-            <Radio value="Prefer not to say">
-              <RadioIndicator mr="$2">
-                <RadioIcon as={CircleIcon} />
-              </RadioIndicator>
-              <RadioLabel>Prefer not to say</RadioLabel>
-            </Radio>
-          </HStack>
-        </RadioGroup>
-      )}
-      {page === 3 && <CameraProfile dispatch={dispatch} />}
-      {page === 4 && (
-        <Input
-          m="$4"
-          variant="outline"
-          size="md"
-          isDisabled={false}
-          isInvalid={false}
-          isReadOnly={false}
-        >
-          <InputField
-            placeholder="Enter Name here"
-            onChangeText={(newfirstName) =>
-              dispatch({ type: "firstName", payload: newfirstName })
-            }
-          />
-        </Input>
-      )}
-      {page === 5 && (
-        <FormControl isRequired>
-          <FormControlLabel>
-            <FormControlLabelText>Left Ear</FormControlLabelText>
-          </FormControlLabel>
-          <Select
-            width={150}
-            value={left}
-            onValueChange={(newValue) => {
-              dispatch({ type: "left", payload: newValue });
-            }}
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <HeaderText
+          text={page !== 5 ? "Create Profile" : "Hearing Aid"}
+          textAlign="center"
+        />
+        {page === 1 && (
+          <Input
+            m="$4"
             variant="outline"
             size="md"
-          >
-            <SelectTrigger variant="outline" size="md">
-              <SelectInput placeholder="Select option" />
-              <SelectIcon mr="$3">
-                <Icon as={ChevronDownIcon} />
-              </SelectIcon>
-            </SelectTrigger>
-            <SelectPortal>
-              <SelectBackdrop />
-              <SelectContent>
-                <SelectDragIndicatorWrapper>
-                  <SelectDragIndicator />
-                </SelectDragIndicatorWrapper>
-                <SelectItem label="No" value={false} />
-                <SelectItem label="Yes" value={true} />
-              </SelectContent>
-            </SelectPortal>
-          </Select>
-          <FormControlLabel>
-            <FormControlLabelText>Right Ear</FormControlLabelText>
-          </FormControlLabel>
-          <Select
-            width={150}
-            value={right}
-            onValueChange={(newValue) => {
-              dispatch({ type: "right", payload: newValue });
-            }}
+            isDisabled={false}
+            isInvalid={false}
+            isReadOnly={false}>
+            <InputField
+              placeholder="Enter Year here"
+              autoComplete="birthdate-year"
+              onChangeText={(newBirthYear) =>
+                dispatch({ type: "birthYear", payload: newBirthYear })
+              }
+            />
+          </Input>
+        )}
+        {page === 2 && (
+          <RadioGroup
+            value={gender}
+            onChange={(newGender) =>
+              dispatch({ type: "gender", payload: newGender })
+            }>
+            <HStack space="2xl">
+              <Radio value="Girl">
+                <RadioIndicator mr="$2">
+                  <RadioIcon as={CircleIcon} />
+                </RadioIndicator>
+                <RadioLabel>Girl</RadioLabel>
+              </Radio>
+              <Radio value="Boy">
+                <RadioIndicator mr="$2">
+                  <RadioIcon as={CircleIcon} />
+                </RadioIndicator>
+                <RadioLabel>Boy</RadioLabel>
+              </Radio>
+              <Radio value="Non-binary">
+                <RadioIndicator mr="$2">
+                  <RadioIcon as={CircleIcon} />
+                </RadioIndicator>
+                <RadioLabel>Non-binary</RadioLabel>
+              </Radio>
+              <Radio value="Prefer not to say">
+                <RadioIndicator mr="$2">
+                  <RadioIcon as={CircleIcon} />
+                </RadioIndicator>
+                <RadioLabel>Prefer not to say</RadioLabel>
+              </Radio>
+            </HStack>
+          </RadioGroup>
+        )}
+        {page === 3 && <CameraProfile dispatch={dispatch} />}
+        {page === 4 && (
+          <Input
+            m="$4"
             variant="outline"
             size="md"
-          >
-            <SelectTrigger variant="outline" size="md">
-              <SelectInput placeholder="Select option" />
-              <SelectIcon mr="$3">
-                <Icon as={ChevronDownIcon} />
-              </SelectIcon>
-            </SelectTrigger>
-            <SelectPortal>
-              <SelectBackdrop />
-              <SelectContent>
-                <SelectDragIndicatorWrapper>
-                  <SelectDragIndicator />
-                </SelectDragIndicatorWrapper>
-                <SelectItem label="No" value={false} />
-                <SelectItem label="Yes" value={true} />
-              </SelectContent>
-            </SelectPortal>
-          </Select>
-        </FormControl>
-      )}
-      {page === 6 && (
-        <View>
-          <Text>Congrat you have added a new kid</Text>
-        </View>
-      )}
-      <Text>
-        ID:{userData.id}
-        {firstName}
-        {gender}
-        {birthYear}
-        {page}
-        {left}
-        {right}
-      </Text>
-      {image && (
-        <Image
-          size="lg"
-          borderRadius="$full"
-          alt="test"
-          source={{
-            uri: image,
-          }}
-        />
-      )}
-      {(page !== 5) & (page !== 6) ? (
-        <ButtonFunc
-          handleOnPress={() => dispatch({ type: "next" })}
-          text="Next"
-        />
-      ) : page === 5 ? (
-        <ButtonFunc
-          handleOnPress={() => {
-            mutation.mutate({
-              birthYear: parseInt(birthYear),
-              gender,
-              image,
-              firstName,
-              hearingAid: { left, right },
-            });
-            dispatch({ type: "submit" });
-          }}
-          text="Submit"
-        />
-      ) : (
-        <ButtonFunc
-          handleOnPress={() => {
-            goBack();
-            dispatch({ type: "goback" });
-          }}
-          text="Go back"
-        />
-      )}
-    </View>
+            isDisabled={false}
+            isInvalid={false}
+            isReadOnly={false}>
+            <InputField
+              placeholder="Enter Name here"
+              onChangeText={(newfirstName) =>
+                dispatch({ type: "firstName", payload: newfirstName })
+              }
+            />
+          </Input>
+        )}
+        {page === 5 && (
+          <FormControl isRequired>
+            <FormControlLabel>
+              <FormControlLabelText>Left Ear</FormControlLabelText>
+            </FormControlLabel>
+            <Select
+              width={150}
+              value={left}
+              onValueChange={(newValue) => {
+                dispatch({ type: "left", payload: newValue });
+              }}
+              variant="outline"
+              size="md">
+              <SelectTrigger variant="outline" size="md">
+                <SelectInput placeholder="Select option" />
+                <SelectIcon mr="$3">
+                  <Icon as={ChevronDownIcon} />
+                </SelectIcon>
+              </SelectTrigger>
+              <SelectPortal>
+                <SelectBackdrop />
+                <SelectContent>
+                  <SelectDragIndicatorWrapper>
+                    <SelectDragIndicator />
+                  </SelectDragIndicatorWrapper>
+                  <SelectItem label="No" value={false} />
+                  <SelectItem label="Yes" value={true} />
+                </SelectContent>
+              </SelectPortal>
+            </Select>
+            <FormControlLabel>
+              <FormControlLabelText>Right Ear</FormControlLabelText>
+            </FormControlLabel>
+            <Select
+              width={150}
+              value={right}
+              onValueChange={(newValue) => {
+                dispatch({ type: "right", payload: newValue });
+              }}
+              variant="outline"
+              size="md">
+              <SelectTrigger variant="outline" size="md">
+                <SelectInput placeholder="Select option" />
+                <SelectIcon mr="$3">
+                  <Icon as={ChevronDownIcon} />
+                </SelectIcon>
+              </SelectTrigger>
+              <SelectPortal>
+                <SelectBackdrop />
+                <SelectContent>
+                  <SelectDragIndicatorWrapper>
+                    <SelectDragIndicator />
+                  </SelectDragIndicatorWrapper>
+                  <SelectItem label="No" value={false} />
+                  <SelectItem label="Yes" value={true} />
+                </SelectContent>
+              </SelectPortal>
+            </Select>
+          </FormControl>
+        )}
+        {page === 6 && (
+          <View>
+            <Text>Congrat you have added a new kid</Text>
+          </View>
+        )}
+        <Text>
+          ID:{userData.id}
+          {firstName}
+          {gender}
+          {birthYear}
+          {page}
+          {left}
+          {right}
+        </Text>
+        {image && (
+          <Image
+            size="lg"
+            borderRadius="$full"
+            alt="test"
+            source={{
+              uri: image,
+            }}
+          />
+        )}
+        {(page !== 5) & (page !== 6) ? (
+          <ButtonFunc
+            handleOnPress={() => dispatch({ type: "next" })}
+            text="Next"
+          />
+        ) : page === 5 ? (
+          <ButtonFunc
+            handleOnPress={() => {
+              mutation.mutate({
+                birthYear: parseInt(birthYear),
+                gender,
+                image,
+                firstName,
+                hearingAid: { left, right },
+              });
+              dispatch({ type: "submit" });
+            }}
+            text="Submit"
+          />
+        ) : (
+          <ButtonFunc
+            handleOnPress={() => {
+              goBack();
+              dispatch({ type: "goback" });
+            }}
+            text="Go back"
+          />
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 
