@@ -6,6 +6,11 @@ import { Colors } from "../../styles";
 import { checkPermissions, requestPermissions } from "./UserPermissions"
 import { useRoute, useNavigation } from "@react-navigation/native";
 import HeaderText from "../reusable/HeaderText";
+import SVG from "../svg/SVG";
+import {
+    noiseCheckIcon,
+    wave
+} from "../svg/svgs";
 
 import {
     Heading,
@@ -14,7 +19,8 @@ import {
     HStack,
     Pressable,
     Icon,
-    CloseIcon
+    CloseIcon,
+    VStack
 } from '@gluestack-ui/themed';
 
 const initialState = {
@@ -175,41 +181,56 @@ const NoiseChecker = () => {
     }, [])
 
     return (
-        <>
-            <HStack space="xl">
-                <HeaderText text="Noise Check" />
-                <Pressable onPress={() => {
-                    stopNoiseCheck();
-                    navigation.navigate("ParentalControl")
-                }}
-                >
-                    <Icon as={CloseIcon} m="$2" w="$4" h="$4" />
-                </Pressable>
-            </HStack>
-            <Text>We will conduct an Environmental Noise Check before starting the test.</Text>
-            {state.isNoiseChecking && (
-                <>
-                    {state.noiseLevel <= -12 && (
-                        <Card backgroundColor={Colors.secondary.g5} margin={16}>
-                            <Heading>Safe</Heading>
-                            <Text>No risk of hearing loss, no matter how long you listen.</Text>
-                        </Card>
-                    )}
-                    {state.noiseLevel <= -10 && state.noiseLevel > -12 && (
-                        <Card backgroundColor={Colors.accent.y3} margin={16}>
-                            <Heading>Moderate Risk</Heading>
-                            <Text>Avoid being in this environment 8 hour or more.</Text>
-                        </Card>
-                    )}
+        <VStack flex={1} justifyContent="start" alignContent="space-between" m={16}>
 
-                    {state.noiseLevel > -10 && (
-                        <Card backgroundColor={Colors.accent.p3} margin={16}>
-                            <Heading>High Risk</Heading>
-                            <Text>Avoid being in this environment 45 minutes or more.</Text>
-                        </Card>
-                    )}
-                </>
-            )}
+            <VStack >
+
+                {/* header */}
+                <HStack justifyContent="space-between" alignItems="center" mb={24}>
+                    <HStack gap={8}>
+                        <SVG xml={noiseCheckIcon} width="40" height="40"></SVG>
+                        <HeaderText text="Noise Check" />
+                    </HStack>
+                    <Pressable onPress={() => {
+                        stopNoiseCheck();
+                        navigation.navigate("ParentalControl")
+                    }}
+                    >
+                        <Icon as={CloseIcon} m="$2" w="$4" h="$4" />
+                    </Pressable>
+                </HStack>
+
+                <Text>We will conduct an Environmental Noise Check before starting the test.</Text>
+
+                <SVG xml={wave} width="360" height="360"></SVG>
+
+
+                {state.isNoiseChecking && (
+                    <>
+                        {state.noiseLevel <= -12 && (
+                            // <Card backgroundColor={Colors.secondary.g5} margin={16}>
+                            <VStack >
+                                <Heading alignSelf="center" mb={4}>Safe</Heading>
+                                <Text alignSelf="center" marginHorizontal={48}>No risk of hearing loss, no matter how long you listen.</Text>
+                            </VStack>
+                            // </Card>
+                        )}
+                        {state.noiseLevel <= -10 && state.noiseLevel > -12 && (
+                            <VStack >
+                                <Heading alignSelf="center" mb={4}>Moderate Risk</Heading>
+                                <Text alignSelf="center" marginHorizontal={48}>Avoid being in this environment 8 hour or more.</Text>
+                            </VStack>
+                        )}
+
+                        {state.noiseLevel > -10 && (
+                            <VStack>
+                                <Heading  alignSelf="center" mb={4}>High Risk</Heading>
+                                <Text alignSelf="center" marginHorizontal={48}>Avoid being in this environment 45 minutes or more.</Text>
+                            </VStack>
+                        )}
+                    </>
+                )}
+            </VStack>
 
             {routeName === "Parental Control Noise Check"
                 ? (state.isNoiseChecking === false
@@ -223,16 +244,17 @@ const NoiseChecker = () => {
                 )
                 :
                 <ButtonFunc
-                    handleOnPress={() => {state.isNoiseChecking 
-                        ? (stopNoiseCheck(),
-                          navigation.navigate("Tutorial"))
-                        : startNoiseCheck();
+                    handleOnPress={() => {
+                        state.isNoiseChecking
+                            ? (stopNoiseCheck(),
+                                navigation.navigate("Tutorial"))
+                            : startNoiseCheck();
                     }}
                     disabled={!state.isMicrophonePermGranted || !state.isRecordingPermGranted}
                     text={state.isNoiseChecking ? "Proceed to Test" : "CHECK"}
                 />
             }
-        </>
+        </VStack>
     )
 }
 
