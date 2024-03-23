@@ -1,25 +1,18 @@
 import HeaderText from "../components/reusable/HeaderText"
 import {
-    HStack,
     VStack,
     Heading,
     Text,
-    Link,
-    Image,
     Box,
     Divider,
-    Card,
     Pressable,
-    Icon,
-    ChevronRightIcon,
-    LinkText,
-    SafeAreaView
 } from '@gluestack-ui/themed';
+import SVG from "../components/svg/SVG";
 
 const ParentalControlScreen = ( { navigation }) => {
 
     return (
-        <>
+        <VStack flex={1} justifyContent="start" m={16}>
             <HeaderText text="Parental Control" />
             <VStack
                 space="lg"
@@ -45,12 +38,9 @@ const ParentalControlScreen = ( { navigation }) => {
                     </Text>
                 </Box>
             </VStack>
-        </>
+        </VStack>
 
     )
-
-
-
 }
 
 export default ParentalControlScreen

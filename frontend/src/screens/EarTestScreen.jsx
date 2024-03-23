@@ -54,7 +54,7 @@ const EarTestScreen = ({ navigation }) => {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Authorization: `Bearer ${await seureStrorage.getItemAsync('JwtToken')}`,
+          Authorization: `Bearer ${await secureStorage.getItemAsync('JwtToken')}`,
         },
         body: JSON.stringify(payload),
       });
@@ -62,6 +62,7 @@ const EarTestScreen = ({ navigation }) => {
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["myData"] });
       response.json().then((data) => {
+        console.log("checking for response")
         navigation.navigate("Test Result", data);
       });
     },
@@ -76,12 +77,27 @@ const EarTestScreen = ({ navigation }) => {
     {
       uri: require("../../assets/audioFiles/500hz.wav"),
       freq: "500hz",
+      volume: 0.8,
+    },
+    {
+      uri: require("../../assets/audioFiles/500hz.wav"),
+      freq: "500hz",
       volume: 0.6,
     },
     {
       uri: require("../../assets/audioFiles/500hz.wav"),
       freq: "500hz",
+      volume: 0.4,
+    },
+    {
+      uri: require("../../assets/audioFiles/500hz.wav"),
+      freq: "500hz",
       volume: 0.2,
+    },
+    {
+      uri: require("../../assets/audioFiles/500hz.wav"),
+      freq: "500hz",
+      volume: 0.1,
     },
     {
       uri: require("../../assets/audioFiles/500hz.wav"),
@@ -96,36 +112,86 @@ const EarTestScreen = ({ navigation }) => {
     {
       uri: require("../../assets/audioFiles/1000hz.wav"),
       freq: "1000hz",
+      volume: 0.8,
+    },
+    {
+      uri: require("../../assets/audioFiles/1000hz.wav"),
+      freq: "1000hz",
+      volume: 0.6,
+    },
+    {
+      uri: require("../../assets/audioFiles/1000hz.wav"),
+      freq: "1000hz",
+      volume: 0.4,
+    },
+    {
+      uri: require("../../assets/audioFiles/1000hz.wav"),
+      freq: "1000hz",
+      volume: 0.2,
+    },
+    {
+      uri: require("../../assets/audioFiles/1000hz.wav"),
+      freq: "1000hz",
+      volume: 0.1,
+    },
+    {
+      uri: require("../../assets/audioFiles/0hz.wav"),
+      freq: "0hz",
+      volume: 0,
+    },
+    {
+      uri: require("../../assets/audioFiles/2000hz.wav"),
+      freq: "2000hz",
+      volume: 0.6,
+    },
+    {
+      uri: require("../../assets/audioFiles/2000hz.wav"),
+      freq: "2000hz",
+      volume: 0.5,
+    },
+    {
+      uri: require("../../assets/audioFiles/2000hz.wav"),
+      freq: "2000hz",
+      volume: 0.3,
+    },
+    {
+      uri: require("../../assets/audioFiles/2000hz.wav"),
+      freq: "2000hz",
+      volume: 0.2,
+    },
+    {
+      uri: require("../../assets/audioFiles/2000hz.wav"),
+      freq: "2000hz",
+      volume: 0.1,
+    },
+    {
+      uri: require("../../assets/audioFiles/0hz.wav"),
+      freq: "0hz",
+      volume: 0,
+    },
+    {
+      uri: require("../../assets/audioFiles/5000hz.wav"),
+      freq: "5000hz",
       volume: 0.7,
     },
     {
-      uri: require("../../assets/audioFiles/1000hz.wav"),
-      freq: "1000hz",
+      uri: require("../../assets/audioFiles/5000hz.wav"),
+      freq: "5000hz",
       volume: 0.5,
     },
     {
-      uri: require("../../assets/audioFiles/1000hz.wav"),
-      freq: "1000hz",
+      uri: require("../../assets/audioFiles/5000hz.wav"),
+      freq: "5000hz",
+      volume: 0.3,
+    },
+    {
+      uri: require("../../assets/audioFiles/5000hz.wav"),
+      freq: "5000hz",
       volume: 0.2,
     },
     {
-      uri: require("../../assets/audioFiles/0hz.wav"),
-      freq: "0hz",
-      volume: 0,
-    },
-    {
-      uri: require("../../assets/audioFiles/2000hz.wav"),
-      freq: "2000hz",
-      volume: 0.5,
-    },
-    {
-      uri: require("../../assets/audioFiles/2000hz.wav"),
-      freq: "2000hz",
-      volume: 0.6,
-    },
-    {
-      uri: require("../../assets/audioFiles/2000hz.wav"),
-      freq: "2000hz",
+      uri: require("../../assets/audioFiles/5000hz.wav"),
+      freq: "5000hz",
       volume: 0.1,
     },
     {
@@ -134,39 +200,29 @@ const EarTestScreen = ({ navigation }) => {
       volume: 0,
     },
     {
-      uri: require("../../assets/audioFiles/5000hz.wav"),
-      freq: "5000hz",
-      volume: 0.4,
-    },
-    {
-      uri: require("../../assets/audioFiles/5000hz.wav"),
-      freq: "5000hz",
-      volume: 0.2,
-    },
-    {
-      uri: require("../../assets/audioFiles/5000hz.wav"),
-      freq: "5000hz",
-      volume: 0.3,
-    },
-    {
-      uri: require("../../assets/audioFiles/0hz.wav"),
-      freq: "0hz",
-      volume: 0,
-    },
-    {
-      uri: require("../../assets/audioFiles/8000hz.wav"),
-      freq: "8000hz",
-      volume: 0.4,
-    },
-    {
-      uri: require("../../assets/audioFiles/8000hz.wav"),
-      freq: "8000hz",
-      volume: 0.3,
-    },
-    {
       uri: require("../../assets/audioFiles/8000hz.wav"),
       freq: "8000hz",
       volume: 0.5,
+    },
+    {
+      uri: require("../../assets/audioFiles/8000hz.wav"),
+      freq: "8000hz",
+      volume: 0.4,
+    },
+    {
+      uri: require("../../assets/audioFiles/8000hz.wav"),
+      freq: "8000hz",
+      volume: 0.3,
+    },
+    {
+      uri: require("../../assets/audioFiles/8000hz.wav"),
+      freq: "8000hz",
+      volume: 0.2,
+    },
+    {
+      uri: require("../../assets/audioFiles/8000hz.wav"),
+      freq: "8000hz",
+      volume: 0.1,
     },
     {
       uri: require("../../assets/audioFiles/0hz.wav"),
@@ -174,15 +230,6 @@ const EarTestScreen = ({ navigation }) => {
       volume: 0,
     },
   ];
-
-  // const changeEar = () => {
-  //     console.log("clicked")
-  //     setCurrentIndex(0);
-  //     // setSound(null)
-  //     setEarOpt("right")
-  //     setProgress(0)
-  //     setnextEar(0)
-  // }
 
   // playing the audio in sequence
   useEffect(() => {
@@ -211,9 +258,7 @@ const EarTestScreen = ({ navigation }) => {
       //   console.log("if sound");
       await sound.unloadAsync();
     }
-    // if (earOpt === "right") {
-    //   console.log("current index:", currentIndex);
-    // }
+
     const { sound: newSound } = await Audio.Sound.createAsync(
       audioPlay[currentIndex].uri,
       { shouldPlay: true, volume: audioPlay[currentIndex].volume }
@@ -223,12 +268,8 @@ const EarTestScreen = ({ navigation }) => {
     // sound.stopAsync();
     if (
       currentIndex !== 0 &&
-      (currentIndex === 5 ||
-        currentIndex === 7 ||
-        currentIndex === 11 ||
-        currentIndex === 15 ||
-        currentIndex === 19 ||
-        currentIndex === 20)
+      (currentIndex%6 === 0 ||
+        currentIndex === (audioPlay.length-1))
     ) {
       if (progress < 5) {
         // console.log("check the audio intervals")
@@ -256,13 +297,9 @@ const EarTestScreen = ({ navigation }) => {
 
   // user response while listening to audio played
   const userResponse = () => {
-    console.log("user is able to hear: ", audioPlay[currentIndex].freq);
+    console.log("user is able to hear: ", audioPlay[currentIndex].freq, currentIndex);
     if (audioPlay[currentIndex].volume > 0) {
       const db = volTodBCal(audioPlay[currentIndex].volume);
-      // const key = responseFreq.indexOf(audioPlay[currentIndex].freq)
-      // const audioArr = [...responsedB]
-      // audioArr[key] = db
-      // setResponsedB(audioArr)
       setResponse((prevResp) => ({
         ...prevResp,
         [audioPlay[currentIndex].freq]: db,
@@ -340,29 +377,25 @@ const EarTestScreen = ({ navigation }) => {
             <SVG xml={happyMascot} width="180" height="180" />
             <View>
               <Text style={styles.instructText}>
-                {earOpt === "left" ? "You Did Great!" : "You Did Great!"}
+                You Did Great!
               </Text>
             </View>
           </VStack>
-          {/* {earOpt === "left" ? */}
-          {/* <ButtonFunc text="Next" handleOnPress={changeEar} /> : */}
-          <ButtonFunc
-            text="View Result"
-            handleOnPress={() => {
-              mutation.mutate({
-                leftEar: response,
-                rightEar: {
-                  "500hz": 40,
-                  "1000hz": 60,
-                  "2000hz": 45,
-                  "5000hz": 60,
-                  "8000hz": 40,
-                },
-                owner: selectedKidId,
-              });
-            }}
-          />
-          {/* } */}
+
+          <ButtonFunc text="View Results" handleOnPress={() => {
+            console.log("test result button pressed",selectedKidId)
+            mutation.mutate({
+              leftEar: response,
+              rightEar: {
+                "500hz": 40,
+                "1000hz": 60,
+                "2000hz": 45,
+                "5000hz": 60,
+                "8000hz": 40,
+              },
+              owner: selectedKidId,
+            });
+          }} />
         </VStack>
       )}
     </VStack>

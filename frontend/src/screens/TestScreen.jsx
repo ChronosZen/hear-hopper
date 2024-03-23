@@ -1,17 +1,9 @@
-import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
-import { useState, useEffect, useReducer } from "react";
-import { Audio } from "expo-av";
-import TestResult from "../components/hearingTest/TestResult";
-import CountDown from "../components/hearingTest/CountDown";
+import { StyleSheet, View } from "react-native";
 import TestInitialCheck from "../components/hearingTest/TestInitialCheck";
 import TestTutorial from "../components/hearingTest/TestTutorial";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const TestScreen = ({ navigation }) => {
-  // function navigateToTutorial(){
-  //   navigation.navigate("Tutorial")
-  // }
-
+const TestScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
