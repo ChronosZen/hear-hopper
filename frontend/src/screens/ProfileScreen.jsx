@@ -8,6 +8,7 @@ import KidDisplay from "../components/user/KidDisplay";
 import { useQuery } from "@tanstack/react-query";
 import * as secureStorage from "expo-secure-store";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 ProfileScreen = ({ navigation, route }) => {
   const { isPending, error, data } = useQuery({
     queryKey: ["myData"],

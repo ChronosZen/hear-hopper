@@ -16,7 +16,7 @@ import {
   VStack,
 } from "@gluestack-ui/themed";
 import SVG from "../svg/SVG";
-
+import axios from "axios";
 import { ear, happyMascot, soundIcon } from "../svg/svgs";
 import HeaderText from "../reusable/HeaderText";
 import ProgressBar from "./ProgressBar";
@@ -24,7 +24,11 @@ import AnimalChoices from "./AnimalChoices";
 import ButtonFunc from "../reusable/ButtonFunc";
 import { useReducer } from "react";
 import RevealAnswer from "./RevealAnswer";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useUser } from "../../context/UserContext";
+import * as secureStorage from "expo-secure-store";
 import CloseButton from "../reusable/CloseButton";
+
 const quizData = [
   {
     correctAnswer: "Cat",
@@ -133,7 +137,7 @@ const QuizSection = ({ navigation }) => {
     { question, pageState, answerState, userAnswer, showModal, score },
     dispatch,
   ] = useReducer(reducer, initialState);
-
+  const { selectedKidId, dispatch: dispatchContext } = useUser();
   const checkAnswer = (userAnswer, correctAnswer, question) => {
     if (userAnswer === correctAnswer) {
       dispatch({
@@ -156,6 +160,32 @@ const QuizSection = ({ navigation }) => {
       if (question > 4) {
         dispatch({ type: "finish" });
       }
+    }
+  };
+
+  const handleSubmitScore = async () => {
+    try {
+      const response = await axios.patch(
+        `${process.env.EXPO_PUBLIC_API_URL}/api/quiz/${selectedKidId}`,
+        { quizScore: score },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${await secureStorage.getItemAsync(
+              "JwtToken"
+            )}`,
+          },
+        }
+      );
+      dispatchContext({
+        type: "submitQuiz",
+        payload: { selectedKidQuizScore: score },
+      });
+      dispatch({ type: "showModal" });
+    } catch (error) {
+      console.error("There has been a problem with your PATCH api", error);
+      console.error("Response data:", error.response?.data);
     }
   };
 
@@ -243,10 +273,7 @@ const QuizSection = ({ navigation }) => {
       ) : pageState === "revealAnswer" && question < 4 ? (
         <ButtonFunc text="Next" handleOnPress={() => handleNext()} />
       ) : (
-        <ButtonFunc
-          text="Finish"
-          handleOnPress={() => dispatch({ type: "showModal" })}
-        />
+        <ButtonFunc text="Finish" handleOnPress={() => handleSubmitScore()} />
       )}
     </VStack>
   );
