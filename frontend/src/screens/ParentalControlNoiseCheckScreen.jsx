@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import NoiseChecker from "../components/user/NoiseChecker";
+import NoiseChecker from "../components/noiseChecker/NoiseChecker";
 import { SafeAreaView, HStack, Icon, CloseIcon } from "@gluestack-ui/themed";
 
 const ParentalControlNoiseCheckScreen = ( ) => {

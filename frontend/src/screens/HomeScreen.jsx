@@ -55,7 +55,7 @@ const HomeScreen = ({ navigation, route }) => {
       </Box>
 
       {/*Latest Test result section*/}
-      <TestResultCards />
+      <TestResultCards viewSec={1} />
 
       {/* Hearing test section */}
       <HStack margin={16} space="xl">

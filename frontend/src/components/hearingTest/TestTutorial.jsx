@@ -23,20 +23,6 @@ const TestTutorial = ({navigation}) => {
     
     const startCountDown = () => {
         setShowCountDown(true)
-        // for(let i=0; i<9; i++){
-        //     if(i%3 === 0){
-        //         console.log("count: ", state.count)
-        //         setTimeout(() => {
-        //             console.log("count timeout: ", state.count)
-        //             dispatch({type: 'dec'})
-        //         }, 5000)
-        //     }
-
-        // }
-
-        // setTimeout(() => {
-        //     console.log("count down not happening")
-        // }, 5000)
 
         navigation.navigate("Ear Test")
         setShowCountDown(false)
@@ -45,20 +31,24 @@ const TestTutorial = ({navigation}) => {
     return (
         <>
         {!showCountDown ? 
-        <VStack style={{flex:1, marginHorizontal: 12, marginBottom: 12}}>
-            <VStack style={styles.container}>
-                <VStack>
-                    <HStack>
+        <VStack flex={1} marginHorizontal={12} marginBottom={32}>
+            <VStack flex={1} alignItems='center' marginVertical={12}>
+                <VStack marginHorizontal={24}>
+                    <HStack alignItems='center'>
                         <SVG xml={ear} width="32" height="32" />
                         <Text style={Typography.heading.h2}> Tutorial</Text>
                     </HStack>
-                    <Text style={Typography.body.bxl}>Press and Hold the Button while you hear the beeping sound.</Text>
+                    <Text style={styles.tutorialText}>Press and Hold the Button while you hear the beeping sound.</Text>
                 </VStack>
-                <TouchableOpacity style={{width:116, height: 116, borderRadius: 58, backgroundColor: Colors.primary.p2, justifyContent:'center', alignItems: 'center'}}>
-                    <SVG xml={testIcon} width="48" height="48" fill={Colors.primary.p5} />
-                </TouchableOpacity>
+                <View style={{flex:1, justifyContent: 'center'}}>
+                    <TouchableOpacity style={{width:116, height: 116, borderRadius: 58, backgroundColor: Colors.primary.p2, justifyContent:'center', alignItems: 'center'}}>
+                        <SVG xml={testIcon} width="48" height="48" fill={Colors.primary.p5} />
+                    </TouchableOpacity>
+                </View>
             </VStack>
-            <ButtonFunc text="Start Test" handleOnPress={startCountDown} />
+            <View style={{marginHorizontal: 12}}>
+                <ButtonFunc text="Start Test" handleOnPress={startCountDown} />
+            </View>
         </VStack> 
         :
         <VStack style={{flex:'1'}} justifyContent='center' align='center' backgroundColor='pink'>
@@ -75,13 +65,16 @@ export default TestTutorial;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     alignItems: 'center',
-    margin: 12
-    // backgroundColor: 'pink',
+    marginVertical: 12
   },
   startCountText: {
       textAlign: 'center',
       ...Typography.heading.h3
+  },
+  tutorialText: {
+      marginTop: 16,
+      ...Typography.body.bxl
   }
 });
