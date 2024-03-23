@@ -2,6 +2,8 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTab from "./src/routes/BottomTab";
 import { useState } from "react";
+
+
 import {
   createNativeStackNavigator,
   DefaultTheme,
