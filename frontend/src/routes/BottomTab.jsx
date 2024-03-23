@@ -30,7 +30,7 @@ import ViewAllResult from "../screens/ViewAllResult";
 const ProfileStack = createNativeStackNavigator();
 function ProfileStackScreen({ route }) {
   return (
-    <ProfileStack.Navigator screenOptions={{ headerShown: true }}>
+    <ProfileStack.Navigator screenOptions={{ headerShown: false }}>
       <ProfileStack.Screen name="MainProfile" component={ProfileScreen} />
       <ProfileStack.Screen name="AddProfile" component={AddProfileScreen} />
       <ProfileStack.Screen name="Example" component={ExampleScreen} />
@@ -42,7 +42,7 @@ const HomeStack = createNativeStackNavigator();
 function HomeStackScreen({ route }) {
   try {
     return (
-      <HomeStack.Navigator screenOptions={{ headerShown: true }}>
+      <HomeStack.Navigator screenOptions={{ headerShown: false }}>
         <HomeStack.Screen name="Go back" component={HomeScreen} />
         <HomeStack.Screen
           name="ParentalControl"
@@ -63,7 +63,7 @@ function HomeStackScreen({ route }) {
 const TrainStack = createNativeStackNavigator();
 function TrainStackScreen() {
   return (
-    <TrainStack.Navigator screenOptions={{ headerShown: true }}>
+    <TrainStack.Navigator screenOptions={{ headerShown: false }}>
       <TrainStack.Screen name="TrainSection" component={TrainScreen} />
       <TrainStack.Screen name="QuizSection" component={QuizSection} />
       <TrainStack.Screen name="StartSection" component={StartSection} />
@@ -74,7 +74,7 @@ function TrainStackScreen() {
 const HearinTestStack = createNativeStackNavigator();
 function HearingTestStackScreen() {
   return (
-    <HearinTestStack.Navigator screenOptions={{ headerShown: true }}>
+    <HearinTestStack.Navigator screenOptions={{ headerShown: false }}>
       <HearinTestStack.Screen name="HearingTest" component={TestScreen} />
       <HearinTestStack.Screen
         name="Noise Check"
@@ -102,6 +102,12 @@ const BottomTab = () => {
           height: 72,
           paddingTop: 11,
           paddingBottom: 11,
+          borderTopWidth: 1.5,
+          backgroundColor: "#ffffff",
+          borderColor: "#f3f3f3",
+          shadowOpacity: 1,
+          shadowRadius: 15,
+          shadowColor: "#000000",
         },
       }}>
       <Tab.Screen

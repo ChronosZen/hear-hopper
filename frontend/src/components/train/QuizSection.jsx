@@ -24,6 +24,7 @@ import AnimalChoices from "./AnimalChoices";
 import ButtonFunc from "../reusable/ButtonFunc";
 import { useReducer } from "react";
 import RevealAnswer from "./RevealAnswer";
+import CloseButton from "../reusable/CloseButton";
 const quizData = [
   {
     correctAnswer: "Cat",
@@ -190,9 +191,12 @@ const QuizSection = ({ navigation }) => {
           </ModalContent>
         </Modal>
       )}
-      <HStack justifyContent="start" alignItems="center" gap={8}>
-        <SVG xml={ear} width="24" height="24" />
-        <HeaderText text="Ear Training" />
+      <HStack justifyContent="space-between" alignItems="center" gap={8}>
+        <HStack alignItems="center" gap={8}>
+          <SVG xml={ear} width="24" height="24" />
+          <HeaderText text="Ear Training" />
+        </HStack>
+        <CloseButton navigation={navigation} section="TrainSection" />
       </HStack>
       <ProgressBar question={question} />
       {pageState === "question" && (

@@ -3,11 +3,11 @@ import {
   Text,
   View,
   TextInput,
-  SafeAreaView,
   Platform,
   Modal,
   Pressable,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
@@ -22,7 +22,7 @@ import { Typography, Colors } from "../styles";
 import HeaderText from "../components/reusable/HeaderText";
 import ButtonFunc from "../components/reusable/ButtonFunc";
 // import { useUser } from "../context/UserContext";
-import * as secureStorage from 'expo-secure-store';
+import * as secureStorage from "expo-secure-store";
 const CustomAlert = (props) => {
   return (
     <Modal
@@ -80,11 +80,13 @@ const LoginScreen = ({ navigation, route, setIsSignedIn }) => {
         secureStorage.setItemAsync("JwtToken", data.token);
         // console.log("this is the data.token ->", data);
         // saveJwtToken(data.token);
-        return data
-      }).then(() => {
-        const inDeviceJWT= secureStorage.getItemAsync("JwtToken");
-        return inDeviceJWT
-      }).then(() => {
+        return data;
+      })
+      .then(() => {
+        const inDeviceJWT = secureStorage.getItemAsync("JwtToken");
+        return inDeviceJWT;
+      })
+      .then(() => {
         // console.log("This is the JWT the user has in local storage ->", JWT)
         setIsSignedIn(true);
       })

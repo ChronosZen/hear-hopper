@@ -22,8 +22,8 @@ import {
   Icon,
   ChevronRightIcon,
   LinkText,
-  SafeAreaView,
 } from "@gluestack-ui/themed";
+import { SafeAreaView } from "react-native-safe-area-context";
 import ChildSelection from "../components/user/ChildSelection";
 import { Header } from "react-native/Libraries/NewAppScreen";
 
