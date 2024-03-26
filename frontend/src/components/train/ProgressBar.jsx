@@ -5,7 +5,7 @@ import {
   VStack,
 } from "@gluestack-ui/themed";
 import { Text, View } from "react-native";
-import { Colors } from "../../styles";
+import { Colors, Typography } from "../../styles";
 const ProgressBar = ({ question }) => {
   return (
     <VStack space="md" marginBottom={48}>
@@ -13,8 +13,8 @@ const ProgressBar = ({ question }) => {
         <ProgressFilledTrack h={12} bg={Colors.gs.black} />
       </Progress>
       <HStack justifyContent="space-between" width={"100%"}>
-        <Text>Progress</Text>
-        <Text>0{question + 1}/05</Text>
+        <Text style={Typography.body.bm}>Progress</Text>
+        <Text style={Typography.body.bm}>0{question + 1}/05</Text>
       </HStack>
     </VStack>
   );

@@ -54,22 +54,27 @@ const body = {
   bxl: {
     fontSize: 18,
     lineHeight: 18 * 1.64,
+    fontFamily: "SplineSans_400Regular",
   },
   bl: {
     fontSize: 16,
     lineHeight: 16 * 1.64,
+    fontFamily: "SplineSans_400Regular",
   },
   bm: {
     fontSize: 14,
     lineHeight: 14 * 1.7,
+    fontFamily: "SplineSans_400Regular",
   },
   bs: {
     fontSize: 12,
     lineHeight: 12 * 1.7,
+    fontFamily: "SplineSans_400Regular",
   },
   bxs: {
     fontSize: 10,
     lineHeight: 10 * 1.7,
+    fontFamily: "SplineSans_400Regular",
   },
 };
 export { bodyFont, heading, body, disyplay };

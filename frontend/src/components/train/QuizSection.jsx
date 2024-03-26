@@ -17,7 +17,7 @@ import {
 } from "@gluestack-ui/themed";
 import SVG from "../svg/SVG";
 import axios from "axios";
-import { ear, happyMascot, soundIcon } from "../svg/svgs";
+import { ear, happyMascot, soundIcon, earTrainginIcon } from "../svg/svgs";
 import HeaderText from "../reusable/HeaderText";
 import ProgressBar from "./ProgressBar";
 import AnimalChoices from "./AnimalChoices";
@@ -110,6 +110,7 @@ function reducer(state, action) {
         question: state.question + 1,
         pageState: "question",
         answerState: "waiting",
+        userAnswer: "",
       };
     case "finish":
       return {
@@ -196,6 +197,7 @@ const QuizSection = ({ navigation }) => {
     dispatch({ type: "exit" });
     navigation.navigate("TrainSection");
   };
+
   return (
     <VStack padding={24} gap={24}>
       {showModal && (
@@ -222,10 +224,12 @@ const QuizSection = ({ navigation }) => {
         </Modal>
       )}
       <HStack justifyContent="space-between" alignItems="center" gap={8}>
-        <HStack alignItems="center" gap={8}>
-          <SVG xml={ear} width="24" height="24" />
-          <HeaderText text="Ear Training" />
-        </HStack>
+        <HeaderText
+          text="Ear Training"
+          xml={earTrainginIcon}
+          navigation={navigation}
+          section="TrainSection"
+        />
         <CloseButton navigation={navigation} section="TrainSection" />
       </HStack>
       <ProgressBar question={question} />
