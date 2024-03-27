@@ -5,6 +5,7 @@ import SVG from "../svg/SVG";
 import ButtonFunc from "../reusable/ButtonFunc";
 import { Typography, Colors } from '../../styles/index';
 import { VStack, HStack } from "@gluestack-ui/themed";
+import LottieView from 'lottie-react-native';
 
 const TestInitialCheck = ({navigation}) => {
     const [setting, setSetting] = useState(0)
@@ -24,8 +25,9 @@ const TestInitialCheck = ({navigation}) => {
             <VStack style={styles.container}>
                 <SVG xml={mainMastcot} width="180" height="180" />
                 {setting ?
-                    <VStack style={{alignItems: 'center', gap: 32}}>
-                        <Text style={{...Typography.heading.h4}}>Please make sure to Turn Off</Text>
+                    <VStack space='2xl'>
+                        <Text style={{...Typography.heading.h4, textAlign: 'center'}}>Please make sure to Turn Off</Text>
+                        <VStack space='2xl' mx='$16'>
                         <HStack alignItems='center'>
                             <SVG xml={notification} width="40" height="40" />
                             <Text style={Typography.body.bxl}> Notifications</Text>
@@ -34,12 +36,14 @@ const TestInitialCheck = ({navigation}) => {
                             <SVG xml={speaker} width="40" height="40" />
                             <Text style={Typography.body.bxl}> Sound effects</Text>
                         </HStack>
+                        </VStack>
                     </VStack>
                     :
                     <>
                     <Text style={{...Typography.heading.h4, textAlign: 'center'}}>Please wear a Headphone for Accurate Results</Text>
                     <VStack flex={1} alignItems= 'center' justifyContent= 'center'>
-                        <SVG xml={headphone} width="120" height="120" fill={Colors.primary.p1} />
+                        {/* <SVG xml={headphone} width="120" height="120" fill={Colors.primary.p1} /> */}
+                        <LottieView source={require('../animation/Loader.json')} autoPlay loop style={{width:200, height: 200}} />
                     </VStack>
                     </>
                     }
