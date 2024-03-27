@@ -3,11 +3,11 @@ import {
   Text,
   View,
   TextInput,
-  SafeAreaView,
   Platform,
   Modal,
   Pressable,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
@@ -21,8 +21,8 @@ import { InputField } from "@gluestack-ui/themed";
 import { Typography, Colors } from "../styles";
 import HeaderText from "../components/reusable/HeaderText";
 import ButtonFunc from "../components/reusable/ButtonFunc";
-
-const API_URL = "https://hearhopper.wmdd4950.com";
+// import { useUser } from "../context/UserContext";
+import * as secureStorage from "expo-secure-store";
 const CustomAlert = (props) => {
   return (
     <Modal
@@ -46,7 +46,7 @@ const CustomAlert = (props) => {
     </Modal>
   );
 };
-const LoginScreen = ({ navigation, route, setIsSignedIn, setUserData }) => {
+const LoginScreen = ({ navigation, route, setIsSignedIn }) => {
   const [email, onChangeEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -60,7 +60,7 @@ const LoginScreen = ({ navigation, route, setIsSignedIn, setUserData }) => {
       email: email,
       password: String(password),
     };
-    fetch(`${API_URL}/users/login`, {
+    fetch(`${process.env.EXPO_PUBLIC_API_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -77,8 +77,17 @@ const LoginScreen = ({ navigation, route, setIsSignedIn, setUserData }) => {
         }
       })
       .then((data) => {
-        console.log("this is data after login", data);
-        setUserData(data);
+        secureStorage.setItemAsync("JwtToken", data.token);
+        // console.log("this is the data.token ->", data);
+        // saveJwtToken(data.token);
+        return data;
+      })
+      .then(() => {
+        const inDeviceJWT = secureStorage.getItemAsync("JwtToken");
+        return inDeviceJWT;
+      })
+      .then(() => {
+        // console.log("This is the JWT the user has in local storage ->", JWT)
         setIsSignedIn(true);
       })
       .catch((error) => {

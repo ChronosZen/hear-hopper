@@ -2,7 +2,11 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTab from "./src/routes/BottomTab";
 import { useState } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import {
+  createNativeStackNavigator,
+  DefaultTheme,
+} from "@react-navigation/native-stack";
 import LoginScreen from "./src/screens/LoginScreen";
 import SignUpScreen from "./src/screens/SignUpScreen";
 import {
@@ -20,8 +24,11 @@ import {
 } from "@expo-google-fonts/spline-sans";
 import { config } from "@gluestack-ui/config";
 import { GluestackUIProvider } from "@gluestack-ui/themed";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AddProfileScreen from "./src/screens/AddProfileScreen";
-
+import { UserProvider } from "./src/context/UserContext";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+const queryClient = new QueryClient();
 const Stack = createNativeStackNavigator();
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -39,33 +46,35 @@ export default function App() {
     return null;
   }
   return (
-    <GluestackUIProvider config={config}>
-      <NavigationContainer>
-        {isSignedIn ? (
-          <BottomTab userData={userData} />
-        ) : (
-          <Stack.Navigator>
-            <Stack.Screen name="Log in">
-              {(props) => (
-                <LoginScreen
-                  {...props}
-                  setIsSignedIn={setIsSignedIn}
-                  setUserData={setUserData}
-                />
-              )}
-            </Stack.Screen>
-            <Stack.Screen name="Sign up">
-              {(props) => (
-                <SignUpScreen {...props} setIsSignedIn={setIsSignedIn} />
-              )}
-            </Stack.Screen>
-            <Stack.Screen name="Add Profile">
-              {(props) => <AddProfileScreen {...props} />}
-            </Stack.Screen>
-          </Stack.Navigator>
-        )}
-      </NavigationContainer>
-    </GluestackUIProvider>
+    <SafeAreaProvider>
+      <QueryClientProvider client={queryClient}>
+        <GluestackUIProvider config={config}>
+          <NavigationContainer theme={MyTheme}>
+            {isSignedIn ? (
+              <UserProvider>
+                <BottomTab userData={userData} />
+              </UserProvider>
+            ) : (
+              <Stack.Navigator>
+                <Stack.Screen name="Log in">
+                  {(props) => (
+                    <LoginScreen {...props} setIsSignedIn={setIsSignedIn} />
+                  )}
+                </Stack.Screen>
+                <Stack.Screen name="Sign up">
+                  {(props) => (
+                    <SignUpScreen {...props} setIsSignedIn={setIsSignedIn} />
+                  )}
+                </Stack.Screen>
+                <Stack.Screen name="Add Profile">
+                  {(props) => <AddProfileScreen {...props} />}
+                </Stack.Screen>
+              </Stack.Navigator>
+            )}
+          </NavigationContainer>
+        </GluestackUIProvider>
+      </QueryClientProvider>
+    </SafeAreaProvider>
   );
 }
 
@@ -77,3 +86,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    background: "#ffffff",
+  },
+};

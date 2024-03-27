@@ -2,13 +2,37 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import HeaderText from "../components/reusable/HeaderText";
 import ButtonFunc from "../components/reusable/ButtonFunc";
-import { Image, SafeAreaView, VStack } from "@gluestack-ui/themed";
+import { Image, VStack } from "@gluestack-ui/themed";
 import Dad from "../../assets/dad.jpg";
 import KidDisplay from "../components/user/KidDisplay";
+import { useQuery } from "@tanstack/react-query";
+import * as secureStorage from "expo-secure-store";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 ProfileScreen = ({ navigation, route }) => {
-  const { userData } = route.params;
-  const kidArr = userData.kidInfo;
+  const { isPending, error, data } = useQuery({
+    queryKey: ["myData"],
+    queryFn: async () =>
+      fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/me`, {
+        headers: {
+          Authorization: `Bearer ${await secureStorage.getItemAsync(
+            "JwtToken"
+          )}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((json) => json.data),
+  });
+
+  if (isPending) return <Text>Loading...</Text>;
+
+  if (error) return <Text>An error has occurred: ${error.message}</Text>;
+
+  const userData = data;
+
+  const kidArr = [...userData.kids].sort(
+    (kid1, kid2) => new Date(kid2.createdAt) - new Date(kid1.createdAt)
+  );
   function navigateAddProfile() {
     navigation.navigate("AddProfile", { name: "Jane" });
   }
@@ -26,8 +50,8 @@ ProfileScreen = ({ navigation, route }) => {
         {kidArr.map((kid) => (
           <KidDisplay
             image={kid.image}
-            childName={kid.childName}
-            key={kid.kidID}
+            childName={kid.firstName}
+            key={kid.id}
           />
         ))}
       </VStack>
@@ -39,12 +63,12 @@ ProfileScreen = ({ navigation, route }) => {
           }}
         />
         <View style={{ flex: 1 }}>
-          <ButtonFunc
+          {/* <ButtonFunc
             text="View Sample"
             handleOnPress={() => {
               navigateSample();
             }}
-          />
+          /> */}
         </View>
       </View>
     </SafeAreaView>

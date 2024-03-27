@@ -20,8 +20,6 @@ import ButtonFunc from "../components/reusable/ButtonFunc";
 import HeaderText from "../components/reusable/HeaderText";
 import { Typography, Colors } from "../styles";
 
-const API_URL = "https://hearhopper.wmdd4950.com";
-
 const CustomAlert = ({ modalVisible, setModalVisible, errorMessage }) => {
   return (
     <Modal
@@ -89,7 +87,7 @@ const SignUpScreen = ({ setIsSignedIn }) => {
     };
 
     try {
-      const response = await fetch(`${API_URL}/users/signup`, {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/users/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
