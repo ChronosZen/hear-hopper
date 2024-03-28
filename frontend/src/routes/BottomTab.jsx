@@ -17,6 +17,10 @@ import {
   profileIcon,
   testIcon,
   trainingIcon,
+  homeSolidIcon,
+  profileSolidIcon,
+  testSolidIcon,
+  trainingSolidIcon,
 } from "../components/svg/svgs";
 import { Colors, Typography } from "../styles";
 import TrainSection from "../components/train/TrainSection";
@@ -119,7 +123,7 @@ const BottomTab = () => {
           ),
           tabBarIcon: ({ focused }) => (
             <SVG
-              xml={homeIcon}
+              xml={focused ? homeSolidIcon: homeIcon}
               height="24"
               width="24"
               fill={focused ? Colors.gs.black : Colors.gs.gs4}
@@ -136,7 +140,7 @@ const BottomTab = () => {
           ),
           tabBarIcon: ({ focused }) => (
             <SVG
-              xml={testIcon}
+              xml={focused ? testSolidIcon : testIcon}
               height="24"
               width="24"
               fill={focused ? Colors.gs.black : Colors.gs.gs4}
@@ -155,7 +159,7 @@ const BottomTab = () => {
           ),
           tabBarIcon: ({ focused }) => (
             <SVG
-              xml={trainingIcon}
+              xml={focused ? trainingSolidIcon : trainingIcon}
               height="24"
               width="24"
               fill={focused ? Colors.gs.black : Colors.gs.gs4}
@@ -174,7 +178,7 @@ const BottomTab = () => {
           ),
           tabBarIcon: ({ focused }) => (
             <SVG
-              xml={profileIcon}
+              xml={focused ? profileSolidIcon : profileIcon}
               height="24"
               width="24"
               fill={focused ? Colors.gs.black : Colors.gs.gs4}
