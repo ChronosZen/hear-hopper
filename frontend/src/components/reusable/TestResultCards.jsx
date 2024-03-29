@@ -59,7 +59,7 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
   console.log("date -> ", date)
 
   const dateFormatting = (date) => {
-    const formattedDate = moment(date).format("Do MMM,YYYY");
+    const formattedDate = moment(date).format("Do MMM YYYY");
     return formattedDate;
   }
 
@@ -69,17 +69,34 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
       {viewSec === 1 ? (
         dataOfCards.length > 0 ? (
           // <Pressable>
-            <Pressable onPress={() => {
-              console.log("Is latestAudiogram working-> ", latestAudiogram);
-              navigation.navigate("Test Result", { data: latestAudiogram, screenName:'HomeScreen'})}}>
+          <Pressable onPress={() => {
+            console.log("Is latestAudiogram working-> ", latestAudiogram);
+            navigation.navigate("Test Result", { data: latestAudiogram, screenName: 'HomeScreen' })
+          }}>
             <Card margin={16}>
-              <Heading>{latestAudiogram?.hearingLevel}</Heading>
-              <Text>{latestAudiogram?.createdAt}</Text>
+              <HStack alignItems="center" gap={12}>
+                <VStack
+                  style={{
+                    backgroundColor: Colors.primary.p5,
+                    width: 48,
+                    height: 48,
+                    borderRadius: 24,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}>
+                  <SVG xml={ear} width="24" height="24" />
+                </VStack>
+                <VStack>
+                  <Heading>{latestAudiogram?.hearingLevel}</Heading>
+                  <Text>{dateFormatting(latestAudiogram?.createdAt)}</Text>
+                </VStack>
+              </HStack>
+
             </Card>
           </Pressable>
         ) : (
           // <Pressable>
-            <Pressable onPress={() => handleOnPress()}>
+          <Pressable onPress={() => handleOnPress()}>
             {/* <Pressable navigation.navigate("All Results")> */}
             <Card margin={16}>
               <Heading>Test Result</Heading>
@@ -94,10 +111,10 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
             return (
               <VStack key={data.id}>
                 {/* <Pressable> */}
-                  <Pressable
-              onPress={() => {
-                navigation.navigate("Test Result", {data: data, screenName:'ViewAll'});
-              }}>
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate("Test Result", { data: data, screenName: 'ViewAll' });
+                  }}>
                   <Card marginVertical={12}>
                     <HStack alignItems="center" gap={12}>
                       <VStack
