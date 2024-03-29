@@ -2,7 +2,6 @@ import { StyleSheet, View } from "react-native";
 import HeaderText from "../components/reusable/HeaderText";
 import ButtonFunc from "../components/reusable/ButtonFunc";
 import React from "react";
-import { Colors } from "../styles";
 import SVG from "../components/svg/SVG";
 import { mainMastcot,
   parentalControlIcon, 
@@ -26,13 +25,14 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import ChildSelection from "../components/user/ChildSelection";
 import { Header } from "react-native/Libraries/NewAppScreen";
+import { Typography, Spacing, Colors } from "../styles";
 
 const HomeScreen = ({ navigation, route }) => {
-  const { firstName } = useUser();
+  // const { firstName } = useUser();
 
-  const onClick = () => {
-    console.log("card is clicked.");
-  };
+  // const onClick = () => {
+  //   console.log("card is clicked.");
+  // };
 
   const homeCards = [
     {
@@ -44,15 +44,15 @@ const HomeScreen = ({ navigation, route }) => {
   ];
 
   const handleOnPress = () => {
-    console.log("checking the handleOnPress function.");
+    // console.log("checking the handleOnPress function.");
     navigation.navigate("Test", { screen: 'All Results' });
   }
 
   return (
     <VStack flex={1} margin="$6" marginTop="$16">
-      {/* Header */}
+      {/* Header section */}
       <HStack justifyContent="space-between" alignItems="center" >
-        <HeaderText text="Welcome"  ></HeaderText>
+        <HeaderText text="Welcome" underlineColor={Colors.primary.p4} ></HeaderText>
         <ChildSelection />
       </HStack>
       <TestResultCards viewSec={1} handleOnPress={handleOnPress} />
