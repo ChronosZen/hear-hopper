@@ -2,20 +2,15 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import HeaderText from "../components/reusable/HeaderText";
 import ButtonFunc from "../components/reusable/ButtonFunc";
-import { Image, VStack } from "@gluestack-ui/themed";
-import Dad from "../../assets/dad.jpg";
-import KidDisplay from "../components/user/KidDisplay";
-import { useQuery } from "@tanstack/react-query";
-import * as secureStorage from "expo-secure-store";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Image, SafeAreaView, VStack, HStack, ScrollView } from "@gluestack-ui/themed";
+import { Image, VStack, HStack, ScrollView } from "@gluestack-ui/themed";
 import Dad from "../../assets/dad.jpg";
 import KidDisplay from "../components/user/KidDisplay";
 import { useQuery } from "@tanstack/react-query";
 import * as secureStorage from 'expo-secure-store';
 import SVG from "../components/svg/SVG";
-import { ear } from "../components/svg/svgs";
-import { Typography } from "../styles/index";
+import { closeIcon, accountIcon, lockColorIcon, keyIcon, termsIcon, helpIcon, logoutIcon, nextIcon } from "../components/svg/svgs";
+import { Typography, Colors } from "../styles/index";
 
 ProfileScreen = ({ navigation, route }) => {
   const { isPending, error, data } = useQuery({
@@ -50,13 +45,16 @@ ProfileScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView >
-        <VStack justifyContent="center" alignItems="center" gap={8}>
+        <VStack justifyContent="center" alignItems="" gap={8}>
           <HeaderText text="Profile" />
-          <Text>Hello, {userData.firstName}</Text>
-          <Image size="lg" borderRadius="$full" alt="test" source={Dad} />
+          <HStack alignItems="center" space="xl" mb={28}>
+            <Image size="lg" borderRadius="$full" alt="test" source={Dad} />
+            <Text style={{...Typography.heading.h5}}>{userData.firstName}</Text>
+          </HStack>
         </VStack>
 
-        <VStack justifyContent="center" alignItems="start" gap={8}>
+        <VStack justifyContent="center" alignItems="start" space="xl">
+          <Text style={{...Typography.heading.h6}}>Children’s Account</Text>
           {kidArr.map((kid) => (
             <KidDisplay
               image={kid.image}
@@ -72,6 +70,8 @@ ProfileScreen = ({ navigation, route }) => {
             handleOnPress={() => {
               navigateAddProfile();
             }}
+            color={Colors.gs.white}
+            textColor={Colors.gs.black}
           />
         </VStack>
         {/* <View style={{ flex: 1, alignItems: "center", gap: 32 }}>
@@ -86,26 +86,45 @@ ProfileScreen = ({ navigation, route }) => {
           {/* </View>
         </View> */}
 
-        <VStack gap={22}>
-            <HStack alignItems="center">
-              <SVG xml={ear} width="24" height="24" />
-              <Text style={Typography.body.bl}>Change Password</Text>
+        <VStack>
+            <HStack style={styles.outerContainer}>
+              <HStack style={styles.innerContainer}>
+                <SVG xml={accountIcon} width="40" height="40" />
+                <Text style={Typography.heading.h6}>Account Info</Text>
+              </HStack>
+                <SVG xml={nextIcon} width="40" height="40" />
             </HStack>
-            <HStack alignItems="center">
-              <SVG xml={ear} width="24" height="24" />
-              <Text style={Typography.body.bl}>Privacy Policy</Text>
+            <HStack style={styles.outerContainer}>
+              <HStack style={styles.innerContainer}>
+                <SVG xml={lockColorIcon} width="40" height="40" />
+                <Text style={Typography.heading.h6}>Change Password</Text>
+              </HStack>
+                <SVG xml={nextIcon} width="40" height="40" />
             </HStack>
-            <HStack alignItems="center">
-              <SVG xml={ear} width="24" height="24" />
-              <Text style={Typography.body.bl}>Terms of Use</Text>
+            <HStack style={styles.outerContainer}>
+              <HStack style={styles.innerContainer}>
+                <SVG xml={keyIcon} width="40" height="40" />
+                <Text style={Typography.heading.h6}>Privacy Policy</Text>
+              </HStack>
+                <SVG xml={nextIcon} width="40" height="40" />
             </HStack>
-            <HStack alignItems="center">
-              <SVG xml={ear} width="24" height="24" />
-              <Text style={Typography.body.bl}>Help</Text>
+            <HStack style={styles.outerContainer}>
+              <HStack style={styles.innerContainer}>
+                <SVG xml={termsIcon} width="40" height="40" />
+                <Text style={Typography.heading.h6}>Terms and Conditions</Text>
+              </HStack>
+                <SVG xml={nextIcon} width="40" height="40" />
             </HStack>
-            <HStack alignItems="center">
-              <SVG xml={ear} width="24" height="24" />
-              <Text style={Typography.body.bl}>Logout</Text>
+            <HStack style={styles.outerContainer}>
+              <HStack style={styles.innerContainer}>
+                <SVG xml={helpIcon} width="40" height="40" />
+                <Text style={Typography.heading.h6}>Help</Text>
+              </HStack>
+                <SVG xml={nextIcon} width="40" height="40" />
+            </HStack>
+            <HStack style={styles.logoutContainer}>
+              <SVG xml={logoutIcon} width="40" height="40" />
+              <Text style={Typography.heading.h6}>Logout</Text>
             </HStack>
           </VStack>
       </ScrollView>
@@ -118,5 +137,24 @@ const styles = StyleSheet.create({
   mainContainer: {
     margin: 20,
     marginTop: 10,
+    marginLeft: 24
   },
+  outerContainer: {
+    alignItems:"center",
+    justifyContent: "space-between", 
+    borderTopColor:Colors.gs.gs6, 
+    borderTopWidth:2, 
+    paddingVertical:24
+  },
+  logoutContainer: {
+    alignItems:"center",
+    borderTopColor:Colors.gs.gs6, 
+    borderTopWidth:2, 
+    paddingVertical:24,
+    gap: 18
+  },
+  innerContainer: {
+    alignItems:"center",
+    gap: 18
+  }
 });
