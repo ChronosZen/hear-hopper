@@ -63,7 +63,7 @@ const EarTestScreen = ({ navigation }) => {
       queryClient.invalidateQueries({ queryKey: ["myData"] });
       response.json().then((data) => {
         console.log("checking for response")
-        navigation.navigate("Test Result", data);
+        navigation.navigate("Test Result", {data:data, screenName:'TestScreen'});
       });
     },
   });

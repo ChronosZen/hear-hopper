@@ -43,14 +43,19 @@ const HomeScreen = ({ navigation, route }) => {
     },
   ];
 
+  const handleOnPress = () => {
+    console.log("checking the handleOnPress function.");
+    navigation.navigate("Test", { screen: 'All Results' });
+  }
+
   return (
-    <VStack flex={1} p="$4">
+    <VStack flex={1} margin="$6" marginTop="$16">
       {/* Header */}
-      <HStack justifyContent="space-between" alignItems="center">
+      <HStack justifyContent="space-between" alignItems="center" >
         <HeaderText text="Welcome"  ></HeaderText>
         <ChildSelection />
       </HStack>
-      <TestResultCards viewSec={1} />
+      <TestResultCards viewSec={1} handleOnPress={handleOnPress} />
       <VStack borderRadius={16} backgroundColor={Colors.primary.p5} softShadow={2}>
         <Heading size="xl" py="$2" px="$8">Test your kid's hearing</Heading>
         <Text px="$8" py="$2" fontSize={"$lg"}>Our hearing test is created keeping your kid's ear sensitivity in mind.</Text>
