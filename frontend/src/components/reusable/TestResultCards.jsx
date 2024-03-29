@@ -15,14 +15,15 @@ import SVG from "../svg/SVG";
 import { View } from "react-native";
 import { Colors, Typography } from "../../styles";
 import ButtonFunc from "./ButtonFunc";
-const TestResultCards = ({ viewSec }) => {
+import moment from "moment";
+const TestResultCards = ({ viewSec, handleOnPress }) => {
   const { selectedKidAudiograms } = useUser();
   console.log("selectedAudiograms", selectedKidAudiograms);
   const navigation = useNavigation();
   const worstEars = selectedKidAudiograms
     ? selectedKidAudiograms?.map((audiogram) => {
-        return Math.max(audiogram.leftAverage, audiogram.rightAverage);
-      })
+      return Math.max(audiogram.leftAverage, audiogram.rightAverage);
+    })
     : [];
   console.log("here is the worst ear data ->", worstEars[0]);
   const hearingZone = (avarage) => {
@@ -44,32 +45,59 @@ const TestResultCards = ({ viewSec }) => {
   // console.log("hearing levels -> ", hearingLevels);
   const dataOfCards = selectedKidAudiograms
     ? selectedKidAudiograms?.map((audiogram, index) => {
-        return { ...audiogram, hearingLevel: hearingLevels[index] };
-      })
+      return { ...audiogram, hearingLevel: hearingLevels[index] };
+    })
     : [];
   // console.log("data card: ",dataOfCards[0]);
   const latestAudiogram = dataOfCards[0];
+  // console.log("latestAudiogram-> ", latestAudiogram)
+  // console.log("latestAudiogram.createdAt -> ", latestAudiogram?.createdAt)
+  const latestDate = latestAudiogram?.createdAt
+  const formattedDate = moment(latestDate).format("Do MMM,YYYY");
+  // console.log("latestDate -> ", formattedDate)
+  const date = new Date(latestDate)
+  console.log("date -> ", date)
+
+  const dateFormatting = (date) => {
+    const formattedDate = moment(date).format("Do MMM,YYYY");
+    return formattedDate;
+  }
+
   console.log(latestAudiogram);
   return (
     <>
       {viewSec === 1 ? (
-        <Pressable>
-          {/* <Pressable onPress={() => navigation.navigate("Test Result", latestAudiogram)}> */}
-          <Card margin={16}>
-            <Heading>{latestAudiogram?.hearingLevel}</Heading>
-            <Text>{latestAudiogram?.createdAt}</Text>
-          </Card>
-        </Pressable>
+        dataOfCards.length > 0 ? (
+          // <Pressable>
+            <Pressable onPress={() => {
+              console.log("Is latestAudiogram working-> ", latestAudiogram);
+              navigation.navigate("Test Result", { data: latestAudiogram, screenName:'HomeScreen'})}}>
+            <Card margin={16}>
+              <Heading>{latestAudiogram?.hearingLevel}</Heading>
+              <Text>{latestAudiogram?.createdAt}</Text>
+            </Card>
+          </Pressable>
+        ) : (
+          // <Pressable>
+            <Pressable onPress={() => handleOnPress()}>
+            {/* <Pressable navigation.navigate("All Results")> */}
+            <Card margin={16}>
+              <Heading>Test Result</Heading>
+              <Text>0 taken</Text>
+              {/* <Text>{date}</Text> */}
+            </Card>
+          </Pressable>
+        )
       ) : viewSec === 2 ? (
         dataOfCards.length > 0 ? (
           dataOfCards.map((data) => {
             return (
               <VStack key={data.id}>
-                <Pressable>
-                  {/* <Pressable
+                {/* <Pressable> */}
+                  <Pressable
               onPress={() => {
-                navigation.navigate("Test Result", data);
-              }}> */}
+                navigation.navigate("Test Result", {data: data, screenName:'ViewAll'});
+              }}>
                   <Card marginVertical={12}>
                     <HStack alignItems="center" gap={12}>
                       <VStack
@@ -85,7 +113,7 @@ const TestResultCards = ({ viewSec }) => {
                       </VStack>
                       <VStack>
                         <Heading>{data.hearingLevel}</Heading>
-                        <Text>{data.createdAt}</Text>
+                        <Text>{dateFormatting(data.createdAt)}</Text>
                       </VStack>
                     </HStack>
                   </Card>

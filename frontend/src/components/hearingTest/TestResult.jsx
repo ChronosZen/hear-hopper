@@ -13,11 +13,27 @@ import { mainMastcot, ear } from "../svg/svgs";
 import { VStack, HStack, ScrollView } from "@gluestack-ui/themed";
 import { Typography, Colors } from "../../styles/index";
 import ButtonFunc from "../../components/reusable/ButtonFunc";
+// import { useRoute, useNavigation } from "@react-navigation/native";
 
 
 const TestResult = ({ route, navigation }) => {
-  const { data } = route.params;
-  console.log("this is audiogram object", data);
+  let data;
+  if(route.params.screenName === "HomeScreen" || route.params.screenName === "ViewAll"){
+    data = route.params.data;
+  } 
+  else if(route.params.screenName === "TestScreen"){
+    const newData = route.params.data.data;
+    // console.log("inside if block using route -> ", route.params.data.data);
+    // console.log("inside if block newData -> ", newData);
+    data = newData;
+    // console.log("inside if block data -> ", data);
+  }
+  // const router = useRoute()
+  // const routeName = router.name
+  // console.log("router coming from testResult component", router)
+  // console.log("routeName -> ", routeName);
+  // console.log("this is audiogram object", ramroute.params);
+  // console.log("this is audiogram object", data);
 
   // console.log("right left avg: ", data.leftAverage, data.rightAverage)
   // console.log("percentage: ", (100-(data.leftAverage*(100/91))).toFixed(0))
