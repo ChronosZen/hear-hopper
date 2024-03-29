@@ -53,7 +53,7 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
     : [];
   // console.log("data card: ",dataOfCards[0]);
   const latestAudiogram = dataOfCards[dataOfCards.length - 1];
-  console.log("latestAudiogram-> ", latestAudiogram)
+  // console.log("latestAudiogram-> ", latestAudiogram)
   // console.log("latestAudiogram.createdAt -> ", latestAudiogram?.createdAt)
   const latestDate = latestAudiogram?.createdAt
   const formattedDate = moment(latestDate).format("Do MMM,YYYY");
@@ -100,8 +100,6 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
                   <SVG xml={chevronRight} width="24" height="24" />
                 </VStack>
               </HStack>
-
-
             </Card>
           </Pressable>
         ) : (
