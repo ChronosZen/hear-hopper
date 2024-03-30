@@ -9,6 +9,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import TestScreen from "../screens/TestScreen";
 import TrainScreen from "../screens/TrainScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import AddProfileScreen from "../screens/AddProfileScreen";
 import ExampleScreen from "../screens/ExampleScreen";
 import SVG from "../components/svg/SVG";
@@ -69,8 +70,6 @@ function TrainStackScreen() {
   return (
     <TrainStack.Navigator screenOptions={{ headerShown: false }}>
       <TrainStack.Screen name="TrainSection" component={TrainScreen} />
-      <TrainStack.Screen name="QuizSection" component={QuizSection} />
-      <TrainStack.Screen name="StartSection" component={StartSection} />
     </TrainStack.Navigator>
   );
 }
@@ -84,8 +83,7 @@ function HearingTestStackScreen() {
         name="Noise Check"
         component={TestNoiseCheckScreen}
       />
-      <HearinTestStack.Screen name="Tutorial" component={TestTutorial} />
-      <HearinTestStack.Screen name="Ear Test" component={EarTestScreen} />
+
       <HearinTestStack.Screen name="Test Result" component={TestResult} />
       <HearinTestStack.Screen name="All Results" component={ViewAllResult} />
     </HearinTestStack.Navigator>
@@ -93,7 +91,6 @@ function HearingTestStackScreen() {
 }
 
 const Tab = createBottomTabNavigator();
-
 const BottomTab = () => {
   return (
     <Tab.Navigator
@@ -123,7 +120,7 @@ const BottomTab = () => {
           ),
           tabBarIcon: ({ focused }) => (
             <SVG
-              xml={focused ? homeSolidIcon: homeIcon}
+              xml={focused ? homeSolidIcon : homeIcon}
               height="24"
               width="24"
               fill={focused ? Colors.gs.black : Colors.gs.gs4}
