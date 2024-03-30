@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Colors, Typography } from "../../styles";
+import { Audio } from "expo-av";
 import {
   ButtonText,
   CloseIcon,
@@ -132,13 +133,23 @@ function reducer(state, action) {
       };
   }
 }
-
+async function playCompletedSound() {
+  const yaySound = require("../../../assets/audioFiles/training/yay-6120.mp3");
+  try {
+    const { sound } = await Audio.Sound.createAsync(yaySound);
+    const completedSound = sound;
+    await completedSound.playAsync();
+  } catch (error) {
+    console.error("Error playing feedback sound:", error);
+  }
+}
 const QuizSection = ({ navigation }) => {
   const [
     { question, pageState, answerState, userAnswer, showModal, score },
     dispatch,
   ] = useReducer(reducer, initialState);
   const { selectedKidId, dispatch: dispatchContext } = useUser();
+
   const checkAnswer = (userAnswer, correctAnswer, question) => {
     if (userAnswer === correctAnswer) {
       dispatch({
@@ -184,6 +195,7 @@ const QuizSection = ({ navigation }) => {
         payload: { selectedKidQuizScore: score },
       });
       dispatch({ type: "showModal" });
+      playCompletedSound();
     } catch (error) {
       console.error("There has been a problem with your PATCH api", error);
       console.error("Response data:", error.response?.data);
