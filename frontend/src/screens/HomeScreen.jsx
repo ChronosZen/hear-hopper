@@ -86,7 +86,7 @@ const HomeScreen = ({ navigation, route }) => {
           </VStack>
         </VStack>
 
-        <HStack flex={"50%"}>
+        <HStack flexBasis={"50%"}>
           {homeCards.map((homeCard, index) => {
             return (
               <HStack key={index}>
