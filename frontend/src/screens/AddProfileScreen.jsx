@@ -39,6 +39,10 @@ import CameraProfile from "../components/user/CameraProfile";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import * as secureStorage from "expo-secure-store";
 import { Typography, Colors } from "../styles";
+import CloseButton from "../components/reusable/CloseButton";
+import { useNavigation } from "@react-navigation/native";
+import { smileIcon, happyMascot } from "../components/svg/svgs";
+import SVG from "../components/svg/SVG";
 
 const initialState = {
   page: 1,
@@ -145,14 +149,21 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
     },
   });
 
+  const navigation = useNavigation()
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1, justifyContent: "space-between", margin: 24, marginBottom: 48 }}>
-        <HeaderText
-          text={page !== 5 ? "Create Profile" : "Hearing Aid"}
-          textAlign="center"
-        />
-        <VStack flex={1} mt="$24">
+      <VStack flex={1} justifyContent="space-between" margin={24} marginBottom={48}>
+        <HStack justifyContent="space-between" alignItems="center">
+          <HeaderText
+            text="Create Profile"
+            underlineColor={Colors.secondary.g4}
+            xml={smileIcon}
+          />
+          <CloseButton navigation={navigation} section={"MainProfile"} />
+        </HStack>
+
+        <VStack my="$24" flex={1}>
           <VStack mb={24}>
             <Text style={{...Typography.heading.h4, textAlign: "center"}}>
               {page === 1 ? "Child’s Birth  Year?" : page === 2 ? "Child’s Gender ?" : page === 3 ? "Profile Pic" : page === 4 ? "Child’s Name?" : page === 5 ? "Hearing Aid?" : ""}
@@ -180,38 +191,33 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
           </>
         )}
         {page === 2 && (
-          <RadioGroup
-            value={gender}
-            onChange={(newGender) =>
-              dispatch({ type: "gender", payload: newGender })
-            }>
-            <HStack space="2xl">
-              <Radio value="Girl">
-                <RadioIndicator mr="$2">
-                  <RadioIcon as={CircleIcon} />
-                </RadioIndicator>
-                <RadioLabel>Girl</RadioLabel>
-              </Radio>
-              <Radio value="Boy">
-                <RadioIndicator mr="$2">
-                  <RadioIcon as={CircleIcon} />
-                </RadioIndicator>
-                <RadioLabel>Boy</RadioLabel>
-              </Radio>
-              <Radio value="Non-binary">
-                <RadioIndicator mr="$2">
-                  <RadioIcon as={CircleIcon} />
-                </RadioIndicator>
-                <RadioLabel>Non-binary</RadioLabel>
-              </Radio>
-              <Radio value="Prefer not to say">
-                <RadioIndicator mr="$2">
-                  <RadioIcon as={CircleIcon} />
-                </RadioIndicator>
-                <RadioLabel>Prefer not to say</RadioLabel>
-              </Radio>
-            </HStack>
-          </RadioGroup>
+          <Select
+          width={Dimensions.get("screen")}
+          value={gender}
+          onValueChange={(newGender) => {
+            dispatch({ type: "gender", payload: newGender });
+          }}
+          variant="outline"
+          size="md">
+          <SelectTrigger variant="rounded" size="md" height={48}>
+            <SelectInput placeholder="Select gender" />
+            <SelectIcon mr="$3">
+              <Icon as={ChevronDownIcon} />
+            </SelectIcon>
+          </SelectTrigger>
+          <SelectPortal>
+            <SelectBackdrop />
+            <SelectContent>
+              <SelectDragIndicatorWrapper>
+                <SelectDragIndicator />
+              </SelectDragIndicatorWrapper>
+              <SelectItem label="Girl" value="Girl" />
+              <SelectItem label="Boy" value="Boy" />
+              <SelectItem label="Non-binary" value="Non-binary" />
+              <SelectItem label="Prefer not to say" value="Prefer not to say" />
+            </SelectContent>
+          </SelectPortal>
+          </Select>
         )}
         {page === 3 && <CameraProfile dispatch={dispatch} />}
         {page === 4 && (
@@ -299,11 +305,12 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
           </FormControl>
         )}
         {page === 6 && (
-          <View>
-            <Text>Congrat you have added a new kid</Text>
-          </View>
+          <VStack alignItems="center" space="xl">
+            <SVG xml={happyMascot} width={200} height={200} />
+            <Text style={{...Typography.heading.h5, textAlign: "center"}}>Congrats successfully added new kid!!!</Text>
+          </VStack>
         )}
-        {/* <Text>
+        {/* <Text style={{margin: 12, textAlign: "center"}}>
           ID:{userData.id}
           {firstName}
           {gender}
@@ -313,7 +320,7 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
           {right}
         </Text> */}
         {/* <Text>Check ear: {(((page === 1 && birthYear) || (page === 2 && gender) || (page === 3 && image)  || (page === 4 && firstName)) ? "true" : "false")}</Text> */}
-        {image && (
+        {(image && page !== 6) && (
           <View style={{alignItems:"center", marginVertical: 12}}>
           <Image
             size="lg"
@@ -355,7 +362,7 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
             text="Go back"
           />
         )}
-      </View>
+      </VStack>
     </SafeAreaView>
   );
 };
