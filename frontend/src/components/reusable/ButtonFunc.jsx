@@ -7,7 +7,8 @@ const ButtonFunc = ({
   text = "Text",
   color = Colors.gs.black,
   isDisabled,
-  textColor = Colors.gs.white
+  textColor = Colors.gs.white,
+  size = "sm",
 }) => {
   return (
     <VStack space="lg" pt="$4">
@@ -19,8 +20,7 @@ const ButtonFunc = ({
         onPress={() => {
           handleOnPress();
         }}
-        isDisabled={isDisabled}
-        >
+        isDisabled={isDisabled}>
         <ButtonText style={styles.bl} color={textColor}>
           {text}
         </ButtonText>
