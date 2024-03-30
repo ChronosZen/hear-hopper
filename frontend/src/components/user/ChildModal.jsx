@@ -26,13 +26,10 @@ const ChildModal = ({ setIsModelOpen, isModelOpen, kids }) => {
   const { dispatch, selectedKidId } = useUser();
   const [selectedValue, setSelectedValue] = useState(selectedKidId);
 
-  // Integrated handleSelectedKid functionality directly into handleChange
   const handleChange = (selectedValue) => {
-    setSelectedValue(selectedValue); // Update the local state for immediate feedback
-
+    setSelectedValue(selectedValue);
     const selectedKidData = kids.find((kid) => kid._id === selectedValue);
     if (selectedKidData) {
-      // Ensure that the selected kid data exists before dispatching
       dispatch({
         type: "changeChild",
         payload: {
@@ -43,10 +40,8 @@ const ChildModal = ({ setIsModelOpen, isModelOpen, kids }) => {
         },
       });
     }
-
-    setIsModelOpen(!isModelOpen); // Optionally close the modal immediately after selection
+    setIsModelOpen(!isModelOpen);
   };
-
   return (
     <Modal isOpen={isModelOpen}>
       <ModalBackdrop />
