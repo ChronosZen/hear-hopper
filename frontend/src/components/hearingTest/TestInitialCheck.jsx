@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
-import { useState, useEffect, useReducer } from "react";
-import {headphone, soundIcon, notification, mainMastcot, speaker} from '../svg/svgs'
+import { StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import {notification, mainMastcot, speaker, soundIcon} from '../svg/svgs'
 import SVG from "../svg/SVG";
 import ButtonFunc from "../reusable/ButtonFunc";
 import { Typography, Colors } from '../../styles/index';
 import { VStack, HStack } from "@gluestack-ui/themed";
-import LottieView from 'lottie-react-native';
 import AnimatedLottieView from 'lottie-react-native'
+import CloseButton from "../reusable/CloseButton";
 const TestInitialCheck = ({navigation}) => {
     const [setting, setSetting] = useState(0)
 
@@ -21,33 +21,26 @@ const TestInitialCheck = ({navigation}) => {
     }
 
     return (
-        <VStack flex={1}>
-            <VStack style={styles.container}>
-                <SVG xml={mainMastcot} width="180" height="180" />
-                {setting ?
-                    <VStack space='2xl'>
-                        <Text style={{...Typography.heading.h4, textAlign: 'center'}}>Please make sure to Turn Off</Text>
-                        <VStack space='2xl' mx='$16'>
-                        <HStack alignItems='center'>
-                            <SVG xml={notification} width="40" height="40" />
-                            <Text style={Typography.body.bxl}> Notifications</Text>
-                        </HStack>
-                        <HStack alignItems='center'>
-                            <SVG xml={speaker} width="40" height="40" />
-                            <Text style={Typography.body.bxl}> Sound effects</Text>
-                        </HStack>
-                        </VStack>
+        <VStack flex={1} justifyContent="space-between">
+            <HStack m={24} justifyContent="flex-end">
+                <CloseButton navigation={navigation} section={"Go back"} />
+            </HStack>
+            {setting ?
+                <>
+                    <VStack alignItems="center">
+                        {/* <AnimatedLottieView source={require('../animation/NoSoundsFX.json')} autoPlay style={{width:300, height: 300}} /> */}
+                        <SVG xml={notification} width={300} height={300} />
                     </VStack>
-                    :
-                    <>
-                    <Text style={{...Typography.heading.h4, textAlign: 'center'}}>Please wear a Headphone for Accurate Results</Text>
-                    <VStack flex={1} alignItems= 'center' justifyContent= 'center'>
-                        {/* <SVG xml={headphone} width="120" height="120" fill={Colors.primary.p1} /> */}
+                    <Text style={{...Typography.heading.h4, textAlign: 'center', marginHorizontal: 32}}>Please make sure to Turn Off any Sound Effects</Text>
+                </>
+                :
+                <>
+                    <VStack alignItems="center">
                         <AnimatedLottieView source={require('../animation/Headphones.json')} autoPlay style={{width:300, height: 300}} />
                     </VStack>
-                    </>
-                    }
-            </VStack>
+                    <Text style={{...Typography.heading.h4, textAlign: 'center', marginHorizontal: 32}}>Please wear a Headphone for Accurate Results</Text>
+                </>
+                }
             <View style={{marginBottom: 32, marginHorizontal: 24}}>
                 <ButtonFunc text="Proceed" handleOnPress={changeSection} />
             </View>
@@ -57,11 +50,4 @@ const TestInitialCheck = ({navigation}) => {
 
 export default TestInitialCheck;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    marginBottom: 24, 
-    marginHorizontal: 32
-  }
-});
+const styles = StyleSheet.create({});
