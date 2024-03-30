@@ -6,6 +6,7 @@ import {
   Pressable,
   VStack,
   HStack,
+  ScrollView,
 } from "@gluestack-ui/themed";
 // import { View, Text } from "react-native";
 import { useUser } from "../../context/UserContext";
@@ -16,6 +17,7 @@ import { View } from "react-native";
 import { Colors, Typography, Spacing } from "../../styles";
 import ButtonFunc from "./ButtonFunc";
 import moment from "moment";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const TestResultCards = ({ viewSec, handleOnPress }) => {
   const { selectedKidAudiograms } = useUser();
@@ -51,7 +53,15 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
       return { ...audiogram, hearingLevel: hearingLevels[index] };
     })
     : [];
-  // console.log("data card: ",dataOfCards[0]);
+  
+  //sorting data to fetch latest result
+  dataOfCards.sort((a,b) => {
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  })
+
+  // for(let i=0; i<dataOfCards.length; i++){
+  //   console.log("data card: ",moment(dataOfCards[i].createdAt).format("Do MMM,YYYY"));
+  // }
   const latestAudiogram = dataOfCards[0];
   // console.log("latestAudiogram-> ", latestAudiogram)
   // console.log("latestAudiogram.createdAt -> ", latestAudiogram?.createdAt)
@@ -69,7 +79,8 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
   // console.log(latestAudiogram);
 
   return (
-    <>
+    <SafeAreaView>
+    <ScrollView>
       {viewSec === 1 ? (
         dataOfCards.length > 0 ? (
           <Pressable onPress={() => {
@@ -147,8 +158,8 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
             );
           })
         ) : (
-          <VStack>
-            <VStack alignItems="center">
+          <VStack flex={1} space="2xl" justifyContent="space-between" my={48}>
+            <VStack alignItems="center" space="2xl">
               <Text style={Typography.heading.h2}>Oops!</Text>
               <Text style={Typography.body.bl}>
                 You haven’t taken any tests yet.
@@ -157,18 +168,19 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
             </VStack>
             <ButtonFunc
               text="Take Hearing Test"
-              handleOnPress={() => console.log("HearingTest")}
+              handleOnPress={() => navigation.navigate("HearingTest")}
             />
             <ButtonFunc
               text="Back to Home"
-              handleOnPress={() => console.log("Go back")}
+              handleOnPress={() => navigation.navigate("Go back")}
             />
           </VStack>
         )
       ) : (
         <Text>No Results</Text>
       )}
-    </>
+    </ScrollView>
+    </SafeAreaView>
   );
 };
 export default TestResultCards;

@@ -130,9 +130,8 @@ const TestResult = ({ route, navigation }) => {
               }}
             />
           </VStack>
-
+          <ButtonFunc text="View All Results" handleOnPress={() => navigation.navigate("Test",{screen:"All Results"})} />
         </VStack>
-        <ButtonFunc text="View All Results" handleOnPress={() => navigation.navigate('Test' ,{screen: 'All Results'})} />
       </VStack>
     </SafeAreaView>
   );
