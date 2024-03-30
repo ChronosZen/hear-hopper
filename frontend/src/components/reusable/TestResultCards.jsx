@@ -72,12 +72,11 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
     <>
       {viewSec === 1 ? (
         dataOfCards.length > 0 ? (
-          // <Pressable>
           <Pressable onPress={() => {
             // console.log("Is latestAudiogram working-> ", latestAudiogram);
             navigation.navigate("Test Result", { data: latestAudiogram, screenName: 'HomeScreen' })
           }}>
-            <Card margin={0} marginVertical={28} padding={16} >
+            <Card margin={0}>
               <HStack justifyContent="space-between" alignItems="center">
                 <HStack alignItems="center" gap={12}>
                   <VStack
@@ -106,7 +105,7 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
           // <Pressable>
           <Pressable onPress={() => handleOnPress()}>
             {/* <Pressable navigation.navigate("All Results")> */}
-            <Card margin={16}>
+            <Card>
               <Heading>Test Result</Heading>
               <Text>0 taken</Text>
               {/* <Text>{date}</Text> */}
