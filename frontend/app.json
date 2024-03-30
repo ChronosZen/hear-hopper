@@ -34,8 +34,7 @@
         {
           "fonts": [
             "node_modules/@expo-google-fonts/spline-sans/SplineSans_400Regular.ttf",
-            "node_modules/@expo-google-fonts/spline-sans/SplineSans_600SemiBold.ttf",
-            "./assets/RubikScribble-Regular.ttf"
+            "node_modules/@expo-google-fonts/spline-sans/SplineSans_600SemiBold.ttf"
           ]
         }
       ]
