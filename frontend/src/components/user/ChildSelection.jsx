@@ -18,7 +18,7 @@ const ChildSelection = () => {
           kids={kids}
         />
       )}
-      <HStack alignItems="center">
+      <HStack alignItems="center" space="md">
         <Pressable
           onPress={() => {
             setIsModelOpen(!isModelOpen);

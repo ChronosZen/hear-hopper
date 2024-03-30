@@ -13,7 +13,7 @@ const ButtonFunc = ({
     <VStack space="lg" pt="$4">
       <Button
         bgColor={color}
-        size="sm"
+        size={size}
         height={48}
         borderRadius={48}
         onPress={() => {
