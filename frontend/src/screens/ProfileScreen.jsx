@@ -45,16 +45,16 @@ ProfileScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView >
-        <VStack justifyContent="center" alignItems="" gap={8}>
-          <HeaderText text="Profile" />
-          <HStack alignItems="center" space="xl" mb={28}>
-            <Image size="lg" borderRadius="$full" alt="test" source={Dad} />
-            <Text style={{...Typography.heading.h5}}>{userData.firstName}</Text>
-          </HStack>
-        </VStack>
+        <HStack>
+          <HeaderText text="Profile" underlineColor={Colors.primary.p5} textAlign="left" />
+        </HStack>
+        <HStack alignItems="center" space="xl" mb={28}>
+          <Image size="lg" borderRadius="$full" alt="test" source={Dad} />
+          <Text style={{...Typography.heading.h5}}>{userData.firstName}</Text>
+        </HStack>
 
-        <VStack justifyContent="center" alignItems="start" space="xl">
-          <Text style={{...Typography.heading.h6}}>Children’s Account</Text>
+        <VStack justifyContent="center" alignItems="start" space="xl" borderTopWidth={2} borderTopColor={Colors.gs.gs6}>
+          <Text style={{...Typography.heading.h6, paddingTop:12}}>Children’s Account</Text>
           {kidArr.map((kid) => (
             <KidDisplay
               image={kid.image}
@@ -135,9 +135,8 @@ ProfileScreen = ({ navigation, route }) => {
 export default ProfileScreen;
 const styles = StyleSheet.create({
   mainContainer: {
-    margin: 20,
     marginTop: 10,
-    marginLeft: 24
+    marginHorizontal: 24
   },
   outerContainer: {
     alignItems:"center",
