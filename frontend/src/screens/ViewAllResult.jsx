@@ -5,18 +5,14 @@ import ChildSelection from "../components/user/ChildSelection";
 import SVG from "../components/svg/SVG";
 import { ear } from "../components/svg/svgs";
 import { Typography, Colors } from "../styles/index";
+import HeaderText from "../components/reusable/HeaderText";
 
 const ViewAllResult = ({navigation}) => {
 
   return (
-    <VStack marginHorizontal={24}>
+    <VStack m={24}>
         <HStack justifyContent="space-between" alignItems="center" >
-            <HStack alignItems="center" gap={6}>
-                <View style={{backgroundColor:Colors.primary.p5, width:40, height:40, borderRadius: 20, alignItems: 'center', justifyContent: 'center'}}>
-                    <SVG xml={ear} width="24" height="24" />
-                </View>
-                <Text style={Typography.heading.h2}>Results</Text>
-            </HStack>
+            <HeaderText text="Results" underlineColor={Colors.primary.p5} />
             <ChildSelection />
         </HStack>
         <TestResultCards viewSec={2} />
