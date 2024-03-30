@@ -6,7 +6,7 @@ import ButtonFunc from "../reusable/ButtonFunc";
 import { Typography, Colors } from '../../styles/index';
 import { VStack, HStack } from "@gluestack-ui/themed";
 import LottieView from 'lottie-react-native';
-
+import AnimatedLottieView from 'lottie-react-native'
 const TestInitialCheck = ({navigation}) => {
     const [setting, setSetting] = useState(0)
 
@@ -43,7 +43,7 @@ const TestInitialCheck = ({navigation}) => {
                     <Text style={{...Typography.heading.h4, textAlign: 'center'}}>Please wear a Headphone for Accurate Results</Text>
                     <VStack flex={1} alignItems= 'center' justifyContent= 'center'>
                         {/* <SVG xml={headphone} width="120" height="120" fill={Colors.primary.p1} /> */}
-                        <LottieView source={require('../animation/Loader.json')} autoPlay loop style={{width:200, height: 200}} />
+                        <AnimatedLottieView source={require('../animation/Headphones.json')} autoPlay style={{width:300, height: 300}} />
                     </VStack>
                     </>
                     }
