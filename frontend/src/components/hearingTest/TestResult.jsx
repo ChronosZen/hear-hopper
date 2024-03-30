@@ -1,19 +1,17 @@
 import {
   StyleSheet,
   Text,
-  View,
-  Button,
-  TouchableOpacity,
   Dimensions
 } from "react-native";
-import { useState } from "react";
 import { LineChart } from "react-native-chart-kit";
 import SVG from "../svg/SVG";
-import { mainMastcot, ear } from "../svg/svgs";
-import { VStack, HStack, ScrollView } from "@gluestack-ui/themed";
+import { testEar, happyMascot } from "../svg/svgs";
+import { VStack, HStack } from "@gluestack-ui/themed";
 import { Typography, Colors } from "../../styles/index";
 import ButtonFunc from "../../components/reusable/ButtonFunc";
-// import { useRoute, useNavigation } from "@react-navigation/native";
+import HeaderText from "../reusable/HeaderText";
+import CloseButton from "../reusable/CloseButton";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 const TestResult = ({ route, navigation }) => {
@@ -53,15 +51,11 @@ const TestResult = ({ route, navigation }) => {
       }
   }
   return (
-    <ScrollView>
-      <VStack style={{ flex: 1, margin: 12 }}>
-        <HStack alignItems="center">
-            <SVG xml={ear} width="32" height="32" />
-          <Text
-            style={Typography.heading.h2}
-          >
-            Results
-          </Text>
+    <SafeAreaView flex={1}>
+      <VStack flex= {1} m={24} space="3xl">
+        <HStack alignItems="center" justifyContent="space-between">
+          <HeaderText text="Results" xml={testEar} underlineColor={Colors.primary.p5} />
+          <CloseButton navigation={navigation} section={"Go back"} />
         </HStack>
 
         {/* Ear results */}
@@ -74,7 +68,7 @@ const TestResult = ({ route, navigation }) => {
               {(100-(data.leftAverage*(100/91))).toFixed(0)}
             </Text>
           </VStack>
-          <SVG xml={mainMastcot} width="180" height="180" />
+          <SVG xml={happyMascot} width="180" height="180" />
           <VStack justifyContent="center" alignItems="center">
             <Text style={styles.earText}>Right Ear</Text>
             <Text
@@ -84,24 +78,17 @@ const TestResult = ({ route, navigation }) => {
             </Text>
           </VStack>
         </HStack>
-          <Text
-            style={styles.hearingRes}
-          >
-            {data.leftAverage < data.rightAverage ? checkHearing(data.rightAverage): checkHearing(data.leftAverage)}
-          </Text>
 
-        <VStack
-          style={{
-            flex: 1,
-            justifyContent: "space-between",
-            padding: 20,
-            borderTopLeftRadius: 50,
-            borderTopRightRadius: 50
-          }}
+        <Text
+          style={styles.hearingRes}
         >
+          {data.leftAverage < data.rightAverage ? checkHearing(data.rightAverage): checkHearing(data.leftAverage)}
+        </Text>
+
+        <VStack flex={1} justifyContent="center" >
           <Text style={Typography.heading.h6}>Audiogram</Text>
           {/* Audio Chart */}
-          <View>
+          <VStack>
             <LineChart
               data={{
                 labels: [500, 1000, 2000, 5000, 8000],
@@ -120,19 +107,19 @@ const TestResult = ({ route, navigation }) => {
               yAxisSuffix="dB"
               yAxisInterval={1}
               chartConfig={{
-                backgroundColor: "#4900E5",
-                backgroundGradientFrom: "#4900E5",
-                backgroundGradientTo: "#4900E5",
-                decimalPlaces: 2,
-                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                backgroundColor: Colors.primary.p1,
+                backgroundGradientFrom: Colors.primary.p3,
+                backgroundGradientTo: Colors.primary.p4,
+                decimalPlaces: 0,
+                color: (opacity = 1) => Colors.gs.black,
+                labelColor: (opacity = 1) => Colors.gs.black,
                 style: {
                   borderRadius: 16
                 },
                 propsForDots: {
                   r: "6",
                   strokeWidth: "2",
-                  stroke: "#ffa726"
+                  stroke: Colors.primary.p3
                 }
               }}
               bezier
@@ -142,12 +129,12 @@ const TestResult = ({ route, navigation }) => {
                 borderRadius: 16
               }}
             />
-          </View>
+          </VStack>
 
-          <ButtonFunc text="View All Results" handleOnPress={() => navigation.navigate("All Results")} />
         </VStack>
+        <ButtonFunc text="View All Results" handleOnPress={() => navigation.navigate('Test' ,{screen: 'All Results'})} />
       </VStack>
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 
