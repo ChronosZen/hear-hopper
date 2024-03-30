@@ -144,7 +144,7 @@ const TestResult = ({ route, navigation }) => {
             />
           </View>
 
-          <ButtonFunc text="View All Results" handleOnPress={() => navigation.navigate("All Results")} />
+          <ButtonFunc text="View All Results" handleOnPress={() => navigation.navigate("Test",{screen:"All Results"})} />
         </VStack>
       </VStack>
     </ScrollView>
