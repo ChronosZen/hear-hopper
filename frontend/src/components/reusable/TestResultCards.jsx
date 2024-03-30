@@ -21,12 +21,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const TestResultCards = ({ viewSec, handleOnPress }) => {
   const { selectedKidAudiograms } = useUser();
-  // console.log("selectedAudiograms", selectedKidAudiograms);
   const navigation = useNavigation();
   const worstEars = selectedKidAudiograms
     ? selectedKidAudiograms?.map((audiogram) => {
-      return Math.max(audiogram.leftAverage, audiogram.rightAverage);
-    })
+        return Math.max(audiogram.leftAverage, audiogram.rightAverage);
+      })
     : [];
   // console.log("here is the worst ear data ->", worstEars[0]);
 
@@ -50,8 +49,8 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
   // console.log("hearing levels -> ", hearingLevels);
   const dataOfCards = selectedKidAudiograms
     ? selectedKidAudiograms?.map((audiogram, index) => {
-      return { ...audiogram, hearingLevel: hearingLevels[index] };
-    })
+        return { ...audiogram, hearingLevel: hearingLevels[index] };
+      })
     : [];
   
   //sorting data to fetch latest result
@@ -65,7 +64,7 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
   const latestAudiogram = dataOfCards[0];
   // console.log("latestAudiogram-> ", latestAudiogram)
   // console.log("latestAudiogram.createdAt -> ", latestAudiogram?.createdAt)
-  const latestDate = latestAudiogram?.createdAt
+  const latestDate = latestAudiogram?.createdAt;
   const formattedDate = moment(latestDate).format("Do MMM,YYYY");
   // console.log("latestDate -> ", formattedDate)
   const date = new Date(latestDate)
@@ -74,7 +73,7 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
   const dateFormatting = (date) => {
     const formattedDate = moment(date).format("Do MMM YYYY");
     return formattedDate;
-  }
+  };
 
   // console.log(latestAudiogram);
 
