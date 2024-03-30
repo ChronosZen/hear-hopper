@@ -70,7 +70,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: Spacing.l,
-        paddingVertical: Spacing.xl
     },
     heading: {
         ...Typography.heading.h4,

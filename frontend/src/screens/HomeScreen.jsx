@@ -42,6 +42,7 @@ const HomeScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container} >
+        
         <HStack justifyContent="space-between" alignItems="center" >
           <HeaderText text="Welcome" underlineColor={Colors.primary.p4} ></HeaderText>
           <ChildSelection />
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: Spacing.l,
-    paddingVertical: Spacing.xl,
+    paddingBottom: Spacing.m,
     gap: Spacing.xl,
   },
   testCardHeading: {
