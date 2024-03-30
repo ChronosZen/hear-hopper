@@ -1,6 +1,5 @@
 import { StyleSheet, View } from "react-native";
 import HeaderText from "../components/reusable/HeaderText";
-import ButtonFunc from "../components/reusable/ButtonFunc";
 import React from "react";
 import SVG from "../components/svg/SVG";
 import {
@@ -10,7 +9,6 @@ import {
   headphone
 } from "../components/svg/svgs";
 import TestResultCards from "../components/reusable/TestResultCards";
-import { useUser } from "../context/UserContext";
 import {
   HStack,
   VStack,
@@ -23,15 +21,9 @@ import {
 } from "@gluestack-ui/themed";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ChildSelection from "../components/user/ChildSelection";
-import { Header } from "react-native/Libraries/NewAppScreen";
 import { Typography, Spacing, Colors } from "../styles";
 
 const HomeScreen = ({ navigation, route }) => {
-  // const { firstName } = useUser();
-
-  // const onClick = () => {
-  //   console.log("card is clicked.");
-  // };
 
   const homeCards = [
     {
@@ -86,11 +78,13 @@ const HomeScreen = ({ navigation, route }) => {
           </VStack>
         </VStack>
 
-        <HStack flexBasis={"50%"}>
+        <HStack gap={Spacing.l}>
           {homeCards.map((homeCard, index) => {
             return (
-              <HStack key={index}>
+
                 <Pressable
+                  key={index}
+                  flexGrow={1}
                   onPress={() => {
                     if (index === 0) {
                       navigation.navigate("Train");
@@ -114,7 +108,6 @@ const HomeScreen = ({ navigation, route }) => {
                     :
                     <Card
                       key={index}
-                      margin={16}
                       borderWidth={1}
                       shadowColor={true}
                       borderColor={Colors.accent.b2}
@@ -126,7 +119,6 @@ const HomeScreen = ({ navigation, route }) => {
                     </Card>
                   }
                 </Pressable>
-              </HStack>
             );
           })}
         </HStack >
