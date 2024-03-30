@@ -1,27 +1,23 @@
 import { useReducer, useEffect } from "react";
-import { Audio } from 'expo-av';
-import { View } from "react-native";
 import ButtonFunc from "../reusable/ButtonFunc";
-import { Colors } from "../../styles";
+import { StyleSheet } from "react-native";
+import { Audio } from 'expo-av';
+import { Colors, Spacing, Typography } from "../../styles";
 import { checkPermissions, requestPermissions } from "./UserPermissions";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import HeaderText from "../reusable/HeaderText";
 import SVG from "../svg/SVG";
 import {
     noiseCheckIcon,
+    closeIcon,
     wave
-
 } from "../svg/svgs";
-
 import {
-    Heading,
-    Text,
-    Card,
     HStack,
     Pressable,
-    Icon,
-    CloseIcon,
-    VStack
+    VStack,
+    Text,
+    Heading
 } from '@gluestack-ui/themed';
 
 const initialState = {
@@ -33,7 +29,6 @@ const initialState = {
     safeDuration: 4,
     isMicrophonePermGranted: false,
     isRecordingPermGranted: false,
-
 };
 
 const reducer = (state, action) => {
@@ -88,9 +83,11 @@ const reducer = (state, action) => {
     }
 }
 
-const NoiseChecker = () => {
+const NoiseChecker = ({ text }) => {
     // console.log("Message from NoiseChecker component.") -> OK
     // console.log("route name from noise checker", route.route.route.name)
+
+    const script = text
 
     const route = useRoute()
     const routeName = route.name
@@ -111,7 +108,6 @@ const NoiseChecker = () => {
         await requestPermissions(dispatch, state)
     }
 
-    // Start noise check
     const startNoiseCheck = async () => {
         try {
             if ((!state.isPermissionGranted) || (!state.isRecordingPermGranted)) {
@@ -170,8 +166,7 @@ const NoiseChecker = () => {
     }
     // console.log('Recording started or stopped and isNoiseChecking ->', state.isNoiseChecking);
     // console.log("safeDuration ->", state.safeDuration)
-
-    console.log("recording", state.recording)
+    // console.log("recording", state.recording)
 
     const stopNoiseCheck = async () => {
         try {
@@ -198,7 +193,7 @@ const NoiseChecker = () => {
         }
     }
 
-    console.log("isNoiseChecking ->", state.isNoiseChecking)
+    // console.log("isNoiseChecking ->", state.isNoiseChecking)
 
     useEffect(() => {
         handleCheckPermissions()
@@ -207,103 +202,113 @@ const NoiseChecker = () => {
         }
     }, [])
 
-
     return (
-        <VStack flex={1} justifyContent="start" alignContent="space-between" m={16}>
-
-            <VStack >
-
-                {/* header */}
-                <HStack justifyContent="space-between" alignItems="center" mb={24}>
-                    <HStack gap={8}>
-                        <SVG xml={noiseCheckIcon} width="40" height="40"></SVG>
-                        <HeaderText text="Noise Check" />
+        <VStack flex={1}>
+            <VStack flex={1}>
+                <VStack>
+                    <HStack justifyContent="space-between" alignItems="center">
+                        <HStack alignItems="center" space="md">
+                            <SVG xml={noiseCheckIcon} width="40" height="40"></SVG>
+                            <HeaderText text="Noise Check" underlineColor={Colors.primary.p5} />
+                        </HStack>
+                        {routeName === "Parental Control Noise Check"
+                            ?
+                            <Pressable onPress={() => {
+                                stopNoiseCheck();
+                                navigation.navigate("ParentalControl")
+                            }}
+                            >
+                                <SVG xml={closeIcon} width="40" height="40"></SVG>
+                            </Pressable>
+                            :
+                            <Pressable onPress={() => {
+                                stopNoiseCheck();
+                                navigation.navigate("HearingTest")
+                            }}
+                            >
+                                <SVG xml={closeIcon} width="40" height="40"></SVG>
+                            </Pressable>
+                        }
                     </HStack>
-
-                    {routeName === "Parental Control Noise Check"
-                    ?
-                        <Pressable onPress={() => {
-                            stopNoiseCheck();
-                            navigation.navigate("ParentalControl")
-                        }}
-                        >
-                            <Icon as={CloseIcon} m="$2" w="$4" h="$4" />
-                        </Pressable>
-                    :
-                    <Pressable onPress={() => {
-                        stopNoiseCheck();
-                        navigation.navigate("HearingTest")
-                    }}
-                    >
-                        <Icon as={CloseIcon} m="$2" w="$4" h="$4" />
-                    </Pressable>
-                    }
-                </HStack>
-
-                <Text>We will conduct an Environmental Noise Check before starting the test.</Text>
-
-                <SVG xml={wave} width="360" height="360"></SVG>
-
-
+                    <Text style={styles.text}>{script}</Text>
+                </VStack>
+                <VStack alignItems="center">
+                    <SVG xml={wave} width="440" height="440"></SVG>
+                </VStack>
                 {state.isNoiseChecking && (
                     <>
                         {state.noiseLevel <= -12 && (
                             // <Card backgroundColor={Colors.secondary.g5} margin={16}>
                             <VStack >
-                                <Heading alignSelf="center" mb={4}>Safe</Heading>
-                                <Text alignSelf="center" marginHorizontal={48}>No risk of hearing loss, no matter how long you listen.</Text>
+                                <Heading alignSelf="center" style={styles.levelHeading}>Safe Level</Heading>
+                                <Text alignSelf="center" style={styles.levelText}>No risk of hearing loss, no matter how long you listen.</Text>
                             </VStack>
                             // </Card>
                         )}
                         {state.noiseLevel <= -10 && state.noiseLevel > -12 && (
                             <VStack >
-                                <Heading alignSelf="center" mb={4}>Moderate Risk</Heading>
-                                <Text alignSelf="center" marginHorizontal={48}>Avoid being in this environment 8 hour or more.</Text>
+                                <Heading alignSelf="center" style={styles.levelHeading}>Moderate Risk Level</Heading>
+                                <Text alignSelf="center" style={styles.levelText}>Avoid being in this environment 8 hour or more.</Text>
                             </VStack>
                         )}
-
                         {state.noiseLevel > -10 && (
                             <VStack>
-                                <Heading alignSelf="center" mb={4}>High Risk</Heading>
-                                <Text alignSelf="center" marginHorizontal={48}>Avoid being in this environment 45 minutes or more.</Text>
+                                <Heading alignSelf="center" style={styles.levelHeading}>High Risk Level</Heading>
+                                <Text alignSelf="center" style={styles.levelText}>Avoid being in this environment 45 minutes or more.</Text>
                             </VStack>
                         )}
                     </>
                 )}
             </VStack>
 
-            {routeName === "Parental Control Noise Check"
-                ? (state.isNoiseChecking === false
-                    ? <ButtonFunc
-                        handleOnPress={startNoiseCheck}
-                        disabled={!state.isMicrophonePermGranted || !state.isRecordingPermGranted }
-                        text={"START NOISE CHECK"}
-                    />
+            <VStack>
+                {routeName === "Parental Control Noise Check"
+                    ? (state.isNoiseChecking === false
+                        ? <ButtonFunc
+                            handleOnPress={startNoiseCheck}
+                            disabled={!state.isMicrophonePermGranted || !state.isRecordingPermGranted}
+                            text={"START NOISE CHECK"}
+                        />
+                        :
+                        <></>
+                    )
                     :
-                    <></>
-                )
-                :
-                <ButtonFunc
-                    handleOnPress={() => {
-                        state.isNoiseChecking
-                            ? (stopNoiseCheck(),
-                                navigation.navigate("Tutorial"))
-                            : startNoiseCheck();
-                    }}
-                    isDisabled={
-                        !state.isMicrophonePermGranted ||
-                        !state.isRecordingPermGranted ||
-                        state.safeDuration < 3
-                      }
-                      text={
-                        state.isNoiseChecking && state.safeDuration > 2
-                          ? "Proceed to Test"
-                          : "CHECK"
-                      }
-                />
-            }
+                    <ButtonFunc
+                        handleOnPress={() => {
+                            state.isNoiseChecking
+                                ? (stopNoiseCheck(),
+                                    navigation.navigate("Tutorial"))
+                                : startNoiseCheck();
+                        }}
+                        isDisabled={
+                            !state.isMicrophonePermGranted ||
+                            !state.isRecordingPermGranted ||
+                            state.safeDuration < 3
+                        }
+                        text={
+                            state.isNoiseChecking && state.safeDuration > 2
+                                ? "Proceed to Test"
+                                : "CHECK"
+                        }
+                    />
+                }
+            </VStack>
         </VStack>
     )
 }
 
 export default NoiseChecker;
+
+const styles = StyleSheet.create({
+    text: {
+        ...Typography.body.bl,
+    },
+    levelHeading: {
+        ...Typography.heading.h4,
+        paddingBottom: Spacing.l
+    },
+    levelText: {
+        ...Typography.body.bl,
+        paddingHorizontal: 40
+    }
+})
