@@ -23,8 +23,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       paddingHorizontal: Spacing.l,
-      paddingVertical: Spacing.xl,
-      gap: Spacing.xl,
+      paddingVertical: 40,
     }
   }
 )

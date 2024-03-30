@@ -240,21 +240,21 @@ const NoiseChecker = ({ text }) => {
                         {state.noiseLevel <= -12 && (
                             // <Card backgroundColor={Colors.secondary.g5} margin={16}>
                             <VStack >
-                                <Heading alignSelf="center" mb={4}>Safe</Heading>
-                                <Text alignSelf="center" marginHorizontal={48}>No risk of hearing loss, no matter how long you listen.</Text>
+                                <Heading alignSelf="center" style={styles.levelHeading}>Safe Level</Heading>
+                                <Text alignSelf="center" style={styles.levelText}>No risk of hearing loss, no matter how long you listen.</Text>
                             </VStack>
                             // </Card>
                         )}
                         {state.noiseLevel <= -10 && state.noiseLevel > -12 && (
                             <VStack >
-                                <Heading alignSelf="center" mb={4}>Moderate Risk</Heading>
-                                <Text alignSelf="center" marginHorizontal={48}>Avoid being in this environment 8 hour or more.</Text>
+                                <Heading alignSelf="center" style={styles.levelHeading}>Moderate Risk Level</Heading>
+                                <Text alignSelf="center" style={styles.levelText}>Avoid being in this environment 8 hour or more.</Text>
                             </VStack>
                         )}
                         {state.noiseLevel > -10 && (
                             <VStack>
-                                <Heading alignSelf="center" mb={4}>High Risk</Heading>
-                                <Text alignSelf="center" marginHorizontal={48}>Avoid being in this environment 45 minutes or more.</Text>
+                                <Heading alignSelf="center" style={styles.levelHeading}>High Risk Level</Heading>
+                                <Text alignSelf="center" style={styles.levelText}>Avoid being in this environment 45 minutes or more.</Text>
                             </VStack>
                         )}
                     </>
@@ -302,5 +302,13 @@ export default NoiseChecker;
 const styles = StyleSheet.create({
     text: {
         ...Typography.body.bl,
+    },
+    levelHeading: {
+        ...Typography.heading.h4,
+        paddingBottom: Spacing.l
+    },
+    levelText: {
+        ...Typography.body.bl,
+        paddingHorizontal: 40
     }
 })
