@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import {
   Button,
   ButtonText,
@@ -12,14 +12,15 @@ import {
 } from "@gluestack-ui/themed";
 import { VolumeManager } from "react-native-volume-manager";
 import * as SecureStore from "expo-secure-store";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { Audio } from "expo-av";
 
-export default function VolumeControl({goToScreen}) {
+export default function VolumeControl({ goToScreen }) {
   const [volumeLevel, setVolumeLevel] = useState(0);
-  const [sound, setSound] = useState();
   const navigation = useNavigation();
+  const soundRef = useRef();
 
+  console.log("volumeLevel ->", volumeLevel);
   // Fetch the volume level from the device's storage
   useEffect(() => {
     const fetchVolumeLevel = () => {
@@ -28,7 +29,7 @@ export default function VolumeControl({goToScreen}) {
         if (storedVolumeLevel) {
           setVolumeLevel(parseFloat(storedVolumeLevel));
         } else {
-          // do nothing. volume stays at 0 and waits for user to change it to save to storage
+          setVolumeLevel(0);
         }
       } catch (error) {
         console.error("Error fetching volume level:", error);
@@ -56,28 +57,31 @@ export default function VolumeControl({goToScreen}) {
       require("../../../assets/audioFiles/training/heavy-rain_sound.wav")
     );
     await sound.setIsLoopingAsync(true);
-    setSound(sound);
+    soundRef.current = sound;
     console.log("Playing Sound");
     await sound.playAsync();
   };
 
-  useEffect(() => {
-    playRainSound();
+  useFocusEffect(
+    useCallback(() => {
+      playRainSound();
 
-    return sound
-      ? () => {
-          sound.unloadAsync();
+      return () => {
+        if (soundRef.current) {
+          soundRef.current.unloadAsync();
         }
-      : undefined;
-  }, [sound]);
+      };
+    }, [])
+  );
 
   return (
     <>
       <Heading>Volume Setting</Heading>
       <Text>We will set the app volume</Text>
-      <Center paddingVertical={240}>
+      <Center w={300} h={400}>
         <Slider
-          size="md"
+          sliderTrackHeight={8}
+          size="lg"
           orientation="horizontal"
           value={Math.round(volumeLevel * 100)}
           onChange={(value) => {
