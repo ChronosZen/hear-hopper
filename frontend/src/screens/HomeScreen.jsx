@@ -98,7 +98,7 @@ const HomeScreen = ({ navigation, route }) => {
                       key={index}
                       borderWidth={1}
                       shadowColor={true}
-                      borderColor={Colors.secondary.g5}
+                      borderColor={Colors.secondary.g3}
                       backgroundColor={Colors.secondary.g6}>
                       <VStack justifyContent="space-between" gap={Spacing.l}>
                         <SVG xml={parentalControlIcon} width="40" height="40" />
