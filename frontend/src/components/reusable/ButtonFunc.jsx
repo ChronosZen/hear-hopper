@@ -7,7 +7,7 @@ const ButtonFunc = ({
   text = "Text",
   color = Colors.gs.black,
   isDisabled,
-  size = "sm"
+  textColor = Colors.gs.white
 }) => {
   return (
     <VStack space="lg" pt="$4">
@@ -21,7 +21,7 @@ const ButtonFunc = ({
         }}
         isDisabled={isDisabled}
         >
-        <ButtonText style={styles.bl} color="$white">
+        <ButtonText style={styles.bl} color={textColor}>
           {text}
         </ButtonText>
       </Button>
