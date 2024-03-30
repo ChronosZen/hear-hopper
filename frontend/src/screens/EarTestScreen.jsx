@@ -309,10 +309,10 @@ const EarTestScreen = ({ navigation }) => {
         ...prevResp,
         [audioPlay[currentIndex].freq]: db,
       }));
-      setRightResponse((rightResp) => ({
-        ...rightResp,
-        [audioPlay[currentIndex].freq]: db + 10,
-      }));
+      // setRightResponse((rightResp) => ({
+      //   ...rightResp,
+      //   [audioPlay[currentIndex].freq]: db + 10,
+      // }));
     }
     // console.log(response);
   };
