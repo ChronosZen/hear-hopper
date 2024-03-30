@@ -4,7 +4,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
 import ParentalControlScreen from "../screens/ParentalControlScreen";
 import ParentalControlNoiseCheckScreen from "../screens/ParentalControlNoiseCheckScreen";
+import ParentalControlVolumeAdjustmentScreen from "../screens/ParentalControlVolumeAdjustmentScreen";
 import TestNoiseCheckScreen from "../screens/TestNoiseCheckScreen";
+import TestVolumeAdjustmentScreen from "../screens/TestVolumeAdjustmentScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import TestScreen from "../screens/TestScreen";
 import TrainScreen from "../screens/TrainScreen";
@@ -57,6 +59,10 @@ function HomeStackScreen({ route }) {
           name="Parental Control Noise Check"
           component={ParentalControlNoiseCheckScreen}
         />
+        <HomeStack.Screen
+          name="Parental Control Volume Setting"
+          component={ParentalControlVolumeAdjustmentScreen}
+        />
         <HomeStack.Screen name="Test Result" component={TestResult} />
       </HomeStack.Navigator>
     );
@@ -83,7 +89,12 @@ function HearingTestStackScreen() {
         name="Noise Check"
         component={TestNoiseCheckScreen}
       />
-
+      <HearinTestStack.Screen
+        name="Pretest Volume Adjustment"
+        component={TestVolumeAdjustmentScreen}
+      />
+      <HearinTestStack.Screen name="Tutorial" component={TestTutorial} />
+      <HearinTestStack.Screen name="Ear Test" component={EarTestScreen} />
       <HearinTestStack.Screen name="Test Result" component={TestResult} />
       <HearinTestStack.Screen name="All Results" component={ViewAllResult} />
     </HearinTestStack.Navigator>
