@@ -14,7 +14,7 @@ import { VolumeManager } from "react-native-volume-manager";
 import * as SecureStore from "expo-secure-store";
 import { useNavigation } from "@react-navigation/native";
 
-export default function VolumeTracker() {
+export default function VolumeListenerModal() {
   const [wantsVolumeChanged, setWantsVolumeChanged] = useState(false);
 
   const navigation = useNavigation();

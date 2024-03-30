@@ -33,6 +33,7 @@ import TestTutorial from "../components/hearingTest/TestTutorial";
 import EarTestScreen from "../screens/EarTestScreen";
 import TestResult from "../components/hearingTest/TestResult";
 import ViewAllResult from "../screens/ViewAllResult";
+import VolumeListenerModal from "../components/background/VolumeListenerModal";
 
 const ProfileStack = createNativeStackNavigator();
 function ProfileStackScreen({ route }) {
@@ -104,6 +105,8 @@ function HearingTestStackScreen() {
 const Tab = createBottomTabNavigator();
 const BottomTab = () => {
   return (
+    <>
+    <VolumeListenerModal />
     <Tab.Navigator
       style={styles.tab}
       screenOptions={{
@@ -195,6 +198,7 @@ const BottomTab = () => {
         }}
       />
     </Tab.Navigator>
+    </>
   );
 };
 
