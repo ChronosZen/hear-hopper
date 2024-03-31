@@ -1,40 +1,25 @@
 import {
   StyleSheet,
   Text,
+  View,
+  Button,
+  TouchableOpacity,
   Dimensions
 } from "react-native";
+import { useState } from "react";
 import { LineChart } from "react-native-chart-kit";
 import SVG from "../svg/SVG";
-import { testEar, happyMascot } from "../svg/svgs";
+import { mainMastcot, ear } from "../svg/svgs";
 import { VStack, HStack } from "@gluestack-ui/themed";
 import { Typography, Colors } from "../../styles/index";
-import ButtonFunc from "../../components/reusable/ButtonFunc";
-import HeaderText from "../reusable/HeaderText";
-import CloseButton from "../reusable/CloseButton";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 
-const TestResult = ({ route, navigation }) => {
-  let data;
-  if(route.params.screenName === "HomeScreen" || route.params.screenName === "ViewAll"){
-    data = route.params.data;
-  } 
-  else if(route.params.screenName === "TestScreen"){
-    const newData = route.params.data.data;
-    // console.log("inside if block using route -> ", route.params.data.data);
-    // console.log("inside if block newData -> ", newData);
-    data = newData;
-    // console.log("inside if block data -> ", data);
-  }
-  // const router = useRoute()
-  // const routeName = router.name
-  // console.log("router coming from testResult component", router)
-  // console.log("routeName -> ", routeName);
-  // console.log("this is audiogram object", ramroute.params);
-  // console.log("this is audiogram object", data);
+const TestResult = ({ route }) => {
+  const { data } = route.params;
+  console.log("this is audiogram object", data);
 
-  // console.log("right left avg: ", data.leftAverage, data.rightAverage)
-  // console.log("percentage: ", (100-(data.leftAverage*(100/91))).toFixed(0))
+  console.log("right left avg: ", data.leftAverage, data.rightAverage)
+  console.log("percentage: ", (100-(data.leftAverage*(100/91))).toFixed(0))
   const checkHearing = (avg) => {
     if(avg >=0 && avg<=25){
         return "Normal hearing"
@@ -51,89 +36,102 @@ const TestResult = ({ route, navigation }) => {
       }
   }
   return (
-    <SafeAreaView flex={1}>
-      <VStack flex= {1} m={24} space="3xl">
-        <HStack alignItems="center" justifyContent="space-between">
-          <HeaderText text="Results" xml={testEar} underlineColor={Colors.primary.p5} />
-          <CloseButton navigation={navigation} section={"Go back"} />
-        </HStack>
+    <VStack style={{ flex: 1, margin: 12 }}>
+      <HStack alignItems="center">
+          <SVG xml={ear} width="32" height="32" />
+        <Text
+          style={Typography.heading.h2}
+        >
+          Results
+        </Text>
+      </HStack>
 
-        {/* Ear results */}
-        <HStack justifyContent="center">
-          <VStack justifyContent="center" alignItems="center">
-            <Text style={styles.earText}>Left Ear</Text>
-            <Text
-              style={styles.earValue}
-            >
-              {(100-(data.leftAverage*(100/91))).toFixed(0)}
-            </Text>
-          </VStack>
-          <SVG xml={happyMascot} width="180" height="180" />
-          <VStack justifyContent="center" alignItems="center">
-            <Text style={styles.earText}>Right Ear</Text>
-            <Text
-              style={styles.earValue}
-            >
-              {(100-(data.rightAverage*(100/91))).toFixed(0)}
-            </Text>
-          </VStack>
-        </HStack>
-
+      {/* Ear results */}
+      <HStack justifyContent="center">
+        <VStack justifyContent="center" alignItems="center">
+          <Text style={styles.earText}>Left Ear</Text>
+          <Text
+            style={styles.earValue}
+          >
+            {(100-(data.leftAverage*(100/91))).toFixed(0)}
+          </Text>
+        </VStack>
+        <SVG xml={mainMastcot} width="180" height="180" />
+        <VStack justifyContent="center" alignItems="center">
+          <Text style={styles.earText}>Right Ear</Text>
+          <Text
+            style={styles.earValue}
+          >
+            {(100-(data.rightAverage*(100/91))).toFixed(0)}
+          </Text>
+        </VStack>
+      </HStack>
         <Text
           style={styles.hearingRes}
         >
           {data.leftAverage < data.rightAverage ? checkHearing(data.rightAverage): checkHearing(data.leftAverage)}
         </Text>
 
-        <VStack flex={1} justifyContent="center" >
-          <Text style={Typography.heading.h6}>Audiogram</Text>
-          {/* Audio Chart */}
-          <VStack>
-            <LineChart
-              data={{
-                labels: [500, 1000, 2000, 5000, 8000],
-                datasets: [
-                  {
-                    data: [data.leftEar["500hz"], data.leftEar["1000hz"], data.leftEar["2000hz"], data.leftEar["5000hz"], data.leftEar["8000hz"]]
-                  },
-                  {
-                    data: [data.rightEar["500hz"], data.rightEar["1000hz"], data.rightEar["2000hz"], data.rightEar["5000hz"], data.rightEar["8000hz"]]
-                  }
-                ]
-              }}
-              width={Dimensions.get("window").width - 50}
-              height={200}
-              xAxisLabel="Hz"
-              yAxisSuffix="dB"
-              yAxisInterval={1}
-              chartConfig={{
-                backgroundColor: Colors.primary.p1,
-                backgroundGradientFrom: Colors.primary.p3,
-                backgroundGradientTo: Colors.primary.p4,
-                decimalPlaces: 0,
-                color: (opacity = 1) => Colors.gs.black,
-                labelColor: (opacity = 1) => Colors.gs.black,
-                style: {
-                  borderRadius: 16
+      <VStack
+        style={{
+          flex: 1,
+          justifyContent: "space-between",
+          padding: 20,
+          borderTopLeftRadius: 50,
+          borderTopRightRadius: 50
+        }}
+      >
+        <Text style={Typography.heading.h6}>Audiogram</Text>
+        {/* Audio Chart */}
+        <View>
+          <LineChart
+            data={{
+              labels: [500, 1000, 2000, 5000, 8000],
+              datasets: [
+                {
+                  data: [data.leftEar["500hz"], data.leftEar["1000hz"], data.leftEar["2000hz"], data.leftEar["5000hz"], data.leftEar["8000hz"]]
                 },
-                propsForDots: {
-                  r: "6",
-                  strokeWidth: "2",
-                  stroke: Colors.primary.p3
+                {
+                  data: [data.rightEar["500hz"], data.rightEar["1000hz"], data.rightEar["2000hz"], data.rightEar["5000hz"], data.rightEar["8000hz"]]
                 }
-              }}
-              bezier
-              fromZero
-              style={{
-                marginVertical: 8,
+              ]
+            }}
+            width={Dimensions.get("window").width - 50}
+            height={200}
+            xAxisLabel="Hz"
+            yAxisSuffix="dB"
+            yAxisInterval={1}
+            chartConfig={{
+              backgroundColor: "#4900E5",
+              backgroundGradientFrom: "#4900E5",
+              backgroundGradientTo: "#4900E5",
+              decimalPlaces: 2,
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
                 borderRadius: 16
-              }}
-            />
-          </VStack>
-          <ButtonFunc text="View All Results" handleOnPress={() => navigation.navigate("Test",{screen:"All Results"})} />
-        </VStack>
+              },
+              propsForDots: {
+                r: "6",
+                strokeWidth: "2",
+                stroke: "#ffa726"
+              }
+            }}
+            bezier
+            fromZero
+            style={{
+              marginVertical: 8,
+              borderRadius: 16
+            }}
+          />
+        </View>
+
+        {/* <Button
+                title="View Previous Results"
+                onPress={prevResults}
+                /> */}
       </VStack>
-    </SafeAreaView>
+    </VStack>
   );
 };
 

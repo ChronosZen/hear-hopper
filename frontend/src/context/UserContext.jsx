@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createContext, useContext, useReducer, useEffect } from "react";
 import { Text, View } from "react-native";
-import * as secureStorage from "expo-secure-store";
+import * as secureStorage from 'expo-secure-store'; 
 
 const UserContext = createContext();
 const initialState = {
@@ -9,7 +9,7 @@ const initialState = {
   kids: [],
   selectedKidId: "",
   selectedKidImage: "",
-  selectedKidQuizScore: 0,
+  selectedKidQuizScore: "",
   selectedKidAudiograms: "",
 };
 function reducer(state, action) {
@@ -35,11 +35,6 @@ function reducer(state, action) {
         selectedKidQuizScore: action.payload.selectedKidQuizScore,
         selectedKidAudiograms: action.payload.selectedKidAudiograms,
       };
-    case "submitQuiz":
-      return {
-        ...state,
-        selectedKidQuizScore: action.payload.selectedKidQuizScore,
-      };
   }
 }
 const UserProvider = ({ children }) => {
@@ -61,9 +56,7 @@ const UserProvider = ({ children }) => {
     queryFn: async () =>
       fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/me`, {
         headers: {
-          Authorization: `Bearer ${await secureStorage.getItemAsync(
-            "JwtToken"
-          )}`,
+          Authorization: `Bearer ${await secureStorage.getItemAsync('JwtToken') }`,
         },
       })
         .then((res) => res.json())

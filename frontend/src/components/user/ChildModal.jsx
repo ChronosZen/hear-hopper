@@ -1,5 +1,5 @@
-import { useState } from "react";
 import {
+  ChevronDownIcon,
   CloseIcon,
   Heading,
   Icon,
@@ -9,80 +9,76 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalHeader,
+  Select,
+  SelectBackdrop,
+  SelectContent,
+  SelectDragIndicator,
+  SelectDragIndicatorWrapper,
+  SelectIcon,
+  SelectInput,
+  SelectItem,
+  SelectPortal,
+  SelectTrigger,
   VStack,
-  RadioGroup,
-  Radio,
-  RadioIndicator,
-  RadioLabel,
-  CircleIcon,
-  Image,
-  HStack,
-  RadioIcon,
 } from "@gluestack-ui/themed";
-
 import { useUser } from "../../context/UserContext";
-
 const ChildModal = ({ setIsModelOpen, isModelOpen, kids }) => {
-  const { dispatch, selectedKidId } = useUser();
-  const [selectedValue, setSelectedValue] = useState(selectedKidId);
+  const { dispatch } = useUser();
 
-  const handleChange = (selectedValue) => {
-    setSelectedValue(selectedValue);
+  const handleSelectedKid = (selectedValue) => {
     const selectedKidData = kids.find((kid) => kid._id === selectedValue);
-    if (selectedKidData) {
-      dispatch({
-        type: "changeChild",
-        payload: {
-          selectedKidId: selectedValue,
-          selectedKidImage: selectedKidData.image,
-          selectedKidQuizScore: selectedKidData.quizScore,
-          selectedKidAudiograms: selectedKidData.audiograms,
-        },
-      });
-    }
+
+    dispatch({
+      type: "changeChild",
+      payload: {
+        selectedKidId: selectedValue,
+        selectedKidImage: selectedKidData.image,
+        selectedKidQuizScore: selectedKidData.quizScore,
+        selectedKidAudiograms: selectedKidData.audiograms,
+      },
+    });
     setIsModelOpen(!isModelOpen);
   };
+
   return (
     <Modal isOpen={isModelOpen}>
       <ModalBackdrop />
       <ModalContent>
         <VStack justifyContent="center" alignItems="center">
           <ModalHeader>
-            <Heading size="lg">Switch Child’s Profile</Heading>
+            <Heading size="lg">Congratulations!</Heading>
             <ModalCloseButton onPress={() => setIsModelOpen(!isModelOpen)}>
               <Icon as={CloseIcon} />
             </ModalCloseButton>
           </ModalHeader>
           <ModalBody>
-            <RadioGroup value={selectedValue} onChange={handleChange}>
-              {kids.map((kid) => (
-                <Radio
-                  key={kid._id}
-                  value={kid._id}
-                  size="md"
-                  isInvalid={false}
-                  isDisabled={false}>
-                  <HStack alignItems="center">
-                    <RadioIndicator mr="$2">
-                      <RadioIcon as={CircleIcon} />
-                    </RadioIndicator>
-                    <Image
-                      size="sm"
-                      borderRadius="$full"
-                      source={kid.image}
-                      alt={kid.firstName}
-                      mr="$2"
+            <Select onValueChange={(value) => handleSelectedKid(value)}>
+              <SelectTrigger variant="outline" size="md">
+                <SelectInput placeholder="Select children" />
+                <SelectIcon mr="$3">
+                  <Icon as={ChevronDownIcon} />
+                </SelectIcon>
+              </SelectTrigger>
+              <SelectPortal>
+                <SelectBackdrop />
+                <SelectContent>
+                  <SelectDragIndicatorWrapper>
+                    <SelectDragIndicator />
+                  </SelectDragIndicatorWrapper>
+                  {kids?.map((kid) => (
+                    <SelectItem
+                      label={kid.firstName}
+                      key={kid._id}
+                      value={kid._id}
                     />
-                    <RadioLabel>{kid.firstName}</RadioLabel>
-                  </HStack>
-                </Radio>
-              ))}
-            </RadioGroup>
+                  ))}
+                </SelectContent>
+              </SelectPortal>
+            </Select>
           </ModalBody>
         </VStack>
       </ModalContent>
     </Modal>
   );
 };
-
 export default ChildModal;

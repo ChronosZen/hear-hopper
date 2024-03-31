@@ -4,7 +4,6 @@ import { mainMastcot } from "../svg/svgs";
 import { VStack } from "@gluestack-ui/themed";
 import { Typography } from "../../styles";
 import ButtonFunc from "../reusable/ButtonFunc";
-import CloseButton from "../reusable/CloseButton";
 const StartSection = ({ navigation }) => {
   function navigateQuizSection() {
     navigation.navigate("QuizSection");
@@ -16,9 +15,6 @@ const StartSection = ({ navigation }) => {
       alignItems="center"
       marginBottom="auto"
       marginTop="auto">
-      <View style={styles.close}>
-        <CloseButton navigation={navigation} section={"TrainSection"} />
-      </View>
       <SVG xml={mainMastcot} width="180" height="180" />
       <Text style={styles.h4}>Shhh! Listen carefully!</Text>
       <Text style={styles.bxl}>
@@ -41,10 +37,5 @@ const styles = StyleSheet.create({
     ...Typography.bodyFont.regular,
     textAlign: "center",
     maxWidth: 300,
-  },
-  close: {
-    position: "absolute",
-    top: -110,
-    right: 10,
   },
 });

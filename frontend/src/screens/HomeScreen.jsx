@@ -1,29 +1,32 @@
 import { StyleSheet, View } from "react-native";
-import HeaderText from "../components/reusable/HeaderText";
+import ButtonFunc from "../components/reusable/ButtonFunc";
 import React from "react";
-import SVG from "../components/svg/SVG";
-import {
-  mainMastcot,
-  parentalControlIcon,
-  earTrainginIcon,
-  headphone
-} from "../components/svg/svgs";
+import { Colors } from "../styles";
 import TestResultCards from "../components/reusable/TestResultCards";
+import { useUser } from "../context/UserContext";
 import {
   HStack,
   VStack,
   Heading,
   Text,
+  Link,
+  Image,
+  Box,
   Card,
   Pressable,
-  Button,
-  ButtonText
+  Icon,
+  ChevronRightIcon,
+  LinkText,
+  SafeAreaView,
 } from "@gluestack-ui/themed";
-import { SafeAreaView } from "react-native-safe-area-context";
 import ChildSelection from "../components/user/ChildSelection";
-import { Typography, Spacing, Colors } from "../styles";
 
 const HomeScreen = ({ navigation, route }) => {
+  const { firstName } = useUser();
+
+  const onClick = () => {
+    console.log("card is clicked.");
+  };
 
   const homeCards = [
     {
@@ -34,120 +37,86 @@ const HomeScreen = ({ navigation, route }) => {
     },
   ];
 
-  const handleOnPress = () => {
-    // console.log("checking the handleOnPress function.");
-    navigation.navigate("Test", { screen: 'All Results' });
-  }
-
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container} >
-        
-        <HStack justifyContent="space-between" alignItems="center" >
-          <HeaderText text="Welcome" underlineColor={Colors.primary.p4} ></HeaderText>
+    <SafeAreaView
+      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      {/* Header */}
+      <Box minWidth={"$full"} backgroundColor={Colors.primary.p1}>
+        <HStack
+          justifyContent="space-between"
+          alignItems="center"
+          paddingHorizontal={16}>
+          <VStack>
+            <Heading color="white">Welcome</Heading>
+            <Heading color="white">{firstName}</Heading>
+          </VStack>
           <ChildSelection />
         </HStack>
+      </Box>
 
-        <TestResultCards viewSec={1} handleOnPress={handleOnPress} softShadow={2} />
+      {/*Latest Test result section*/}
+      <TestResultCards />
 
-        <VStack borderRadius={16} backgroundColor={Colors.primary.p5} softShadow={2} gap={24} borderColor={Colors.primary.p3} borderWidth={1} position="relative" padding={Spacing.l} overflow="hidden" >
-          <Heading style={styles.testCardHeading}>Test your child's hearing</Heading>
-          <Text style={styles.testCardText}>Our hearing test is created keeping your child's ear sensitivity in mind.</Text>
-          <HStack alignItems="center">
-            <VStack flexBasis={"60%"}  >
-              <Button
-                bgColor={Colors.gs.black}
-                size={"xl"}
-                height={48}
-                borderRadius={48}
-                gap={Spacing.s}
-                onPress={() => navigation.navigate("Test")}
-                paddingHorizontal={Spacing.l}
-                justifyContent="center"
-                alignContent="center"
-              >
-                <SVG xml={headphone} width="24" height="24" fill={Colors.gs.white} />
-                <ButtonText style={styles.bl} color={Colors.gs.white}>
-                  Take Test
-                </ButtonText>
-              </Button>
-              <></>
-            </VStack>
-          </HStack>
-          <VStack position="absolute" left={256} top={144} zIndex={1}>
-            <SVG xml={mainMastcot} width="200" height="200" />
-          </VStack>
+      {/* Hearing test section */}
+      <HStack margin={16} space="xl">
+        <VStack margin={16}>
+          <Heading>Test your child hearing</Heading>
+          <Text>
+            Our hearing test is created keeping your child\'s ear sensitivity in
+            mind.
+          </Text>
+          <ButtonFunc
+            text={"Take the test"}
+            handleOnPress={() => navigation.navigate("Test")}></ButtonFunc>
         </VStack>
 
-        <HStack gap={Spacing.l}>
-          {homeCards.map((homeCard, index) => {
-            return (
+        {/* <Image size="md"
+            borderRadius="$none"
+            source={{
+              uri: "https://picsum.photos/seed/picsum/200/300",
+            }}
+             /> */}
+      </HStack>
 
-                <Pressable
-                  key={index}
-                  flexGrow={1}
-                  onPress={() => {
-                    if (index === 0) {
-                      navigation.navigate("Train");
-                    } else {
-                      navigation.navigate("ParentalControl");
-                    }
-                  }}>
-                  {homeCard.title === "Child Ear Training"
-                    ?
-                    <Card
-                      key={index}
-                      borderWidth={1}
-                      shadowColor={true}
-                      borderColor={Colors.secondary.g3}
-                      backgroundColor={Colors.secondary.g6}>
-                      <VStack justifyContent="space-between" gap={Spacing.l}>
-                        <SVG xml={parentalControlIcon} width="40" height="40" />
-                        <Heading color={Colors.gs.black}>{homeCard.title}</Heading>
-                      </VStack>
-                    </Card>
-                    :
-                    <Card
-                      key={index}
-                      borderWidth={1}
-                      shadowColor={true}
-                      borderColor={Colors.accent.b2}
-                      backgroundColor={Colors.accent.b3}>
-                      <VStack justifyContent="space-between" gap={24}>
-                        <SVG xml={earTrainginIcon} width="40" height="40" />
-                        <Heading color={Colors.gs.black}>{homeCard.title}</Heading>
-                      </VStack>
-                    </Card>
-                  }
-                </Pressable>
-            );
-          })}
-        </HStack >
-      </View>
+      {/* Cards (Ear training & Parental control) section */}
+      {/* <Image></Image> */}
+
+      {homeCards.map((homeCard, index) => {
+        return (
+          <View key={index}>
+            <Pressable
+              onPress={() => {
+                if (index === 0) {
+                  navigation.navigate("Train");
+                } else {
+                  navigation.navigate("ParentalControl");
+                }
+              }}>
+              <Card
+                key={index}
+                margin={16}
+                borderWidth={1}
+                borderColor={Colors.primary.p1}
+                backgroundColor={Colors.primary.p5}>
+                <HStack justifyContent="space-between">
+                  <Heading color={Colors.primary.p1}>{homeCard.title}</Heading>
+                  <Icon
+                    as={ChevronRightIcon}
+                    m="$2"
+                    w="$4"
+                    h="$4"
+                    color={Colors.primary.p1}
+                  />
+                </HStack>
+              </Card>
+            </Pressable>
+          </View>
+        );
+      })}
     </SafeAreaView>
   );
 };
 
 export default HomeScreen;
 
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: Spacing.l,
-    paddingBottom: Spacing.m,
-    gap: Spacing.xl,
-  },
-  testCardHeading: {
-    ...Typography.heading.h1,
-    color: Colors.gs.black,
-    paddingBottom: 0,
-    paddingRight: 68
-  },
-  testCardText: {
-    ...Typography.body.bl,
-    paddingVertical: 0,
-    paddingRight: 45
-  }
-}
-)
+const styles = StyleSheet.create({});

@@ -28,27 +28,13 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-secure-store",
-      [
-        "expo-font",
-        {
-          "fonts": [
-            "node_modules/@expo-google-fonts/spline-sans/SplineSans_400Regular.ttf",
-            "node_modules/@expo-google-fonts/spline-sans/SplineSans_600SemiBold.ttf"
-          ]
-        }
-      ]
+      "expo-font",
+      "expo-secure-store"
     ],
     "extra": {
       "eas": {
         "projectId": "441716d4-8659-4d00-ad65-433255ea5f2b"
       }
-    },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/441716d4-8659-4d00-ad65-433255ea5f2b"
     }
   }
 }

@@ -18,7 +18,7 @@ const ChildSelection = () => {
           kids={kids}
         />
       )}
-      <HStack alignItems="center" space="md">
+      <HStack alignItems="center">
         <Pressable
           onPress={() => {
             setIsModelOpen(!isModelOpen);
@@ -29,7 +29,7 @@ const ChildSelection = () => {
         {selectedKidImage && (
           <Image
             size="md"
-            borderRadius="$full"
+            borderRadius="$none"
             alt="mascot"
             source={selectedKidImage}
           />
