@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon src/index.ts",
+    "build": "sudo npx tsc",
+    "start": "pm2 start dist/index.js --name myApp",
+    "production": "npm run build && npm run start"
   },
   "keywords": [],
   "author": "",
