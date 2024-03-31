@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon src/index.ts",
+    "build": "sudo npx tsc",
+    "start": "pm2 start dist/index.js --name myApp",
+    "production": "npm run build && npm run start"
   },
   "keywords": [],
   "author": "",
@@ -26,7 +29,7 @@
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/morgan": "^1.9.9",
-    "@types/node": "^20.11.25",
+    "@types/node": "^20.11.28",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2"
