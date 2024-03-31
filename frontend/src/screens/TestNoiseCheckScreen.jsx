@@ -1,18 +1,29 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
-import NoiseChecker from "../components/user/NoiseChecker";
-import HeaderText from "../components/reusable/HeaderText";
-import { SafeAreaView, HStack, Icon, CloseIcon } from "@gluestack-ui/themed";
+import NoiseChecker from "../components/noiseChecker/NoiseChecker";
+import { SafeAreaView } from "@gluestack-ui/themed";
+import { Spacing } from "../styles";
 
-const TestNoiseCheckScreen = ( route ) => {
+const TestNoiseCheckScreen = (route) => {
 
     // console.log("route from TestNoiseCheckScreen -> ", route)
 
     return (
-        <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <NoiseChecker route={route}/>
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={styles.container}>
+                <NoiseChecker route={route} text="We will conduct an Environmental Noise Check before starting the test." />
+            </View>
         </SafeAreaView>
     )
 }
 
 export default TestNoiseCheckScreen;
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      paddingHorizontal: Spacing.l,
+      paddingVertical: 40,
+    }
+  }
+)

@@ -9,6 +9,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import TestScreen from "../screens/TestScreen";
 import TrainScreen from "../screens/TrainScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import AddProfileScreen from "../screens/AddProfileScreen";
 import ExampleScreen from "../screens/ExampleScreen";
 import SVG from "../components/svg/SVG";
@@ -17,6 +18,10 @@ import {
   profileIcon,
   testIcon,
   trainingIcon,
+  homeSolidIcon,
+  profileSolidIcon,
+  testSolidIcon,
+  trainingSolidIcon,
 } from "../components/svg/svgs";
 import { Colors, Typography } from "../styles";
 import TrainSection from "../components/train/TrainSection";
@@ -25,11 +30,12 @@ import QuizSection from "../components/train/QuizSection";
 import TestTutorial from "../components/hearingTest/TestTutorial";
 import EarTestScreen from "../screens/EarTestScreen";
 import TestResult from "../components/hearingTest/TestResult";
+import ViewAllResult from "../screens/ViewAllResult";
 
 const ProfileStack = createNativeStackNavigator();
 function ProfileStackScreen({ route }) {
   return (
-    <ProfileStack.Navigator screenOptions={{ headerShown: true }}>
+    <ProfileStack.Navigator screenOptions={{ headerShown: false }}>
       <ProfileStack.Screen name="MainProfile" component={ProfileScreen} />
       <ProfileStack.Screen name="AddProfile" component={AddProfileScreen} />
       <ProfileStack.Screen name="Example" component={ExampleScreen} />
@@ -41,7 +47,7 @@ const HomeStack = createNativeStackNavigator();
 function HomeStackScreen({ route }) {
   try {
     return (
-      <HomeStack.Navigator screenOptions={{ headerShown: true }}>
+      <HomeStack.Navigator screenOptions={{ headerShown: false }}>
         <HomeStack.Screen name="Go back" component={HomeScreen} />
         <HomeStack.Screen
           name="ParentalControl"
@@ -62,10 +68,8 @@ function HomeStackScreen({ route }) {
 const TrainStack = createNativeStackNavigator();
 function TrainStackScreen() {
   return (
-    <TrainStack.Navigator screenOptions={{ headerShown: true }}>
+    <TrainStack.Navigator screenOptions={{ headerShown: false }}>
       <TrainStack.Screen name="TrainSection" component={TrainScreen} />
-      <TrainStack.Screen name="QuizSection" component={QuizSection} />
-      <TrainStack.Screen name="StartSection" component={StartSection} />
     </TrainStack.Navigator>
   );
 }
@@ -73,21 +77,20 @@ function TrainStackScreen() {
 const HearinTestStack = createNativeStackNavigator();
 function HearingTestStackScreen() {
   return (
-    <HearinTestStack.Navigator screenOptions={{ headerShown: true }}>
+    <HearinTestStack.Navigator screenOptions={{ headerShown: false }}>
       <HearinTestStack.Screen name="HearingTest" component={TestScreen} />
       <HearinTestStack.Screen
         name="Noise Check"
         component={TestNoiseCheckScreen}
       />
-      <HearinTestStack.Screen name="Tutorial" component={TestTutorial} />
-      <HearinTestStack.Screen name="Ear Test" component={EarTestScreen} />
+
       <HearinTestStack.Screen name="Test Result" component={TestResult} />
+      <HearinTestStack.Screen name="All Results" component={ViewAllResult} />
     </HearinTestStack.Navigator>
   );
 }
 
 const Tab = createBottomTabNavigator();
-
 const BottomTab = () => {
   return (
     <Tab.Navigator
@@ -100,6 +103,12 @@ const BottomTab = () => {
           height: 72,
           paddingTop: 11,
           paddingBottom: 11,
+          borderTopWidth: 1.5,
+          backgroundColor: "#ffffff",
+          borderColor: "#f3f3f3",
+          shadowOpacity: 1,
+          shadowRadius: 15,
+          shadowColor: "#000000",
         },
       }}>
       <Tab.Screen
@@ -111,7 +120,7 @@ const BottomTab = () => {
           ),
           tabBarIcon: ({ focused }) => (
             <SVG
-              xml={homeIcon}
+              xml={focused ? homeSolidIcon : homeIcon}
               height="24"
               width="24"
               fill={focused ? Colors.gs.black : Colors.gs.gs4}
@@ -128,7 +137,7 @@ const BottomTab = () => {
           ),
           tabBarIcon: ({ focused }) => (
             <SVG
-              xml={testIcon}
+              xml={focused ? testSolidIcon : testIcon}
               height="24"
               width="24"
               fill={focused ? Colors.gs.black : Colors.gs.gs4}
@@ -147,7 +156,7 @@ const BottomTab = () => {
           ),
           tabBarIcon: ({ focused }) => (
             <SVG
-              xml={trainingIcon}
+              xml={focused ? trainingSolidIcon : trainingIcon}
               height="24"
               width="24"
               fill={focused ? Colors.gs.black : Colors.gs.gs4}
@@ -166,7 +175,7 @@ const BottomTab = () => {
           ),
           tabBarIcon: ({ focused }) => (
             <SVG
-              xml={profileIcon}
+              xml={focused ? profileSolidIcon : profileIcon}
               height="24"
               width="24"
               fill={focused ? Colors.gs.black : Colors.gs.gs4}

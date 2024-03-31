@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Colors, Typography } from "../../styles";
+import { Audio } from "expo-av";
 import {
   ButtonText,
   CloseIcon,
@@ -16,14 +17,19 @@ import {
   VStack,
 } from "@gluestack-ui/themed";
 import SVG from "../svg/SVG";
-
-import { ear, happyMascot, soundIcon } from "../svg/svgs";
+import axios from "axios";
+import { ear, happyMascot, soundIcon, earTrainginIcon } from "../svg/svgs";
 import HeaderText from "../reusable/HeaderText";
 import ProgressBar from "./ProgressBar";
 import AnimalChoices from "./AnimalChoices";
 import ButtonFunc from "../reusable/ButtonFunc";
 import { useReducer } from "react";
 import RevealAnswer from "./RevealAnswer";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useUser } from "../../context/UserContext";
+import * as secureStorage from "expo-secure-store";
+import CloseButton from "../reusable/CloseButton";
+
 const quizData = [
   {
     correctAnswer: "Cat",
@@ -105,6 +111,7 @@ function reducer(state, action) {
         question: state.question + 1,
         pageState: "question",
         answerState: "waiting",
+        userAnswer: "",
       };
     case "finish":
       return {
@@ -126,12 +133,22 @@ function reducer(state, action) {
       };
   }
 }
-
+async function playCompletedSound() {
+  const yaySound = require("../../../assets/audioFiles/training/yay-6120.mp3");
+  try {
+    const { sound } = await Audio.Sound.createAsync(yaySound);
+    const completedSound = sound;
+    await completedSound.playAsync();
+  } catch (error) {
+    console.error("Error playing feedback sound:", error);
+  }
+}
 const QuizSection = ({ navigation }) => {
   const [
     { question, pageState, answerState, userAnswer, showModal, score },
     dispatch,
   ] = useReducer(reducer, initialState);
+  const { selectedKidId, dispatch: dispatchContext } = useUser();
 
   const checkAnswer = (userAnswer, correctAnswer, question) => {
     if (userAnswer === correctAnswer) {
@@ -158,6 +175,33 @@ const QuizSection = ({ navigation }) => {
     }
   };
 
+  const handleSubmitScore = async () => {
+    try {
+      const response = await axios.patch(
+        `${process.env.EXPO_PUBLIC_API_URL}/api/quiz/${selectedKidId}`,
+        { quizScore: score },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${await secureStorage.getItemAsync(
+              "JwtToken"
+            )}`,
+          },
+        }
+      );
+      dispatchContext({
+        type: "submitQuiz",
+        payload: { selectedKidQuizScore: score },
+      });
+      dispatch({ type: "showModal" });
+      playCompletedSound();
+    } catch (error) {
+      console.error("There has been a problem with your PATCH api", error);
+      console.error("Response data:", error.response?.data);
+    }
+  };
+
   const handleNext = () => {
     dispatch({ type: "next" });
   };
@@ -165,6 +209,7 @@ const QuizSection = ({ navigation }) => {
     dispatch({ type: "exit" });
     navigation.navigate("TrainSection");
   };
+
   return (
     <VStack padding={24} gap={24}>
       {showModal && (
@@ -190,9 +235,14 @@ const QuizSection = ({ navigation }) => {
           </ModalContent>
         </Modal>
       )}
-      <HStack justifyContent="start" alignItems="center" gap={8}>
-        <SVG xml={ear} width="24" height="24" />
-        <HeaderText text="Ear Training" />
+      <HStack justifyContent="space-between" alignItems="center" gap={8}>
+        <HeaderText
+          text="Ear Training"
+          xml={earTrainginIcon}
+          navigation={navigation}
+          section="TrainSection"
+        />
+        <CloseButton navigation={navigation} section="TrainSection" />
       </HStack>
       <ProgressBar question={question} />
       {pageState === "question" && (
@@ -239,10 +289,7 @@ const QuizSection = ({ navigation }) => {
       ) : pageState === "revealAnswer" && question < 4 ? (
         <ButtonFunc text="Next" handleOnPress={() => handleNext()} />
       ) : (
-        <ButtonFunc
-          text="Finish"
-          handleOnPress={() => dispatch({ type: "showModal" })}
-        />
+        <ButtonFunc text="Finish" handleOnPress={() => handleSubmitScore()} />
       )}
     </VStack>
   );
