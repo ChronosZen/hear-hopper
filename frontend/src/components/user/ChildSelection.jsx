@@ -28,7 +28,8 @@ const ChildSelection = () => {
 
         {selectedKidImage && (
           <Image
-            size="md"
+            height={48}
+            width={48}
             borderRadius="$full"
             alt="mascot"
             source={selectedKidImage}

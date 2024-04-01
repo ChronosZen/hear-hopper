@@ -24,22 +24,22 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
   const navigation = useNavigation();
   const worstEars = selectedKidAudiograms
     ? selectedKidAudiograms?.map((audiogram) => {
-        return Math.max(audiogram.leftAverage, audiogram.rightAverage);
-      })
+      return Math.max(audiogram.leftAverage, audiogram.rightAverage);
+    })
     : [];
   // console.log("here is the worst ear data ->", worstEars[0]);
 
   const hearingZone = (avarage) => {
     if (avarage < 20) {
-      return { level: "Normal Hearing", color: Colors.secondary.g4, stroke: Colors.secondary.g1} ;
+      return { level: "Normal Hearing", color: Colors.secondary.g4, stroke: Colors.secondary.g1 };
     } else if (avarage >= 20 && avarage < 40) {
-      return { level: "Mild Hearing Loss", color: Colors.accent.b2, stroke: Colors.accent.b1} ;
+      return { level: "Mild Hearing Loss", color: Colors.accent.b2, stroke: Colors.accent.b1 };
     } else if (avarage >= 40 && avarage < 60) {
       return { level: "Moderate Hearing Loss", color: Colors.accent.y3, stroke: Colors.accent.y1 };
     } else if (avarage >= 60 && avarage < 70) {
-      return { level: "Moderately severe Hearing Loss", color: Colors.accent.o3, stroke: Colors.accent.o1};
+      return { level: "Moderately severe Hearing Loss", color: Colors.accent.o3, stroke: Colors.accent.o1 };
     } else if (avarage >= 70) {
-      return { level: "Severe Hearing Loss", color: Colors.accent.p3, stroke: Colors.accent.p1};
+      return { level: "Severe Hearing Loss", color: Colors.accent.p3, stroke: Colors.accent.p1 };
     }
   };
 
@@ -49,18 +49,17 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
   // console.log("hearing levels -> ", hearingLevels);
   const dataOfCards = selectedKidAudiograms
     ? selectedKidAudiograms?.map((audiogram, index) => {
-        return { ...audiogram, hearingLevel: hearingLevels[index] };
-      })
+      return { ...audiogram, hearingLevel: hearingLevels[index] };
+    })
     : [];
-  
+
   //sorting data to fetch latest result
-  dataOfCards.sort((a,b) => {
+  dataOfCards.sort((a, b) => {
     return new Date(b.createdAt) - new Date(a.createdAt);
   })
 
-  // for(let i=0; i<dataOfCards.length; i++){
-  //   console.log("data card: ",moment(dataOfCards[i].createdAt).format("Do MMM,YYYY"));
-  // }
+
+
   const latestAudiogram = dataOfCards[0];
   // console.log("latestAudiogram-> ", latestAudiogram)
   // console.log("latestAudiogram.createdAt -> ", latestAudiogram?.createdAt)
@@ -78,15 +77,16 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
   // console.log(latestAudiogram);
 
   return (
-    <SafeAreaView>
-    <ScrollView>
+    <>
+      {/* <SafeAreaView>
+      <ScrollView> */}
       {viewSec === 1 ? (
         dataOfCards.length > 0 ? (
           <Pressable onPress={() => {
             // console.log("Is latestAudiogram working-> ", latestAudiogram);
             navigation.navigate("Test Result", { data: latestAudiogram, screenName: 'HomeScreen' })
           }}>
-            <Card margin={0}>
+            <Card margin={0} borderRadius={12}>
               <HStack justifyContent="space-between" alignItems="center">
                 <HStack alignItems="center" gap={12}>
                   <VStack
@@ -94,7 +94,7 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
                       backgroundColor: latestAudiogram?.hearingLevel.color,
                       width: 48,
                       height: 48,
-                      borderRadius: 24,
+                      borderRadius: 50,
                       alignItems: "center",
                       justifyContent: "center",
                     }}>
@@ -112,7 +112,6 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
             </Card>
           </Pressable>
         ) : (
-          // <Pressable>
           <Pressable onPress={() => handleOnPress()}>
             {/* <Pressable navigation.navigate("All Results")> */}
             <Card>
@@ -123,63 +122,70 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
           </Pressable>
         )
       ) : viewSec === 2 ? (
-        dataOfCards.length > 0 ? (
-          dataOfCards.map((data) => {
-            return (
-              <VStack key={data.id}>
-                {/* <Pressable> */}
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate("Test Result", { data: data, screenName: 'ViewAll' });
-                  }}>
-                  <Card marginVertical={12}>
-                    <HStack alignItems="center" gap={12}>
-                      <VStack
-                        style={{
-                          backgroundColor: data.hearingLevel.color,
-                          color: data.hearingLevel.color,
-                          width: 48,
-                          height: 48,
-                          borderRadius: 24,
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}>
-                        <SVG xml={ear} width="24" height="24" fill={data?.hearingLevel.color} stroke={data?.hearingLevel.stroke}  />
-                      </VStack>
-                      <VStack>
-                        <Heading>{data.hearingLevel.level}</Heading>
-                        <Text>{dateFormatting(data.createdAt)}</Text>
-                      </VStack>
-                    </HStack>
-                  </Card>
-                </Pressable>
+        <SafeAreaView>
+          <ScrollView>
+            {dataOfCards.length > 0 ? (
+              dataOfCards.map((data) => {
+                return (
+
+
+                  <VStack key={data.id}>
+                    {/* <Pressable> */}
+                    <Pressable
+                      onPress={() => {
+                        navigation.navigate("Test Result", { data: data, screenName: 'ViewAll' });
+                      }}>
+                      <Card marginVertical={12}>
+                        <HStack alignItems="center" gap={12}>
+                          <VStack
+                            style={{
+                              backgroundColor: data.hearingLevel.color,
+                              color: data.hearingLevel.color,
+                              width: 48,
+                              height: 48,
+                              borderRadius: 24,
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}>
+                            <SVG xml={ear} width="24" height="24" fill={data?.hearingLevel.color} stroke={data?.hearingLevel.stroke} />
+                          </VStack>
+                          <VStack>
+                            <Heading>{data.hearingLevel.level}</Heading>
+                            <Text>{dateFormatting(data.createdAt)}</Text>
+                          </VStack>
+                        </HStack>
+                      </Card>
+                    </Pressable>
+                  </VStack>
+                );
+              })
+            ) : (
+              <VStack flex={1} space="2xl" justifyContent="space-between" my={48}>
+                <VStack alignItems="center" space="2xl">
+                  <Text style={Typography.heading.h2}>Oops!</Text>
+                  <Text style={Typography.body.bl}>
+                    You haven’t taken any tests yet.
+                  </Text>
+                  <SVG xml={confusedMascot} width="241" height="241" />
+                </VStack>
+                <ButtonFunc
+                  text="Take Hearing Test"
+                  handleOnPress={() => navigation.navigate("HearingTest")}
+                />
+                <ButtonFunc
+                  text="Back to Home"
+                  handleOnPress={() => navigation.navigate("Go back")}
+                />
               </VStack>
-            );
-          })
-        ) : (
-          <VStack flex={1} space="2xl" justifyContent="space-between" my={48}>
-            <VStack alignItems="center" space="2xl">
-              <Text style={Typography.heading.h2}>Oops!</Text>
-              <Text style={Typography.body.bl}>
-                You haven’t taken any tests yet.
-              </Text>
-              <SVG xml={confusedMascot} width="241" height="241" />
-            </VStack>
-            <ButtonFunc
-              text="Take Hearing Test"
-              handleOnPress={() => navigation.navigate("HearingTest")}
-            />
-            <ButtonFunc
-              text="Back to Home"
-              handleOnPress={() => navigation.navigate("Go back")}
-            />
-          </VStack>
-        )
+            )}
+          </ScrollView>
+        </SafeAreaView>
       ) : (
         <Text>No Results</Text>
       )}
-    </ScrollView>
-    </SafeAreaView>
+      {/* </ScrollView>
+    </SafeAreaView> */}
+    </>
   );
 };
 export default TestResultCards;
