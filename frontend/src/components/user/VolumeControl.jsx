@@ -10,6 +10,7 @@ import {
   SliderFilledTrack,
   Heading,
 } from "@gluestack-ui/themed";
+import ButtonFunc from "../reusable/ButtonFunc";
 import { VolumeManager } from "react-native-volume-manager";
 import * as SecureStore from "expo-secure-store";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
@@ -106,13 +107,12 @@ export default function VolumeControl({ goToScreen }) {
         the sound you are currently hearing.
       </Text>
 
-      <Button
-        onPress={() => {
+      <ButtonFunc
+        handleOnPress={() => {
           navigation.navigate(goToScreen);
         }}
-      >
-        <ButtonText>Done</ButtonText>
-      </Button>
+        text="Done"
+      />
     </>
   );
 }
