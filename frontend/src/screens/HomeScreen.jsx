@@ -27,11 +27,11 @@ const HomeScreen = ({ navigation, route }) => {
 
   const homeCards = [
     {
-      title: "Child Ear Training",
-    },
-    {
       title: "Parental Control",
     },
+    {
+      title: "Ear Training",
+    }
   ];
 
   const handleOnPress = () => {
@@ -41,16 +41,16 @@ const HomeScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container} >
-        
-        <HStack justifyContent="space-between" alignItems="center" >
-          <HeaderText text="Welcome" underlineColor={Colors.primary.p4} ></HeaderText>
-          <ChildSelection />
-        </HStack>
+      <View style={styles.container}>
+        <VStack gap={Spacing.s}>
+          <HStack justifyContent="space-between" alignItems="center">
+            <HeaderText text="Welcome" underlineColor={Colors.primary.p4} ></HeaderText>
+            <ChildSelection />
+          </HStack>
+          <TestResultCards viewSec={1} handleOnPress={handleOnPress} softShadow={1} />
+        </VStack>
 
-        <TestResultCards viewSec={1} handleOnPress={handleOnPress} softShadow={2} />
-
-        <VStack borderRadius={16} backgroundColor={Colors.primary.p5} softShadow={2} gap={24} borderColor={Colors.primary.p3} borderWidth={1} position="relative" padding={Spacing.l} overflow="hidden" >
+        <VStack padding={Spacing.l} gap={Spacing.m} backgroundColor={Colors.primary.p6} softShadow={1} borderColor={Colors.primary.p5} borderWidth={1} borderRadius={12} position="relative" overflow="hidden" >
           <Heading style={styles.testCardHeading}>Test your child's hearing</Heading>
           <Text style={styles.testCardText}>Our hearing test is created keeping your child's ear sensitivity in mind.</Text>
           <HStack alignItems="center">
@@ -62,64 +62,62 @@ const HomeScreen = ({ navigation, route }) => {
                 borderRadius={48}
                 gap={Spacing.s}
                 onPress={() => navigation.navigate("Test")}
-                paddingHorizontal={Spacing.l}
+                paddingHorizontal={Spacing.xl}
                 justifyContent="center"
                 alignContent="center"
               >
                 <SVG xml={headphone} width="24" height="24" fill={Colors.gs.white} />
-                <ButtonText style={styles.bl} color={Colors.gs.white}>
+                <ButtonText style={styles.buttonText}>
                   Take Test
                 </ButtonText>
               </Button>
-              <></>
             </VStack>
           </HStack>
-          <VStack position="absolute" left={256} top={144} zIndex={1}>
+          <VStack position="absolute" left={172} top={160} zIndex={1}>
             <SVG xml={mainMastcot} width="200" height="200" />
           </VStack>
         </VStack>
 
-        <HStack gap={Spacing.l}>
+        <HStack gap={Spacing.m} flex={1}>
           {homeCards.map((homeCard, index) => {
             return (
 
-                <Pressable
-                  key={index}
-                  flexGrow={1}
-                  onPress={() => {
-                    if (index === 0) {
-                      navigation.navigate("Train");
-                    } else {
-                      navigation.navigate("ParentalControl");
-                    }
-                  }}>
-                  {homeCard.title === "Child Ear Training"
-                    ?
-                    <Card
-                      key={index}
-                      borderWidth={1}
-                      shadowColor={true}
-                      borderColor={Colors.secondary.g3}
-                      backgroundColor={Colors.secondary.g6}>
-                      <VStack justifyContent="space-between" gap={Spacing.l}>
-                        <SVG xml={parentalControlIcon} width="40" height="40" />
-                        <Heading color={Colors.gs.black}>{homeCard.title}</Heading>
-                      </VStack>
-                    </Card>
-                    :
-                    <Card
-                      key={index}
-                      borderWidth={1}
-                      shadowColor={true}
-                      borderColor={Colors.accent.b2}
-                      backgroundColor={Colors.accent.b3}>
-                      <VStack justifyContent="space-between" gap={24}>
-                        <SVG xml={earTrainginIcon} width="40" height="40" />
-                        <Heading color={Colors.gs.black}>{homeCard.title}</Heading>
-                      </VStack>
-                    </Card>
+              <Pressable
+                key={index}
+                flex={1}
+                flexGrow={1}
+                onPress={() => {
+                  if (index === 0) {
+                    navigation.navigate("Train");
+                  } else {
+                    navigation.navigate("ParentalControl");
                   }
-                </Pressable>
+                }}>
+                {homeCard.title === "Parental Control"
+                  ?
+                  <Card
+                    key={index}
+                    style={styles.featuresCards}
+                    borderColor={Colors.secondary.g5}
+                    backgroundColor={Colors.secondary.g6}>
+                    <VStack justifyContent="space-between" gap={20}>
+                      <SVG xml={parentalControlIcon} width="40" height="40" />
+                      <Heading color={Colors.gs.black} style={styles.featuresCardsText}>{homeCard.title}</Heading>
+                    </VStack>
+                  </Card>
+                  :
+                  <Card
+                    key={index}
+                    style={styles.featuresCards}
+                    borderColor={Colors.accent.b2}
+                    backgroundColor={Colors.accent.b3}>
+                    <VStack justifyContent="space-between" gap={20}>
+                      <SVG xml={earTrainginIcon} width="40" height="40" />
+                      <Heading color={Colors.gs.black} style={styles.featuresCardsText}>{homeCard.title}</Heading>
+                    </VStack>
+                  </Card>
+                }
+              </Pressable>
             );
           })}
         </HStack >
@@ -135,19 +133,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: Spacing.l,
-    paddingBottom: Spacing.m,
+    marginBottom: Spacing.m,
     gap: Spacing.xl,
+    // backgroundColor: "hotpink"
   },
   testCardHeading: {
     ...Typography.heading.h1,
     color: Colors.gs.black,
-    paddingBottom: 0,
     paddingRight: 68
   },
   testCardText: {
     ...Typography.body.bl,
-    paddingVertical: 0,
+    paddingBottom: Spacing.s,
     paddingRight: 45
+  },
+  buttonText: {
+    ...Typography.body.bl,
+    color: Colors.gs.white
+  },
+  featuresCardsText: {
+    ...Typography.body.bl
+  },
+  featuresCards: {
+    padding: 12,
+    borderWidth: 1,
+    borderRadius: 12,
   }
-}
-)
+})
