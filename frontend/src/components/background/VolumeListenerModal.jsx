@@ -63,7 +63,7 @@ export default function VolumeListenerModal() {
   }, []);
 
   return (
-    <Modal isOpen={wantsVolumeChanged}>
+    <Modal isOpen={wantsVolumeChanged} onClose={()=> {setWantsVolumeChanged(false)}}>
       <ModalBackdrop />
       <ModalContent>
         <ModalHeader>
@@ -88,7 +88,7 @@ export default function VolumeListenerModal() {
               navigation.navigate("Parental Control Volume Setting");
             }}
             text="Go to Volume Setting"
-            size="full"
+            size="lg"
           />
         </ModalFooter>
       </ModalContent>
