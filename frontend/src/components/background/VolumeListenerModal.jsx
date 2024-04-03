@@ -9,6 +9,7 @@ import {
   ModalHeader,
   ModalCloseButton,
   Modal,
+  Heading,
   Text,
 } from "@gluestack-ui/themed";
 import ButtonFunc from "../reusable/ButtonFunc";
@@ -87,6 +88,7 @@ export default function VolumeListenerModal() {
               navigation.navigate("Parental Control Volume Setting");
             }}
             text="Go to Volume Setting"
+            size="full"
           />
         </ModalFooter>
       </ModalContent>
