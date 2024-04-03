@@ -233,6 +233,7 @@ const NoiseChecker = ({ text }) => {
                     <Text style={styles.text}>{script}</Text>
                 </VStack>
                 <VStack alignItems="center">
+                    
                     <SVG xml={wave} width="440" height="440"></SVG>
                 </VStack>
                 {state.isNoiseChecking && (
