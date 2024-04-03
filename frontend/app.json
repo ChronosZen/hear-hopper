@@ -4,7 +4,7 @@
     "slug": "frontend",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/favicon_hopper_purple.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
