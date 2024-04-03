@@ -277,7 +277,7 @@ const NoiseChecker = ({ text }) => {
                         handleOnPress={() => {
                             state.isNoiseChecking
                                 ? (stopNoiseCheck(),
-                                    navigation.navigate("Tutorial"))
+                                    navigation.navigate("Pretest Volume Adjustment"))
                                 : startNoiseCheck();
                         }}
                         isDisabled={
