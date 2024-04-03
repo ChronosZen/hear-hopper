@@ -1,13 +1,12 @@
 import VolumeControl from "../components/user/VolumeControl";
-import { SafeAreaView } from "@gluestack-ui/themed";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const TestVolumeAdjustmentScreen = () => {
-
   return (
     <SafeAreaView
-      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      style={{ flex: 1, justifyContent: "space-between", alignItems: "left"}}
     >
-        <VolumeControl goToScreen={"Tutorial"}/>
+      <VolumeControl goToScreen={"Tutorial"} />
     </SafeAreaView>
   );
 };
