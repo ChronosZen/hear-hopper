@@ -6,7 +6,7 @@ const TestVolumeAdjustmentScreen = () => {
     <SafeAreaView
       style={{ flex: 1, justifyContent: "space-between", alignItems: "left"}}
     >
-      <VolumeControl goToScreen={"Tutorial"} />
+      <VolumeControl goToScreen={"Tutorial"} buttonPrompt={"Proceed to Test"} backToNoise={true}/>
     </SafeAreaView>
   );
 };

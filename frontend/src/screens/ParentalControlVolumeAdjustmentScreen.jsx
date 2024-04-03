@@ -6,7 +6,7 @@ const ParentalControlVolumeAdjustmentScreen = () => {
     <SafeAreaView
       style={{ flex: 1, justifyContent: "space-between", alignItems: "left" }}
     >
-      <VolumeControl goToScreen={"ParentalControl"} />
+      <VolumeControl goToScreen={"ParentalControl"} buttonPrompt={"Done"} backToNoise={false}/>
     </SafeAreaView>
   );
 };

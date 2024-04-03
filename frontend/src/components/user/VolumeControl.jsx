@@ -17,12 +17,17 @@ import { VolumeManager } from "react-native-volume-manager";
 import * as SecureStore from "expo-secure-store";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { Audio } from "expo-av";
-import { Colors, Spacing } from "../../styles";
+import { Colors, Spacing, Typography } from "../../styles";
 import HeaderText from "../reusable/HeaderText";
 import SVG from "../svg/SVG";
-import { parentalControlIcon } from "../../components/svg/svgs";
+import { parentalControlIcon,closeIcon } from "../../components/svg/svgs";
+import { Pressable } from "react-native";
 
-export default function VolumeControl({ goToScreen }) {
+export default function VolumeControl({
+  goToScreen,
+  buttonPrompt,
+  backToNoise,
+}) {
   const [volumeLevel, setVolumeLevel] = useState(0);
   const navigation = useNavigation();
   const soundRef = useRef();
@@ -83,17 +88,30 @@ export default function VolumeControl({ goToScreen }) {
 
   return (
     <View paddingHorizontal={Spacing.l}>
-      <HStack alignItems="center" space="md">
-        <SVG xml={parentalControlIcon} width="40" height="40" />
-        <HeaderText
-          text="Volume Setting"
-          underlineColor={Colors.secondary.g5}
-          textAlign="left"
-        />
+      <HStack justifyContent="space-between" alignItems="center">
+        <HStack alignItems="center" space="md">
+          <SVG xml={parentalControlIcon} width="40" height="40" />
+          <HeaderText
+            text="Volume Setting"
+            underlineColor={Colors.secondary.g5}
+            textAlign="left"
+          />
+        </HStack>
+        {backToNoise && (
+          <Pressable
+            onPress={() => {
+              navigation.navigate("Noise Check");
+            }}
+          >
+            <SVG xml={closeIcon} width="40" height="40"></SVG>
+          </Pressable>
+        )}
       </HStack>
       <VStack alignItems="center" space="lg">
-        <Text >We will set and lock the app's volume here</Text>
-        <Center w={300} h={250}>
+        <Text style={{ ...Typography.body.bl }}>
+          We will set and lock the app's volume here
+        </Text>
+        <Center w={300} h={300}>
           <Slider
             sliderTrackHeight={8}
             size="lg"
@@ -116,18 +134,22 @@ export default function VolumeControl({ goToScreen }) {
             <SliderThumb bg={Colors.primary.p2} />
           </Slider>
         </Center>
-        <Text textAlign="center" marginVertical={48}>
+        <Text
+          textAlign="center"
+          marginVertical={48}
+          style={{ ...Typography.body.bl }}
+        >
           Use the slide bar above to adjust the volume to a comfortable level
           for the sound you are currently hearing.
         </Text>
       </VStack>
       <ButtonFunc
-          handleOnPress={() => {
-            navigation.navigate(goToScreen);
-          }}
-          text="Done"
-          size="lg"
-        />
+        handleOnPress={() => {
+          navigation.navigate(goToScreen);
+        }}
+        text={buttonPrompt}
+        size="lg"
+      />
     </View>
   );
 }
