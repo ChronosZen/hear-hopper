@@ -88,9 +88,9 @@ const HomeScreen = ({ navigation, route }) => {
                 flexGrow={1}
                 onPress={() => {
                   if (index === 0) {
-                    navigation.navigate("Train");
-                  } else {
                     navigation.navigate("ParentalControl");
+                  } else {
+                    navigation.navigate("Train");
                   }
                 }}>
                 {homeCard.title === "Parental Control"
