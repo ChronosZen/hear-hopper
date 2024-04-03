@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import {
-  Button,
-  ButtonText,
+  CloseIcon,
+  Icon,
   ModalBackdrop,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
+  ModalCloseButton,
   Modal,
   Text,
 } from "@gluestack-ui/themed";
+import ButtonFunc from "../reusable/ButtonFunc";
 import { VolumeManager } from "react-native-volume-manager";
 import * as SecureStore from "expo-secure-store";
 import { useNavigation } from "@react-navigation/native";
@@ -64,7 +66,12 @@ export default function VolumeListenerModal() {
       <ModalBackdrop />
       <ModalContent>
         <ModalHeader>
-          <Text textAlign="center">Volume change</Text>
+          <Heading size="lg" textAlign="center">
+            Volume change
+          </Heading>
+          <ModalCloseButton>
+            <Icon as={CloseIcon} />
+          </ModalCloseButton>
         </ModalHeader>
         <ModalBody>
           <Text>
@@ -74,14 +81,13 @@ export default function VolumeListenerModal() {
           </Text>
         </ModalBody>
         <ModalFooter>
-          <Button
-            onPress={() => {
+          <ButtonFunc
+            handleOnPress={() => {
               setWantsVolumeChanged(false);
               navigation.navigate("Parental Control Volume Setting");
             }}
-          >
-            <ButtonText>Go to Volume Setting</ButtonText>
-          </Button>
+            text="Go to Volume Setting"
+          />
         </ModalFooter>
       </ModalContent>
     </Modal>
