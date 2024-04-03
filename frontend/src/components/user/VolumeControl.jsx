@@ -8,13 +8,19 @@ import {
   SliderTrack,
   SliderThumb,
   SliderFilledTrack,
-  Heading,
+  HStack,
+  View,
+  VStack,
 } from "@gluestack-ui/themed";
 import ButtonFunc from "../reusable/ButtonFunc";
 import { VolumeManager } from "react-native-volume-manager";
 import * as SecureStore from "expo-secure-store";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { Audio } from "expo-av";
+import { Colors, Spacing } from "../../styles";
+import HeaderText from "../reusable/HeaderText";
+import SVG from "../svg/SVG";
+import { parentalControlIcon } from "../../components/svg/svgs";
 
 export default function VolumeControl({ goToScreen }) {
   const [volumeLevel, setVolumeLevel] = useState(0);
@@ -76,43 +82,52 @@ export default function VolumeControl({ goToScreen }) {
   );
 
   return (
-    <>
-      <Heading>Volume Setting</Heading>
-      <Text>We will set the app volume</Text>
-      <Center w={300} h={400}>
-        <Slider
-          sliderTrackHeight={8}
-          size="lg"
-          orientation="horizontal"
-          value={Math.round(volumeLevel * 100)}
-          onChange={(value) => {
-            try {
-              const floatVolume = value / 100;
-              SecureStore.setItem("volumeLevel", floatVolume.toString());
-              // console.log("floatVolume =>",floatVolume);
-              setVolumeLevel(floatVolume);
-            } catch (error) {
-              console.error("Error setting volume level:", error);
-            }
-          }}
-        >
-          <SliderTrack>
-            <SliderFilledTrack />
-          </SliderTrack>
-          <SliderThumb />
-        </Slider>
-      </Center>
-      <Text textAlign="center" marginVertical={48}>
-        Use the slide bar above to adjust the volume to a comfortable level for
-        the sound you are currently hearing.
-      </Text>
-
+    <View paddingHorizontal={Spacing.l}>
+      <HStack alignItems="center" space="md">
+        <SVG xml={parentalControlIcon} width="40" height="40" />
+        <HeaderText
+          text="Volume Setting"
+          underlineColor={Colors.secondary.g5}
+          textAlign="left"
+        />
+      </HStack>
+      <VStack alignItems="center" space="lg">
+        <Text >We will set and lock the app's volume here</Text>
+        <Center w={300} h={250}>
+          <Slider
+            sliderTrackHeight={8}
+            size="lg"
+            orientation="horizontal"
+            value={Math.round(volumeLevel * 100)}
+            onChange={(value) => {
+              try {
+                const floatVolume = value / 100;
+                SecureStore.setItem("volumeLevel", floatVolume.toString());
+                // console.log("floatVolume =>",floatVolume);
+                setVolumeLevel(floatVolume);
+              } catch (error) {
+                console.error("Error setting volume level:", error);
+              }
+            }}
+          >
+            <SliderTrack>
+              <SliderFilledTrack bg={Colors.primary.p2} />
+            </SliderTrack>
+            <SliderThumb bg={Colors.primary.p2} />
+          </Slider>
+        </Center>
+        <Text textAlign="center" marginVertical={48}>
+          Use the slide bar above to adjust the volume to a comfortable level
+          for the sound you are currently hearing.
+        </Text>
+      </VStack>
       <ButtonFunc
-        handleOnPress={() => {
-          navigation.navigate(goToScreen);
-        }}
-        text="Done"
-      />
-    </>
+          handleOnPress={() => {
+            navigation.navigate(goToScreen);
+          }}
+          text="Done"
+          size="lg"
+        />
+    </View>
   );
 }
