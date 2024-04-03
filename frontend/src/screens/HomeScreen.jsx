@@ -73,7 +73,7 @@ const HomeScreen = ({ navigation, route }) => {
               </Button>
             </VStack>
           </HStack>
-          <VStack position="absolute" left={172} top={160} zIndex={1}>
+          <VStack position="absolute" bottom={-64} right={-32} zIndex={1}>
             <SVG xml={mainMastcot} width="200" height="200" />
           </VStack>
         </VStack>
