@@ -234,7 +234,9 @@ const NoiseChecker = ({ text }) => {
                     <Text style={styles.text}>{script}</Text>
                 </VStack>
                 <VStack alignItems="center">
-                    <LottieView source={require("../animation/SoundWaves.json")} autoPlay loop/>
+                    <View>
+                        <LottieView source={require("../animation/SoundWaves.json")} autoPlay loop />
+                    </View>
                     <SVG xml={wave} width="440" height="440"></SVG>
                 </VStack>
                 {state.isNoiseChecking && (
