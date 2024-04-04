@@ -7,6 +7,7 @@ import { checkPermissions, requestPermissions } from "./UserPermissions";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import HeaderText from "../reusable/HeaderText";
 import SVG from "../svg/SVG";
+import LottieView from "lottie-react-native";
 import {
     noiseCheckIcon,
     closeIcon,
@@ -233,7 +234,7 @@ const NoiseChecker = ({ text }) => {
                     <Text style={styles.text}>{script}</Text>
                 </VStack>
                 <VStack alignItems="center">
-                    
+                    <LottieView source={require("../animation/SoundWaves.json")} autoPlay loop/>
                     <SVG xml={wave} width="440" height="440"></SVG>
                 </VStack>
                 {state.isNoiseChecking && (
