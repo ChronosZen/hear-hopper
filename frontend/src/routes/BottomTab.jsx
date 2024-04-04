@@ -29,7 +29,11 @@ import { Colors, Typography } from "../styles";
 import TestResult from "../components/hearingTest/TestResult";
 import ViewAllResult from "../screens/ViewAllResult";
 import VolumeListenerModal from "../components/background/VolumeListenerModal";
-
+import TrainSection from "../components/train/TrainSection";
+import StartSection from "../components/train/StartSection";
+import QuizSection from "../components/train/QuizSection";
+import TestTutorial from "../components/hearingTest/TestTutorial";
+import EarTestScreen from "../screens/EarTestScreen";
 const ProfileStack = createNativeStackNavigator();
 function ProfileStackScreen({ route }) {
   return (
