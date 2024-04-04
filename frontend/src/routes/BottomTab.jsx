@@ -26,11 +26,6 @@ import {
   trainingSolidIcon,
 } from "../components/svg/svgs";
 import { Colors, Typography } from "../styles";
-import TrainSection from "../components/train/TrainSection";
-import StartSection from "../components/train/StartSection";
-import QuizSection from "../components/train/QuizSection";
-import TestTutorial from "../components/hearingTest/TestTutorial";
-import EarTestScreen from "../screens/EarTestScreen";
 import TestResult from "../components/hearingTest/TestResult";
 import ViewAllResult from "../screens/ViewAllResult";
 import VolumeListenerModal from "../components/background/VolumeListenerModal";

@@ -48,7 +48,7 @@ const AnimalChoices = ({ dispatch, userAnswer, quizData, answerState }) => {
         if (!rainSoundRef.current) {
           const rainSoundInfo = {
             file: require("../../../assets/audioFiles/training/heavy-rain_sound.wav"),
-            volume: 1,
+            volume: 0.7,
           };
           const { sound } = await Audio.Sound.createAsync(rainSoundInfo.file);
           rainSoundRef.current = sound;
@@ -88,7 +88,7 @@ const AnimalChoices = ({ dispatch, userAnswer, quizData, answerState }) => {
 
     setupRainSound();
     if (answerState === "waiting") {
-      soundInterval = setInterval(setupQuestionSound, 2000);
+      soundInterval = setInterval(setupQuestionSound, 1300);
     } else {
       stopRainSound();
     }

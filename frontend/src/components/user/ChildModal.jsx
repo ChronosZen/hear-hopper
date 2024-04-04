@@ -19,8 +19,13 @@ import {
   HStack,
   RadioIcon,
 } from "@gluestack-ui/themed";
-
+import { Colors, Typography } from "../../styles/index";
 import { useUser } from "../../context/UserContext";
+import { StyleSheet, Text, View } from "react-native";
+
+const CustomCircleIcon = (props) => (
+  <CircleIcon fill={Colors.primary.p1} {...props} />
+);
 
 const ChildModal = ({ setIsModelOpen, isModelOpen, kids }) => {
   const { dispatch, selectedKidId } = useUser();
@@ -45,16 +50,25 @@ const ChildModal = ({ setIsModelOpen, isModelOpen, kids }) => {
   return (
     <Modal isOpen={isModelOpen}>
       <ModalBackdrop />
-      <ModalContent>
-        <VStack justifyContent="center" alignItems="center">
+      <ModalContent paddingTop={12} paddingBottom={16} width={327}>
+        <VStack
+          justifyContent="flext-start"
+          alignItems="center"
+          marginRight={"auto"}>
           <ModalHeader>
-            <Heading size="lg">Switch Child’s Profile</Heading>
-            <ModalCloseButton onPress={() => setIsModelOpen(!isModelOpen)}>
+            <Text
+              style={{
+                ...Typography.heading.h4,
+                marginBottom: 16,
+              }}>
+              Switch Child’s Profile
+            </Text>
+            {/* <ModalCloseButton onPress={() => setIsModelOpen(!isModelOpen)}>
               <Icon as={CloseIcon} />
-            </ModalCloseButton>
+            </ModalCloseButton> */}
           </ModalHeader>
-          <ModalBody>
-            <RadioGroup value={selectedValue} onChange={handleChange}>
+          <ModalBody marginRight={"auto"}>
+            <RadioGroup value={selectedValue} onChange={handleChange} gap={16}>
               {kids.map((kid) => (
                 <Radio
                   key={kid._id}
@@ -62,16 +76,22 @@ const ChildModal = ({ setIsModelOpen, isModelOpen, kids }) => {
                   size="md"
                   isInvalid={false}
                   isDisabled={false}>
-                  <HStack alignItems="center">
-                    <RadioIndicator mr="$2">
-                      <RadioIcon as={CircleIcon} />
+                  <HStack alignItems="center" justifyContent="flex-start">
+                    <RadioIndicator mr="$4">
+                      <RadioIcon
+                        color={Colors.primary.p1}
+                        as={CircleIcon}
+                        width={12}
+                        height={12}
+                      />
                     </RadioIndicator>
                     <Image
-                      size="sm"
+                      width={40}
+                      height={40}
                       borderRadius="$full"
                       source={kid.image}
                       alt={kid.firstName}
-                      mr="$2"
+                      mr="$4"
                     />
                     <RadioLabel>{kid.firstName}</RadioLabel>
                   </HStack>
