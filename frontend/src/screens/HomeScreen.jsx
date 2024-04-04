@@ -51,7 +51,7 @@ const HomeScreen = ({ navigation, route }) => {
         </VStack>
 
         <VStack padding={Spacing.l} gap={Spacing.m} backgroundColor={Colors.primary.p6} softShadow={1} borderColor={Colors.primary.p5} borderWidth={1} borderRadius={12} position="relative" overflow="hidden" >
-          <Heading style={styles.testCardHeading}>Test your child's hearing</Heading>
+          <Text style={styles.testCardHeading}>Test your child's hearing</Text>
           <Text style={styles.testCardText}>Our hearing test is created keeping your child's ear sensitivity in mind.</Text>
           <HStack alignItems="center">
             <VStack flexBasis={"60%"}  >
