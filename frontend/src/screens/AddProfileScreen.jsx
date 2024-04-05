@@ -1,23 +1,18 @@
 import { StyleSheet, Text, View, Dimensions } from "react-native";
 import React from "react";
-import { useEffect, useReducer } from "react";
+import { useReducer } from "react";
 import ButtonFunc from "../components/reusable/ButtonFunc";
 import HeaderText from "../components/reusable/HeaderText";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   ChevronDownIcon,
-  CircleIcon,
   FormControlLabel,
   FormControlLabelText,
   HStack,
   Image,
   Input,
-  Radio,
-  RadioGroup,
-  RadioIcon,
-  RadioIndicator,
-  RadioLabel,
   VStack,
+  SelectVirtualizedList,
 } from "@gluestack-ui/themed";
 import {
   Select,
@@ -151,9 +146,11 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
 
   const navigation = useNavigation()
 
+  const yearRange = route.params.yearRange;
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <VStack flex={1} justifyContent="space-between" margin={24} marginBottom={48}>
+      <VStack flex={1} justifyContent="space-between" mx={24} mt={16} mb={24}>
         <HStack justifyContent="space-between" alignItems="center">
           <HeaderText
             text="Create Profile"
@@ -163,16 +160,17 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
           <CloseButton navigation={navigation} section={"MainProfile"} />
         </HStack>
 
-        <VStack my="$24" flex={1}>
-          <VStack mb={24}>
+        <VStack flex={1} >
+          <VStack mb={24} my={page !== 4 ? '$24' : '$8'}>
             <Text style={{...Typography.heading.h4, textAlign: "center"}}>
-              {page === 1 ? "Child’s Birth  Year?" : page === 2 ? "Child’s Gender ?" : page === 3 ? "Profile Pic" : page === 4 ? "Child’s Name?" : page === 5 ? "Hearing Aid?" : ""}
+              {page === 1 ? "Child’s Name?" : page === 2 ? "Child’s Birth  Year?" : page === 3 ? "Child’s Gender ?" : page === 4 ? "Profile Pic" : page === 5 ? "Hearing Aid?" : ""}
             </Text>
             {page === 5 ? <Text style={styles.hearinAidText}>Do they already have any hearing Aid.</Text> : <></>}
           </VStack>
         {page === 1 && (
           <>
           <Input
+            m="$4"
             variant="outline"
             size="md"
             rounded="$3xl"
@@ -181,16 +179,53 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
             isInvalid={false}
             isReadOnly={false}>
             <InputField
-              placeholder="Enter Year here"
-              autoComplete="birthdate-year"
-              onChangeText={(newBirthYear) =>
-                dispatch({ type: "birthYear", payload: newBirthYear })
+              placeholder="Enter Name"
+              onChangeText={(newfirstName) =>
+                dispatch({ type: "firstName", payload: newfirstName })
               }
             />
           </Input>
           </>
         )}
         {page === 2 && (
+          <>
+          <Select
+          width={Dimensions.get("screen")}
+          value={birthYear}
+          onValueChange={(newBirthYear) => {
+            dispatch({ type: "birthYear", payload: newBirthYear });
+          }}
+          variant="outline"
+          size="md">
+          <SelectTrigger variant="rounded" size="md" height={48}>
+            <SelectInput placeholder="Select Birth Year" />
+            <SelectIcon mr="$3">
+              <Icon as={ChevronDownIcon} />
+            </SelectIcon>
+          </SelectTrigger>
+          <SelectPortal>
+            <SelectBackdrop />
+            <SelectContent h="50%">
+              <SelectDragIndicatorWrapper>
+                <SelectDragIndicator />
+              </SelectDragIndicatorWrapper>
+              <SelectVirtualizedList
+                data={yearRange}
+                renderItem={( year ) => {
+                return(
+                  <SelectItem label={year.item.toString()} value={year.item.toString()} />
+                )
+                }}
+                keyExtractor={(year) => year}
+                getItemCount={data => data.length}
+                getItem={(data, index) => data[index]}
+            />
+            </SelectContent>
+          </SelectPortal>
+          </Select>
+          </>
+        )}
+        {page === 3 && (
           <Select
           width={Dimensions.get("screen")}
           value={gender}
@@ -218,28 +253,11 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
             </SelectContent>
           </SelectPortal>
           </Select>
+
         )}
-        {page === 3 && <CameraProfile dispatch={dispatch} />}
-        {page === 4 && (
-          <Input
-            m="$4"
-            variant="outline"
-            size="md"
-            rounded="$3xl"
-            height={48}
-            isDisabled={false}
-            isInvalid={false}
-            isReadOnly={false}>
-            <InputField
-              placeholder="Enter Name"
-              onChangeText={(newfirstName) =>
-                dispatch({ type: "firstName", payload: newfirstName })
-              }
-            />
-          </Input>
-        )}
+        {page === 4 && <CameraProfile dispatch={dispatch} />}
         {page === 5 && (
-          <FormControl isRequired my={24}>
+          <FormControl isRequired={true} my={24} mx='$24'>
             <HStack space="2xl" justifyContent="center">
             <VStack space="l">
             <FormControlLabel>
@@ -303,12 +321,14 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
             </VStack>
             </HStack>
           </FormControl>
+
         )}
         {page === 6 && (
           <VStack alignItems="center" space="xl">
             <SVG xml={happyMascot} width={200} height={200} />
             <Text style={{...Typography.heading.h5, textAlign: "center"}}>Congrats successfully added new kid!!!</Text>
           </VStack>
+
         )}
         {/* <Text style={{margin: 12, textAlign: "center"}}>
           ID:{userData.id}
@@ -320,8 +340,8 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
           {right}
         </Text> */}
         {/* <Text>Check ear: {(((page === 1 && birthYear) || (page === 2 && gender) || (page === 3 && image)  || (page === 4 && firstName)) ? "true" : "false")}</Text> */}
-        {(image && page !== 6) && (
-          <View style={{alignItems:"center", marginVertical: 12}}>
+        {(image && page !== 6 && page !== 5) && (
+          <VStack alignItems="center" my={12}>
           <Image
             size="lg"
             borderRadius="$full"
@@ -330,14 +350,14 @@ const AddProfileScreen = ({ navigation: { goBack }, route }) => {
               uri: image,
             }}
           />
-          </View>
+          </VStack>
         )}
         </VStack>
         {(page !== 5) & (page !== 6) ? (
           <ButtonFunc
             handleOnPress={() => dispatch({ type: "next" })}
             text="Next"
-            isDisabled={((page === 1 && birthYear) || (page === 2 && gender) || (page === 3 && image) || (page === 4 && firstName)) ? false : true}
+            isDisabled={((page === 1 && firstName) || (page === 2 && birthYear) || (page === 3 && gender) || (page === 4 && image)) ? false : true}
           />          
         ) : page === 5 ? (
           <ButtonFunc
