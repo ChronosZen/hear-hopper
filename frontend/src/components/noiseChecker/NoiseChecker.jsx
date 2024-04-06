@@ -103,7 +103,6 @@ const NoiseChecker = ({ text }) => {
             return 0.6;
         }
     }
-    const waveScaleY = calcWaveScaleY(state.noiseLevel)
 
     const route = useRoute()
     const routeName = route.name
@@ -208,7 +207,6 @@ const NoiseChecker = ({ text }) => {
             console.error("stopNoiseCheck is Error: ", error)
         }
     }
-
     // console.log("isNoiseChecking ->", state.isNoiseChecking)
 
     useEffect(() => {
@@ -259,7 +257,7 @@ const NoiseChecker = ({ text }) => {
                             <VStack>
                                 <VStack alignItems="center">
                                     <View style={styles.animationContainer}>
-                                        <LottieView style={{ ...styles.animation }} source={require('../animation/SoundWaves.json')} autoPlay loop />
+                                        <LottieView style={{ ...styles.animation, transform: [{ scaleY: calcWaveScaleY(state.noiseLevel) }] }} source={require('../animation/SoundWaves.json')} autoPlay loop />
                                     </View>
                                 </VStack>
                                 <VStack style={styles.levelContainer}>
@@ -268,11 +266,11 @@ const NoiseChecker = ({ text }) => {
                                 </VStack>
                             </VStack>
                         )}
-                        {state.noiseLevel <= -10 && state.noiseLevel > -12 && (
+                        {state.noiseLevel <= -20 && state.noiseLevel > -25 && (
                             <VStack>
                                 <VStack alignItems="center">
                                     <View style={styles.animationContainer}>
-                                        <LottieView style={{ ...styles.animation }} source={require('../animation/SoundWaves.json')} autoPlay loop />
+                                        <LottieView style={{ ...styles.animation, transform: [{ scaleY: calcWaveScaleY(state.noiseLevel)}] }} source={require('../animation/SoundWaves.json')} autoPlay loop />
                                     </View>
                                 </VStack>
                                 <VStack style={styles.levelContainer}>
@@ -281,11 +279,11 @@ const NoiseChecker = ({ text }) => {
                                 </VStack>
                             </VStack>
                         )}
-                        {state.noiseLevel > -10 && (
+                        {state.noiseLevel > -20 && (
                             <VStack>
                                 <VStack alignItems="center">
                                     <View style={styles.animationContainer}>
-                                        <LottieView style={{ ...styles.animation }} source={require('../animation/SoundWaves.json')} autoPlay loop />
+                                        <LottieView style={{ ...styles.animation,  transform: [{ scaleY: calcWaveScaleY(state.noiseLevel)}] }} source={require('../animation/SoundWaves.json')} autoPlay loop />
                                     </View>
                                 </VStack>
                                 <VStack position="relative">
@@ -301,7 +299,7 @@ const NoiseChecker = ({ text }) => {
                     <>
                         <VStack alignItems="center">
                             <View style={styles.animationContainer}>
-                                <LottieView ref={waveRef} style={{ ...styles.animation }}  source={require('../animation/SoundWaves.json')} />
+                                <LottieView ref={waveRef} style={{ ...styles.animation, transform: [{ scaleY: calcWaveScaleY(state.noiseLevel)}] }}  source={require('../animation/SoundWaves.json')} />
                             </View>
                         </VStack>
                     </>
@@ -374,7 +372,6 @@ const styles = StyleSheet.create({
         aspectRatio: 2
     },
     animation: {
-        transform: [{ scaleY: calcScaleY(state.noiseLevel) }],
         flex: 1,
         zIndex: -1
     }

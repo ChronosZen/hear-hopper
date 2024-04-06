@@ -21,7 +21,7 @@ const ParentalControlScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <HStack alignItems="center" space="md">
+        <HStack alignItems="center" space="sm" marginBottom={Spacing.m}>
           <SVG xml={parentalControlIcon} width="40" height="40" />
           <HeaderText
             text="Parental Control"
