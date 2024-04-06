@@ -183,7 +183,7 @@ const BottomTab = () => {
         options={{
           tabBarLabel: ({ focused }) => (
             <Text style={focused ? styles.hNavActive : styles.hNav}>
-              Profile
+              Settings
             </Text>
           ),
           tabBarIcon: ({ focused }) => (
