@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
-import { useState, useEffect, useReducer } from "react";
+import { StyleSheet } from "react-native";
+import { useState, useEffect } from "react";
 import { Audio } from "expo-av";
 import {
   HStack,
@@ -7,11 +7,11 @@ import {
   Progress,
   ProgressFilledTrack,
   Pressable,
+  Text
 } from "@gluestack-ui/themed";
 import SVG from "../components/svg/SVG";
 import HeaderText from "../components/reusable/HeaderText";
 import {
-  testIcon,
   mainMastcot,
   happyMascot,
   testEar,
@@ -309,16 +309,12 @@ const EarTestScreen = ({ navigation }) => {
         ...prevResp,
         [audioPlay[currentIndex].freq]: db,
       }));
-      // setRightResponse((rightResp) => ({
-      //   ...rightResp,
-      //   [audioPlay[currentIndex].freq]: db + 10,
-      // }));
     }
     // console.log(response);
   };
 
   const volTodBCal = (vol) => {
-    console.log("volume to dB ", vol);
+    // console.log("volume to dB ", vol);
     return vol * 50;
   };
 
@@ -334,7 +330,7 @@ const EarTestScreen = ({ navigation }) => {
       </HStack>
       <VStack space="md" marginBottom={12}>
         <Progress value={progress * 20} w="100%" h={12} bg={Colors.gs.gs6}>
-          <ProgressFilledTrack h={12} bg={Colors.gs.black} />
+          <ProgressFilledTrack h={12} bg={Colors.primary.p1} />
         </Progress>
         <HStack justifyContent="space-between" width={"100%"}>
           <Text>Progress</Text>
@@ -347,19 +343,17 @@ const EarTestScreen = ({ navigation }) => {
           flex={1}
           alignItems="center"
           justifyContent="space-between"
-          my={80}>
+          my={24}>
           <VStack alignItems="center">
             <SVG xml={mainMastcot} width="180" height="180" />
-            <View>
               <Text style={styles.instructText}>
                 Press and Hold the Button while you hear the beeping sound.
               </Text>
-            </View>
           </VStack>
-          <Pressable onPressIn={userResponse} onPressOut={btnReleased} >
+          <Pressable onPressIn={userResponse} onPressOut={btnReleased} mb={24}>
             {btnActive ? 
             <VStack justifyContent="center" alignItems="center">
-              <AnimatedLottieView source={require('../components/animation/ButtonBackgroundRipple.json')} autoPlay style={{width:400, height: 400, position: 'absolute'}} />
+              <AnimatedLottieView source={require('../components/animation/ButtonBackgroundRipple.json')} autoPlay style={{width:300, height: 300, position: 'absolute'}} />
               <SVG xml={heldTestBtn} width={150} height={150} />
             </VStack>
             :
@@ -372,7 +366,7 @@ const EarTestScreen = ({ navigation }) => {
           <VStack flex={1} space="3xl" alignItems="center" justifyContent="center" marginBottom={12}>
             <SVG xml={happyMascot} width="180" height="180" />
             <AnimatedLottieView source={require('../components/animation/Confetti.json')} autoPlay loop style={{width:400, height: 400, position: 'absolute'}} />
-            <Text style={styles.instructText}>
+            <Text style={Typography.heading.h3} color={Colors.gs.black}>
               You Did Great!
             </Text>
           </VStack>
@@ -392,11 +386,8 @@ const EarTestScreen = ({ navigation }) => {
 };
 export default EarTestScreen;
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   instructText: {
     textAlign: "center",
-    ...Typography.heading.h3,
+    ...Typography.body.bxl,
   },
 });
