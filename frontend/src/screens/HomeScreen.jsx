@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.l,
     marginBottom: Spacing.m,
     gap: Spacing.xl,
-    // backgroundColor: "hotpink"
+    backgroundColor: "hotpink"
   },
   testCardHeading: {
     ...Typography.heading.h1,

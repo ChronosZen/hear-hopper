@@ -1,6 +1,6 @@
 import { useReducer, useEffect } from "react";
 import ButtonFunc from "../reusable/ButtonFunc";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { Audio } from 'expo-av';
 import { Colors, Spacing, Typography } from "../../styles";
 import { checkPermissions, requestPermissions } from "./UserPermissions";
@@ -18,8 +18,13 @@ import {
     Pressable,
     VStack,
     Text,
-    Heading
+    Heading,
+    View
 } from '@gluestack-ui/themed';
+import { SafeAreaView } from "react-native-safe-area-context";
+import { max } from "moment";
+
+const windowHeight = Dimensions.get('window').height
 
 const initialState = {
     isNoiseChecking: false,
@@ -204,10 +209,13 @@ const NoiseChecker = ({ text }) => {
     }, [])
 
     return (
+
         <VStack flex={1}>
             <VStack flex={1}>
-                <VStack>
-                    <HStack justifyContent="space-between" alignItems="center">
+
+                <VStack backgroundColor="yellow">
+
+                    <HStack justifyContent="space-between" alignItems="center" backgroundColor="blue">
                         <HStack alignItems="center" space="md">
                             <SVG xml={noiseCheckIcon} width="40" height="40"></SVG>
                             <HeaderText text="Noise Check" underlineColor={Colors.primary.p5} />
@@ -217,7 +225,9 @@ const NoiseChecker = ({ text }) => {
                             <Pressable onPress={() => {
                                 stopNoiseCheck();
                                 navigation.navigate("ParentalControl")
+
                             }}
+                                style={{ zIndex: 10 }}
                             >
                                 <SVG xml={closeIcon} width="40" height="40"></SVG>
                             </Pressable>
@@ -234,31 +244,29 @@ const NoiseChecker = ({ text }) => {
                     <Text style={styles.text}>{script}</Text>
                 </VStack>
                 <VStack alignItems="center">
-                    <View>
-                        <LottieView source={require("../animation/SoundWaves.json")} autoPlay loop />
+                    <View backgroundColor="pink" style={styles.animationContainer}>
+                        <LottieView style={{ ...styles.animation }} source={require('../animation/SoundWaves.json')} autoPlay />
                     </View>
                     <SVG xml={wave} width="440" height="440"></SVG>
                 </VStack>
                 {state.isNoiseChecking && (
                     <>
                         {state.noiseLevel <= -12 && (
-                            // <Card backgroundColor={Colors.secondary.g5} margin={16}>
                             <VStack >
-                                <Heading alignSelf="center" style={styles.levelHeading}>Safe Level</Heading>
-                                <Text alignSelf="center" style={styles.levelText}>No risk of hearing loss, no matter how long you listen.</Text>
+                                <Text style={styles.levelHeading}>Safe Level</Text>
+                                <Text style={styles.levelText}>No risk of hearing loss, no matter how long you listen.</Text>
                             </VStack>
-                            // </Card>
                         )}
                         {state.noiseLevel <= -10 && state.noiseLevel > -12 && (
                             <VStack >
-                                <Heading alignSelf="center" style={styles.levelHeading}>Moderate Risk Level</Heading>
-                                <Text alignSelf="center" style={styles.levelText}>Avoid being in this environment 8 hour or more.</Text>
+                                <Text style={styles.levelHeading}>Moderate Risk Level</Text>
+                                <Text style={styles.levelText}>Avoid being in this environment 8 hour or more.</Text>
                             </VStack>
                         )}
                         {state.noiseLevel > -10 && (
                             <VStack>
-                                <Heading alignSelf="center" style={styles.levelHeading}>High Risk Level</Heading>
-                                <Text alignSelf="center" style={styles.levelText}>Avoid being in this environment 45 minutes or more.</Text>
+                                <Text style={styles.levelHeading}>High Risk Level</Text>
+                                <Text style={styles.levelText}>Avoid being in this environment 45 minutes or more.</Text>
                             </VStack>
                         )}
                     </>
@@ -304,15 +312,36 @@ const NoiseChecker = ({ text }) => {
 export default NoiseChecker;
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingHorizontal: Spacing.l,
+        paddingTop: Spacing.l,
+        paddingBottom: 40,
+        backgroundColor: "hotpink"
+    },
     text: {
         ...Typography.body.bl,
     },
     levelHeading: {
         ...Typography.heading.h4,
-        paddingBottom: Spacing.l
+        paddingBottom: Spacing.l,
+        alignSelf: "center"
     },
     levelText: {
         ...Typography.body.bl,
-        paddingHorizontal: 40
+        paddingHorizontal: 40,
+        alignSelf: "center"
+    },
+    animationContainer: {
+        // width: 400,
+        height: windowHeight * 0.5,
+        aspectRatio: 2
+    },
+    animation: {
+        // width: 440,
+        // height: 440,
+        transform: [{ scaleY: 1.3 }],
+        flex: 1,
+        zIndex: -1
     }
 })
