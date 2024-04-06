@@ -1,12 +1,13 @@
-import { useReducer, useEffect } from "react";
+import { useReducer, useEffect, useRef } from "react";
 import ButtonFunc from "../reusable/ButtonFunc";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { Audio } from 'expo-av';
 import { Colors, Spacing, Typography } from "../../styles";
 import { checkPermissions, requestPermissions } from "./UserPermissions";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import HeaderText from "../reusable/HeaderText";
 import SVG from "../svg/SVG";
+import LottieView from "lottie-react-native";
 import {
     noiseCheckIcon,
     closeIcon,
@@ -17,13 +18,16 @@ import {
     Pressable,
     VStack,
     Text,
-    Heading
+    Heading,
+    View
 } from '@gluestack-ui/themed';
+
+const windowHeight = Dimensions.get('window').height
 
 const initialState = {
     isNoiseChecking: false,
     recording: null,
-    noiseLevel: null,
+    noiseLevel: -40,
     isSafeLevel: false,
     noiseLevelUpdateInterval: null,
     safeDuration: 4,
@@ -88,6 +92,17 @@ const NoiseChecker = ({ text }) => {
     // console.log("route name from noise checker", route.route.route.name)
 
     const script = text
+    const waveRef = useRef()
+
+    const calcWaveScaleY = (noiseLevel) => {
+        if (noiseLevel > -10) {
+            return 1.2;
+        } else if (noiseLevel <= -10 && noiseLevel > -12) {
+            return 0.9;
+        } else {
+            return 0.6;
+        }
+    }
 
     const route = useRoute()
     const routeName = route.name
@@ -192,13 +207,15 @@ const NoiseChecker = ({ text }) => {
             console.error("stopNoiseCheck is Error: ", error)
         }
     }
-
     // console.log("isNoiseChecking ->", state.isNoiseChecking)
 
     useEffect(() => {
         handleCheckPermissions()
         if (!state.isMicrophonePermGranted) {
             handleRequestPermissions()
+        }
+        return async () => {
+            await stopNoiseCheck()
         }
     }, [])
 
@@ -207,7 +224,7 @@ const NoiseChecker = ({ text }) => {
             <VStack flex={1}>
                 <VStack>
                     <HStack justifyContent="space-between" alignItems="center">
-                        <HStack alignItems="center" space="md">
+                        <HStack alignItems="center" space="sm">
                             <SVG xml={noiseCheckIcon} width="40" height="40"></SVG>
                             <HeaderText text="Noise Check" underlineColor={Colors.primary.p5} />
                         </HStack>
@@ -216,7 +233,9 @@ const NoiseChecker = ({ text }) => {
                             <Pressable onPress={() => {
                                 stopNoiseCheck();
                                 navigation.navigate("ParentalControl")
+
                             }}
+                                style={{ zIndex: 10 }}
                             >
                                 <SVG xml={closeIcon} width="40" height="40"></SVG>
                             </Pressable>
@@ -232,54 +251,83 @@ const NoiseChecker = ({ text }) => {
                     </HStack>
                     <Text style={styles.text}>{script}</Text>
                 </VStack>
-                <VStack alignItems="center">
-                    
-                    <SVG xml={wave} width="440" height="440"></SVG>
-                </VStack>
-                {state.isNoiseChecking && (
+                {state.isNoiseChecking ? (
                     <>
                         {state.noiseLevel <= -12 && (
-                            // <Card backgroundColor={Colors.secondary.g5} margin={16}>
-                            <VStack >
-                                <Heading alignSelf="center" style={styles.levelHeading}>Safe Level</Heading>
-                                <Text alignSelf="center" style={styles.levelText}>No risk of hearing loss, no matter how long you listen.</Text>
-                            </VStack>
-                            // </Card>
-                        )}
-                        {state.noiseLevel <= -10 && state.noiseLevel > -12 && (
-                            <VStack >
-                                <Heading alignSelf="center" style={styles.levelHeading}>Moderate Risk Level</Heading>
-                                <Text alignSelf="center" style={styles.levelText}>Avoid being in this environment 8 hour or more.</Text>
-                            </VStack>
-                        )}
-                        {state.noiseLevel > -10 && (
                             <VStack>
-                                <Heading alignSelf="center" style={styles.levelHeading}>High Risk Level</Heading>
-                                <Text alignSelf="center" style={styles.levelText}>Avoid being in this environment 45 minutes or more.</Text>
+                                <VStack alignItems="center">
+                                    <View style={styles.animationContainer}>
+                                        <LottieView style={{ ...styles.animation, transform: [{ scaleY: calcWaveScaleY(state.noiseLevel) }] }} source={require('../animation/SoundWaves.json')} autoPlay loop />
+                                    </View>
+                                </VStack>
+                                <VStack style={styles.levelContainer}>
+                                    <Text style={styles.levelHeading}>Safe Level</Text>
+                                    <Text style={styles.levelText}>No risk of hearing loss, no matter how long you listen.</Text>
+                                </VStack>
+                            </VStack>
+                        )}
+                        {state.noiseLevel <= -20 && state.noiseLevel > -25 && (
+                            <VStack>
+                                <VStack alignItems="center">
+                                    <View style={styles.animationContainer}>
+                                        <LottieView style={{ ...styles.animation, transform: [{ scaleY: calcWaveScaleY(state.noiseLevel)}] }} source={require('../animation/SoundWaves.json')} autoPlay loop />
+                                    </View>
+                                </VStack>
+                                <VStack style={styles.levelContainer}>
+                                    <Text style={styles.levelHeading}>Moderate Risk Level</Text>
+                                    <Text style={styles.levelText}>Avoid being in this environment 8 hour or more.</Text>
+                                </VStack>
+                            </VStack>
+                        )}
+                        {state.noiseLevel > -20 && (
+                            <VStack>
+                                <VStack alignItems="center">
+                                    <View style={styles.animationContainer}>
+                                        <LottieView style={{ ...styles.animation,  transform: [{ scaleY: calcWaveScaleY(state.noiseLevel)}] }} source={require('../animation/SoundWaves.json')} autoPlay loop />
+                                    </View>
+                                </VStack>
+                                <VStack position="relative">
+                                    <VStack style={styles.levelContainer}>
+                                        <Text style={styles.levelHeading}>High Risk Level</Text>
+                                        <Text style={styles.levelText}>Avoid being in this environment 45 minutes or more.</Text>
+                                    </VStack>
+                                </VStack>
                             </VStack>
                         )}
                     </>
-                )}
+                ) : (
+                    <>
+                        <VStack alignItems="center">
+                            <View style={styles.animationContainer}>
+                                <LottieView ref={waveRef} style={{ ...styles.animation, transform: [{ scaleY: calcWaveScaleY(state.noiseLevel)}] }}  source={require('../animation/SoundWaves.json')} />
+                            </View>
+                        </VStack>
+                    </>
+                )
+                }
             </VStack>
 
             <VStack>
                 {routeName === "Parental Control Noise Check"
                     ? (state.isNoiseChecking === false
                         ? <ButtonFunc
-                            handleOnPress={startNoiseCheck}
+                            handleOnPress={async () => {
+                                await startNoiseCheck()
+                            }}
                             disabled={!state.isMicrophonePermGranted || !state.isRecordingPermGranted}
                             text={"START NOISE CHECK"}
                         />
                         :
-                        <></>
+                        <>
+                        </>
                     )
                     :
                     <ButtonFunc
-                        handleOnPress={() => {
+                        handleOnPress={async () => {
                             state.isNoiseChecking
-                                ? (stopNoiseCheck(),
+                                ? (await stopNoiseCheck(),
                                     navigation.navigate("Pretest Volume Adjustment"))
-                                : startNoiseCheck();
+                                : await startNoiseCheck();
                         }}
                         isDisabled={
                             !state.isMicrophonePermGranted ||
@@ -304,12 +352,27 @@ const styles = StyleSheet.create({
     text: {
         ...Typography.body.bl,
     },
+    levelContainer: {
+        position: "absolute",
+        bottom: -40
+    },
     levelHeading: {
         ...Typography.heading.h4,
-        paddingBottom: Spacing.l
+        paddingBottom: Spacing.m,
+        alignSelf: "center"
     },
     levelText: {
         ...Typography.body.bl,
-        paddingHorizontal: 40
+        paddingHorizontal: 48,
+        alignSelf: "center",
+        textAlign: "center"
+    },
+    animationContainer: {
+        height: windowHeight * 0.5,
+        aspectRatio: 2
+    },
+    animation: {
+        flex: 1,
+        zIndex: -1
     }
 })

@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
 import NoiseChecker from "../components/noiseChecker/NoiseChecker";
-import { SafeAreaView } from "@gluestack-ui/themed";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Spacing } from "../styles";
 
 const TestNoiseCheckScreen = (route) => {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       paddingHorizontal: Spacing.l,
-      paddingVertical: 40,
+      paddingBottom: 40
     }
   }
 )
