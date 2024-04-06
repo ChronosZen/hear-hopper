@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { Colors, Typography } from "../../styles";
 import { Audio } from "expo-av";
 import {
@@ -211,8 +211,8 @@ const QuizSection = ({ navigation }) => {
   };
 
   return (
-    <>
-      <VStack padding={24} gap={24} marginTop={12}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <VStack padding={24} gap={24}>
         {showModal && (
           <Modal isOpen={showModal}>
             <ModalBackdrop />
@@ -303,7 +303,7 @@ const QuizSection = ({ navigation }) => {
           <ButtonFunc text="Finish" handleOnPress={() => handleSubmitScore()} />
         )}
       </View>
-    </>
+    </SafeAreaView>
   );
 };
 
