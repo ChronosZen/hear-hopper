@@ -10,8 +10,8 @@ import HeaderText from "../components/reusable/HeaderText";
 const ViewAllResult = ({navigation}) => {
 
   return (
-    <VStack m={24}>
-        <HStack justifyContent="space-between" alignItems="center" >
+    <VStack flex={1} mt={12}>
+        <HStack justifyContent="space-between" alignItems="center" m={24} >
             <HeaderText text="Results" underlineColor={Colors.primary.p5} />
             <ChildSelection />
         </HStack>
