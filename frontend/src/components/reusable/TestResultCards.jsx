@@ -122,20 +122,17 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
           </Pressable>
         )
       ) : viewSec === 2 ? (
-        <SafeAreaView>
-          <ScrollView>
+          <ScrollView >
+            <VStack flex={1} mx={24} mb={24}>
             {dataOfCards.length > 0 ? (
               dataOfCards.map((data) => {
                 return (
-
-
                   <VStack key={data.id}>
-                    {/* <Pressable> */}
                     <Pressable
                       onPress={() => {
                         navigation.navigate("Test Result", { data: data, screenName: 'ViewAll' });
                       }}>
-                      <Card marginVertical={12}>
+                      <Card mb={12}>
                         <HStack alignItems="center" gap={12}>
                           <VStack
                             style={{
@@ -160,26 +157,28 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
                 );
               })
             ) : (
-              <VStack flex={1} space="2xl" justifyContent="space-between" my={48}>
+              <VStack flex={1} space="2xl"  mb={24}>
                 <VStack alignItems="center" space="2xl">
-                  <Text style={Typography.heading.h2}>Oops!</Text>
-                  <Text style={Typography.body.bl}>
+                  <Text style={Typography.heading.h2} color={Colors.gs.black}>Oops!</Text>
+                  <Text style={Typography.body.bl} color={Colors.gs.black}>
                     You haven’t taken any tests yet.
                   </Text>
                   <SVG xml={confusedMascot} width="241" height="241" />
                 </VStack>
-                <ButtonFunc
-                  text="Take Hearing Test"
-                  handleOnPress={() => navigation.navigate("HearingTest")}
-                />
-                <ButtonFunc
-                  text="Back to Home"
-                  handleOnPress={() => navigation.navigate("Go back")}
-                />
+                <VStack flex={1} space='xl' py={24}>
+                  <ButtonFunc
+                    text="Take Hearing Test"
+                    handleOnPress={() => navigation.navigate("HearingTest")}
+                  />
+                  <ButtonFunc
+                    text="Back to Home"
+                    handleOnPress={() => navigation.navigate("Go back")}
+                  />
+                </VStack>
               </VStack>
             )}
+            </VStack>
           </ScrollView>
-        </SafeAreaView>
       ) : (
         <Text>No Results</Text>
       )}

@@ -21,20 +21,10 @@ const TestResult = ({ route, navigation }) => {
   } 
   else if(route.params.screenName === "TestScreen"){
     const newData = route.params.data.data;
-    // console.log("inside if block using route -> ", route.params.data.data);
-    // console.log("inside if block newData -> ", newData);
     data = newData;
-    // console.log("inside if block data -> ", data);
   }
-  // const router = useRoute()
-  // const routeName = router.name
-  // console.log("router coming from testResult component", router)
-  // console.log("routeName -> ", routeName);
-  // console.log("this is audiogram object", ramroute.params);
-  // console.log("this is audiogram object", data);
 
-  // console.log("right left avg: ", data.leftAverage, data.rightAverage)
-  // console.log("percentage: ", (100-(data.leftAverage*(100/91))).toFixed(0))
+
   const checkHearing = (avg) => {
     if(avg >=0 && avg<=25){
         return "Normal hearing"
@@ -52,7 +42,7 @@ const TestResult = ({ route, navigation }) => {
   }
   return (
     <SafeAreaView flex={1}>
-      <VStack flex= {1} m={24} space="3xl">
+      <VStack flex= {1} mb={48} mx={24} space="3xl">
         <HStack alignItems="center" justifyContent="space-between">
           <HeaderText text="Results" xml={testEar} underlineColor={Colors.primary.p5} />
           <CloseButton navigation={navigation} section={"Go back"} />
@@ -108,8 +98,8 @@ const TestResult = ({ route, navigation }) => {
               yAxisInterval={1}
               chartConfig={{
                 backgroundColor: Colors.primary.p1,
-                backgroundGradientFrom: Colors.primary.p3,
-                backgroundGradientTo: Colors.primary.p4,
+                backgroundGradientFrom: Colors.primary.p5,
+                backgroundGradientTo: Colors.primary.p5,
                 decimalPlaces: 0,
                 color: (opacity = 1) => Colors.gs.black,
                 labelColor: (opacity = 1) => Colors.gs.black,
@@ -140,9 +130,6 @@ const TestResult = ({ route, navigation }) => {
 export default TestResult;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
   earText: {
     ...Typography.body.bm
   },
