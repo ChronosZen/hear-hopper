@@ -78,7 +78,7 @@ const HomeScreen = ({ navigation, route }) => {
           </VStack>
         </VStack>
 
-        <HStack gap={Spacing.m} flex={1}>
+        <HStack  gap={Spacing.m} flex={1}>
           {homeCards.map((homeCard, index) => {
             return (
 
@@ -133,9 +133,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: Spacing.l,
-    marginBottom: Spacing.m,
+    marginBottom: 3,
     gap: Spacing.xl,
-    backgroundColor: "hotpink"
   },
   testCardHeading: {
     ...Typography.heading.h1,

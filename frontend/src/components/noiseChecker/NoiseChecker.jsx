@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from "react";
+import { useReducer, useEffect, useRef } from "react";
 import ButtonFunc from "../reusable/ButtonFunc";
 import { StyleSheet, Dimensions } from "react-native";
 import { Audio } from 'expo-av';
@@ -94,6 +94,8 @@ const NoiseChecker = ({ text }) => {
     // console.log("route name from noise checker", route.route.route.name)
 
     const script = text
+    const waveRef = useRef()
+
 
     const route = useRoute()
     const routeName = route.name
@@ -206,17 +208,18 @@ const NoiseChecker = ({ text }) => {
         if (!state.isMicrophonePermGranted) {
             handleRequestPermissions()
         }
+        return async () => {
+            await stopNoiseCheck()
+        }
     }, [])
 
     return (
 
         <VStack flex={1}>
             <VStack flex={1}>
-
-                <VStack backgroundColor="yellow">
-
-                    <HStack justifyContent="space-between" alignItems="center" backgroundColor="blue">
-                        <HStack alignItems="center" space="md">
+                <VStack>
+                    <HStack justifyContent="space-between" alignItems="center">
+                        <HStack alignItems="center" space="sm">
                             <SVG xml={noiseCheckIcon} width="40" height="40"></SVG>
                             <HeaderText text="Noise Check" underlineColor={Colors.primary.p5} />
                         </HStack>
@@ -243,54 +246,90 @@ const NoiseChecker = ({ text }) => {
                     </HStack>
                     <Text style={styles.text}>{script}</Text>
                 </VStack>
-                <VStack alignItems="center">
+                {/* <VStack alignItems="center">
                     <View backgroundColor="pink" style={styles.animationContainer}>
-                        <LottieView style={{ ...styles.animation }} source={require('../animation/SoundWaves.json')} autoPlay />
+                        <LottieView ref={waveRef} style={{ ...styles.animation }} source={require('../animation/SoundWaves.json')} />
                     </View>
-                    <SVG xml={wave} width="440" height="440"></SVG>
-                </VStack>
-                {state.isNoiseChecking && (
+                </VStack> */}
+                {state.isNoiseChecking ? (
                     <>
                         {state.noiseLevel <= -12 && (
-                            <VStack >
-                                <Text style={styles.levelHeading}>Safe Level</Text>
-                                <Text style={styles.levelText}>No risk of hearing loss, no matter how long you listen.</Text>
+                            <VStack>
+                                <VStack alignItems="center">
+                                    <View backgroundColor="pink" style={styles.animationContainer}>
+                                        <LottieView style={{ ...styles.animation }} source={require('../animation/SoundWaves.json')} autoPlay loop />
+                                    </View>
+                                </VStack>
+                                <VStack >
+                                    <Text style={styles.levelHeading}>Safe Level</Text>
+                                    <Text style={styles.levelText}>No risk of hearing loss, no matter how long you listen.</Text>
+                                </VStack>
                             </VStack>
                         )}
                         {state.noiseLevel <= -10 && state.noiseLevel > -12 && (
-                            <VStack >
-                                <Text style={styles.levelHeading}>Moderate Risk Level</Text>
-                                <Text style={styles.levelText}>Avoid being in this environment 8 hour or more.</Text>
+                            <VStack>
+                                <VStack alignItems="center">
+                                    <View backgroundColor="pink" style={styles.animationContainer}>
+                                        <LottieView style={{ ...styles.animation }} source={require('../animation/SoundWaves.json')}  autoPlay loop />
+                                    </View>
+                                </VStack>
+                                <VStack >
+                                    <Text style={styles.levelHeading}>Moderate Risk Level</Text>
+                                    <Text style={styles.levelText}>Avoid being in this environment 8 hour or more.</Text>
+                                </VStack>
                             </VStack>
                         )}
                         {state.noiseLevel > -10 && (
                             <VStack>
-                                <Text style={styles.levelHeading}>High Risk Level</Text>
-                                <Text style={styles.levelText}>Avoid being in this environment 45 minutes or more.</Text>
+                                <VStack alignItems="center">
+                                    <View backgroundColor="pink" style={styles.animationContainer}>
+                                        <LottieView style={{ ...styles.animation }} source={require('../animation/SoundWaves.json')}  autoPlay loop  />
+                                    </View>
+                                </VStack>
+                                <VStack>
+                                    <Text style={styles.levelHeading}>High Risk Level</Text>
+                                    <Text style={styles.levelText}>Avoid being in this environment 45 minutes or more.</Text>
+                                </VStack>
                             </VStack>
                         )}
                     </>
-                )}
+                ) : (
+                    <>
+                        <VStack alignItems="center">
+                            <View backgroundColor="pink" style={styles.animationContainer}>
+                                <LottieView ref={waveRef} style={{ ...styles.animation }} source={require('../animation/SoundWaves.json')} />
+                            </View>
+                        </VStack>
+                    </>
+                )
+                }
             </VStack>
 
-            <VStack>
+            <VStack backgroundColor="yellow">
                 {routeName === "Parental Control Noise Check"
                     ? (state.isNoiseChecking === false
                         ? <ButtonFunc
-                            handleOnPress={startNoiseCheck}
+                            handleOnPress={async () => {
+                                await startNoiseCheck()
+                            }}
                             disabled={!state.isMicrophonePermGranted || !state.isRecordingPermGranted}
                             text={"START NOISE CHECK"}
                         />
                         :
-                        <></>
+                        <>
+                            <View backgroundColor="yellow" flex={1}>
+                                <Text>hellow</Text>
+                            </View>
+                        </>
                     )
                     :
                     <ButtonFunc
-                        handleOnPress={() => {
+                        handleOnPress={async () => {
                             state.isNoiseChecking
-                                ? (stopNoiseCheck(),
+                                ? (await stopNoiseCheck(),
+                                    state.isNoiseChecking === false && state.safeDuration > 2,
                                     navigation.navigate("Pretest Volume Adjustment"))
-                                : startNoiseCheck();
+                                : await startNoiseCheck();
                         }}
                         isDisabled={
                             !state.isMicrophonePermGranted ||
@@ -333,14 +372,11 @@ const styles = StyleSheet.create({
         alignSelf: "center"
     },
     animationContainer: {
-        // width: 400,
         height: windowHeight * 0.5,
         aspectRatio: 2
     },
     animation: {
-        // width: 440,
-        // height: 440,
-        transform: [{ scaleY: 1.3 }],
+        transform: [{ scaleY: 0.6 }],
         flex: 1,
         zIndex: -1
     }
