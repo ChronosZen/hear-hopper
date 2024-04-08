@@ -30,7 +30,7 @@ const HomeScreen = ({ navigation, route }) => {
       title: "Parental Control",
     },
     {
-      title: "Ear Training",
+      title: "Target Sound Test",
     }
   ];
 
