@@ -164,7 +164,7 @@ const BottomTab = () => {
         options={{
           tabBarLabel: ({ focused }) => (
             <Text style={focused ? styles.hNavActive : styles.hNav}>
-              Target
+              Quiz
             </Text>
           ),
           tabBarIcon: ({ focused }) => (

@@ -16,7 +16,7 @@ const TrainScreen = ({ navigation }) => {
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
         <HStack justifyContent="start" alignItems="center" gap={8}>
-          <HeaderText text="Target Sound Test" xml={earTrainginIcon} />
+          <HeaderText text="In Noise Quiz" xml={earTrainginIcon} />
           <View style={styles.infoWrapper}>
             <SVG xml={infoIcon} width="16" height="16" />
           </View>

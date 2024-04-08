@@ -236,7 +236,7 @@ const QuizSection = ({ navigation }) => {
         )}
         <HStack justifyContent="space-between" alignItems="center" gap={8}>
           <HeaderText
-            text="Target Sound Test"
+            text="In Noise Quiz"
             xml={earTrainginIcon}
             navigation={navigation}
             section="TrainSection"
