@@ -24,22 +24,23 @@ const TestResultCards = ({ viewSec, handleOnPress }) => {
   const navigation = useNavigation();
   const worstEars = selectedKidAudiograms
     ? selectedKidAudiograms?.map((audiogram) => {
-      return Math.max(audiogram.leftAverage, audiogram.rightAverage);
+      // return Math.max(audiogram.leftAverage, audiogram.rightAverage);
+      return audiogram.leftAverage;
     })
     : [];
   // console.log("here is the worst ear data ->", worstEars[0]);
 
   const hearingZone = (avarage) => {
-    if (avarage < 20) {
+    if (avarage <= 25) {
       return { level: "Normal Hearing", color: Colors.secondary.g4, stroke: Colors.secondary.g1 };
-    } else if (avarage >= 20 && avarage < 40) {
-      return { level: "Mild Hearing Loss", color: Colors.accent.b2, stroke: Colors.accent.b1 };
-    } else if (avarage >= 40 && avarage < 60) {
-      return { level: "Moderate Hearing Loss", color: Colors.accent.y3, stroke: Colors.accent.y1 };
-    } else if (avarage >= 60 && avarage < 70) {
-      return { level: "Moderately severe Hearing Loss", color: Colors.accent.o3, stroke: Colors.accent.o1 };
-    } else if (avarage >= 70) {
-      return { level: "Severe Hearing Loss", color: Colors.accent.p3, stroke: Colors.accent.p1 };
+    } else if (avarage >= 26 && avarage <= 40) {
+      return { level: "Potential Mild Loss", color: Colors.accent.b2, stroke: Colors.accent.b1 };
+    } else if (avarage >= 41 && avarage <= 55) {
+      return { level: "Potential Moderate Loss", color: Colors.accent.y3, stroke: Colors.accent.y1 };
+    } else if (avarage >= 56 && avarage <= 70) {
+      return { level: "Potential Severe Loss", color: Colors.accent.o3, stroke: Colors.accent.o1 };
+    } else if (avarage > 70) {
+      return { level: "Potential Profound Loss", color: Colors.accent.p3, stroke: Colors.accent.p1 };
     }
   };
 

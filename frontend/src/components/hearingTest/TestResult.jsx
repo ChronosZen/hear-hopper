@@ -5,7 +5,7 @@ import {
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import SVG from "../svg/SVG";
-import { testEar, happyMascot } from "../svg/svgs";
+import { testEar, happyMascot, mainMastcot } from "../svg/svgs";
 import { VStack, HStack } from "@gluestack-ui/themed";
 import { Typography, Colors } from "../../styles/index";
 import ButtonFunc from "../../components/reusable/ButtonFunc";
@@ -26,23 +26,21 @@ const TestResult = ({ route, navigation }) => {
 
 
   const checkHearing = (avg) => {
-    if(avg >=0 && avg<=25){
+    if(avg<=25){
         return "Normal hearing"
     }else if(avg >=26 && avg<=40){
-        return "Mild hearing loss"
+        return "Potential Mild Loss"
     }else if(avg >=41 && avg<=55){
-        return "Moderate hearing loss"
+        return "Potential Moderate Loss"
     }else if(avg >=56 && avg<=70){
-        return "Moderate severe hearing loss"
-    }else if(avg >=71 && avg<=90){
-        return "Severe hearing loss"
-    }else{
-          return "Profound hearing loss"
-      }
+        return "Potential Severe Loss"
+    }else if(avg >=71){
+        return "Potential Profound Loss"
+    }
   }
   return (
     <SafeAreaView flex={1}>
-      <VStack flex= {1} mb={48} mx={24} space="3xl">
+      <VStack flex= {1} mb={48} mx={24} space="2xl">
         <HStack alignItems="center" justifyContent="space-between">
           <HeaderText text="Results" xml={testEar} underlineColor={Colors.primary.p5} />
           <CloseButton navigation={navigation} section={"Go back"} />
@@ -55,16 +53,16 @@ const TestResult = ({ route, navigation }) => {
             <Text
               style={styles.earValue}
             >
-              {(100-(data.leftAverage*(100/91))).toFixed(0)}
+              {(100-(data.leftAverage*(100/91))).toFixed(0)}%
             </Text>
           </VStack>
-          <SVG xml={happyMascot} width="180" height="180" />
+          <SVG xml={data.leftAverage<=25 ? happyMascot : mainMastcot} width="180" height="180" />
           <VStack justifyContent="center" alignItems="center">
             <Text style={styles.earText}>Right Ear</Text>
             <Text
               style={styles.earValue}
             >
-              {(100-(data.rightAverage*(100/91))).toFixed(0)}
+              --
             </Text>
           </VStack>
         </HStack>
@@ -72,7 +70,7 @@ const TestResult = ({ route, navigation }) => {
         <Text
           style={styles.hearingRes}
         >
-          {data.leftAverage < data.rightAverage ? checkHearing(data.rightAverage): checkHearing(data.leftAverage)}
+          {checkHearing(data.leftAverage)}
         </Text>
 
         <VStack flex={1} justifyContent="center" >
@@ -82,13 +80,18 @@ const TestResult = ({ route, navigation }) => {
             <LineChart
               data={{
                 labels: [500, 1000, 2000, 5000, 8000],
+                yAxisInterval:20,
                 datasets: [
+                  //left ear data
                   {
-                    data: [data.leftEar["500hz"], data.leftEar["1000hz"], data.leftEar["2000hz"], data.leftEar["5000hz"], data.leftEar["8000hz"]]
+                    data: [data.leftEar["500hz"], data.leftEar["1000hz"], data.leftEar["2000hz"], data.leftEar["5000hz"], data.leftEar["8000hz"]],
+                    color: () => Colors.secondary.g1,
                   },
-                  {
-                    data: [data.rightEar["500hz"], data.rightEar["1000hz"], data.rightEar["2000hz"], data.rightEar["5000hz"], data.rightEar["8000hz"]]
-                  }
+                  //right ear data
+                  // {
+                  //   data: [data.rightEar["500hz"], data.rightEar["1000hz"], data.rightEar["2000hz"], data.rightEar["5000hz"], data.rightEar["8000hz"]],
+                  //   color: (opacity = 1) => Colors.gs.gs6,
+                  // }
                 ]
               }}
               width={Dimensions.get("window").width - 50}
@@ -120,6 +123,16 @@ const TestResult = ({ route, navigation }) => {
               }}
             />
           </VStack>
+          <HStack space="2xl" justifyContent="center">
+            <HStack space="xl" alignItems="center">
+              <HStack w={40} h={16} borderRadius="$2xl" bg={Colors.secondary.g1} ></HStack>
+              <Text>Left</Text>
+            </HStack>
+            <HStack space="xl" alignItems="center">
+              <HStack w={40} h={16} borderRadius="$2xl" bg={Colors.primary.p3} ></HStack>
+              <Text>Right</Text>
+            </HStack>
+          </HStack>
           <ButtonFunc text="View All Results" handleOnPress={() => navigation.navigate("Test",{screen:"All Results"})} />
         </VStack>
       </VStack>
@@ -138,6 +151,7 @@ const styles = StyleSheet.create({
   },
   hearingRes: {
       textAlign: 'center',
-      ...Typography.heading.h3
+      ...Typography.heading.h3,
+      color: Colors.primary.p2,
   }
 });

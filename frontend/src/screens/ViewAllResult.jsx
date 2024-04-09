@@ -15,6 +15,7 @@ const ViewAllResult = ({navigation}) => {
             <HeaderText text="Results" underlineColor={Colors.primary.p5} />
             <ChildSelection />
         </HStack>
+        <Text style={{...Typography.heading.h6, marginLeft: 24, marginBottom: 22}} >History</Text>
         <TestResultCards viewSec={2} />
     </VStack>
   );
