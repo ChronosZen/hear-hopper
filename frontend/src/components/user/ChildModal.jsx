@@ -48,7 +48,11 @@ const ChildModal = ({ setIsModelOpen, isModelOpen, kids }) => {
     setIsModelOpen(!isModelOpen);
   };
   return (
-    <Modal isOpen={isModelOpen}>
+    <Modal
+      isOpen={isModelOpen}
+      onClose={() => {
+        setIsModelOpen(false);
+      }}>
       <ModalBackdrop />
       <ModalContent paddingTop={12} paddingBottom={16} width={327}>
         <VStack
