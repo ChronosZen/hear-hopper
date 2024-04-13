@@ -1,35 +1,39 @@
-import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
-import { useState, useEffect, useReducer } from "react";
+import { StyleSheet } from "react-native";
+import { useState, useEffect } from "react";
 import { Audio } from "expo-av";
 import {
   HStack,
   VStack,
   Progress,
   ProgressFilledTrack,
+  Pressable,
+  Text
 } from "@gluestack-ui/themed";
 import SVG from "../components/svg/SVG";
 import HeaderText from "../components/reusable/HeaderText";
 import {
-  ear,
-  testIcon,
   mainMastcot,
   happyMascot,
+  testEar,
+  testBtn,
+  heldTestBtn,
 } from "../components/svg/svgs";
 import { Typography, Colors } from "../styles/index";
 import ButtonFunc from "../components/reusable/ButtonFunc";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "../context/UserContext";
 import * as secureStorage from 'expo-secure-store';
+import CloseButton from "../components/reusable/CloseButton";
+import AnimatedLottieView from 'lottie-react-native'
+
 
 const EarTestScreen = ({ navigation }) => {
-  const [earOpt, setEarOpt] = useState("left");
   const [nextEar, setnextEar] = useState(0);
   const [progress, setProgress] = useState(0);
   const [sound, setSound] = useState(null);
-  const [audioPanValu, setaudioPanValu] = useState(-1.0);
+  // const [audioPanValu, setaudioPanValu] = useState(-1.0);
   const [currentIndex, setCurrentIndex] = useState(0);
-  // const [responsedB, setResponsedB] = useState([0,100,100,100,100])
-  // const responseFreq = [0, 500, 1000, 2000, 5000, 8000]
+  const [btnActive, setBtnActive] = useState(false);
   const { selectedKidId } = useUser();
   const [response, setResponse] = useState({
     "500hz": 80,
@@ -40,10 +44,10 @@ const EarTestScreen = ({ navigation }) => {
   });
   const [rightResponse, setRightResponse] = useState({
     "500hz": 80,
-    "1000hz": 80,
-    "2000hz": 80,
+    "1000hz": 90,
+    "2000hz": 70,
     "5000hz": 80,
-    "8000hz": 80,
+    "8000hz": 70,
   });
 
   const queryClient = useQueryClient();
@@ -63,7 +67,7 @@ const EarTestScreen = ({ navigation }) => {
       queryClient.invalidateQueries({ queryKey: ["myData"] });
       response.json().then((data) => {
         console.log("checking for response")
-        navigation.navigate("Test Result", data);
+        navigation.navigate("Test Result", {data:data, screenName:'TestScreen'});
       });
     },
   });
@@ -263,7 +267,7 @@ const EarTestScreen = ({ navigation }) => {
       audioPlay[currentIndex].uri,
       { shouldPlay: true, volume: audioPlay[currentIndex].volume }
     );
-    newSound.setVolumeAsync(audioPlay[currentIndex].volume, audioPanValu);
+    newSound.setVolumeAsync(audioPlay[currentIndex].volume, "-1.0");
     setSound(newSound);
     // sound.stopAsync();
     if (
@@ -297,35 +301,36 @@ const EarTestScreen = ({ navigation }) => {
 
   // user response while listening to audio played
   const userResponse = () => {
-    console.log("user is able to hear: ", audioPlay[currentIndex].freq, currentIndex);
+    // console.log("user is able to hear: ", audioPlay[currentIndex].freq, currentIndex);
+    setBtnActive(true)
     if (audioPlay[currentIndex].volume > 0) {
       const db = volTodBCal(audioPlay[currentIndex].volume);
       setResponse((prevResp) => ({
         ...prevResp,
         [audioPlay[currentIndex].freq]: db,
       }));
-      setRightResponse((rightResp) => ({
-        ...rightResp,
-        [audioPlay[currentIndex].freq]: db + 10,
-      }));
     }
-    console.log(response);
+    // console.log(response);
   };
 
   const volTodBCal = (vol) => {
-    console.log("volume to dB ", vol);
+    // console.log("volume to dB ", vol);
     return vol * 50;
   };
 
+  const btnReleased = () => {
+    setBtnActive(false)
+  }
+
   return (
-    <VStack flex={1} padding={12} backgroundColor="white">
-      <HStack justifyContent="start" alignItems="center" gap={8}>
-        <SVG xml={ear} width="24" height="24" />
-        <HeaderText text={earOpt === "left" ? "Left Ear" : "Right Ear"} />
+    <VStack flex={1} m={24}>
+      <HStack justifyContent="space-between" alignItems="center">
+        <HeaderText text="Left Ear" xml={testEar} underlineColor={Colors.primary.p5} />
+        <CloseButton navigation={navigation} section={"Tutorial"} />
       </HStack>
       <VStack space="md" marginBottom={12}>
         <Progress value={progress * 20} w="100%" h={12} bg={Colors.gs.gs6}>
-          <ProgressFilledTrack h={12} bg={Colors.gs.black} />
+          <ProgressFilledTrack h={12} bg={Colors.primary.p1} />
         </Progress>
         <HStack justifyContent="space-between" width={"100%"}>
           <Text>Progress</Text>
@@ -338,61 +343,39 @@ const EarTestScreen = ({ navigation }) => {
           flex={1}
           alignItems="center"
           justifyContent="space-between"
-          marginVertical={24}>
-          <VStack alignItems="center" marginBottom={12}>
+          my={24}>
+          <VStack alignItems="center">
             <SVG xml={mainMastcot} width="180" height="180" />
-            <View>
               <Text style={styles.instructText}>
                 Press and Hold the Button while you hear the beeping sound.
               </Text>
-            </View>
           </VStack>
-          <TouchableOpacity
-            onPress={userResponse}
-            style={{
-              backgroundColor: Colors.primary.p2,
-              width: 108,
-              height: 108,
-              borderRadius: 54,
-            }}
-            onp>
-            <View
-              style={{
-                flex: 1,
-                alignItems: "center",
-                justifyContent: "center",
-              }}>
-              <SVG
-                xml={testIcon}
-                width="48"
-                height="48"
-                fill={Colors.gs.white}
-              />
-            </View>
-          </TouchableOpacity>
+          <Pressable onPressIn={userResponse} onPressOut={btnReleased} mb={24}>
+            {btnActive ? 
+            <VStack justifyContent="center" alignItems="center">
+              <AnimatedLottieView source={require('../components/animation/ButtonBackgroundRipple.json')} autoPlay style={{width:300, height: 300, position: 'absolute'}} />
+              <SVG xml={heldTestBtn} width={150} height={150} />
+            </VStack>
+            :
+              <SVG xml={testBtn} width={150} height={150} />
+            }
+          </Pressable>
         </VStack>
       ) : (
         <VStack justifyContent="space-between" flex={1}>
-          <VStack alignItems="center" marginBottom={12}>
+          <VStack flex={1} space="3xl" alignItems="center" justifyContent="center" marginBottom={12}>
             <SVG xml={happyMascot} width="180" height="180" />
-            <View>
-              <Text style={styles.instructText}>
-                You Did Great!
-              </Text>
-            </View>
+            <AnimatedLottieView source={require('../components/animation/Confetti.json')} autoPlay loop style={{width:400, height: 400, position: 'absolute'}} />
+            <Text style={Typography.heading.h3} color={Colors.gs.black}>
+              You Did Great!
+            </Text>
           </VStack>
 
           <ButtonFunc text="View Results" handleOnPress={() => {
             console.log("test result button pressed",selectedKidId)
             mutation.mutate({
               leftEar: response,
-              rightEar: {
-                "500hz": 40,
-                "1000hz": 60,
-                "2000hz": 45,
-                "5000hz": 60,
-                "8000hz": 40,
-              },
+              rightEar: rightResponse,
               owner: selectedKidId,
             });
           }} />
@@ -403,11 +386,8 @@ const EarTestScreen = ({ navigation }) => {
 };
 export default EarTestScreen;
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   instructText: {
     textAlign: "center",
-    ...Typography.body.bl,
+    ...Typography.body.bxl,
   },
 });

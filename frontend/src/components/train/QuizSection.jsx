@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { Colors, Typography } from "../../styles";
+import { Audio } from "expo-av";
 import {
   ButtonText,
   CloseIcon,
@@ -36,7 +37,7 @@ const quizData = [
     sound: {
       name: "cat",
       file: require("../../../assets/audioFiles/training/cat_sound.wav"),
-      volume: 0.7,
+      volume: 1,
     },
   },
   {
@@ -45,7 +46,7 @@ const quizData = [
     sound: {
       name: "cow",
       file: require("../../../assets/audioFiles/training/cow_sound.wav"),
-      volume: 0.6,
+      volume: 1,
     },
   },
   {
@@ -54,7 +55,7 @@ const quizData = [
     sound: {
       name: "goat",
       file: require("../../../assets/audioFiles/training/goat_sound.wav"),
-      volume: 0.5,
+      volume: 1,
     },
   },
   {
@@ -63,7 +64,7 @@ const quizData = [
     sound: {
       name: "tiger",
       file: require("../../../assets/audioFiles/training/tiger_sound.wav"),
-      volume: 0.6,
+      volume: 1,
     },
   },
   {
@@ -72,7 +73,7 @@ const quizData = [
     sound: {
       name: "dog",
       file: require("../../../assets/audioFiles/training/dog_sound.wav"),
-      volume: 0.4,
+      volume: 1,
     },
   },
 ];
@@ -132,13 +133,23 @@ function reducer(state, action) {
       };
   }
 }
-
+async function playCompletedSound() {
+  const yaySound = require("../../../assets/audioFiles/training/yay-6120.mp3");
+  try {
+    const { sound } = await Audio.Sound.createAsync(yaySound);
+    const completedSound = sound;
+    await completedSound.playAsync();
+  } catch (error) {
+    console.error("Error playing feedback sound:", error);
+  }
+}
 const QuizSection = ({ navigation }) => {
   const [
     { question, pageState, answerState, userAnswer, showModal, score },
     dispatch,
   ] = useReducer(reducer, initialState);
   const { selectedKidId, dispatch: dispatchContext } = useUser();
+
   const checkAnswer = (userAnswer, correctAnswer, question) => {
     if (userAnswer === correctAnswer) {
       dispatch({
@@ -184,6 +195,7 @@ const QuizSection = ({ navigation }) => {
         payload: { selectedKidQuizScore: score },
       });
       dispatch({ type: "showModal" });
+      playCompletedSound();
     } catch (error) {
       console.error("There has been a problem with your PATCH api", error);
       console.error("Response data:", error.response?.data);
@@ -199,87 +211,99 @@ const QuizSection = ({ navigation }) => {
   };
 
   return (
-    <VStack padding={24} gap={24}>
-      {showModal && (
-        <Modal isOpen={showModal}>
-          <ModalBackdrop />
-          <ModalContent>
-            <VStack justifyContent="center" alignItems="center">
-              <ModalHeader>
-                <Heading size="lg">
-                  Congratulation! you got {score} out of 5
-                </Heading>
-              </ModalHeader>
-              <ModalBody>
-                <SVG xml={happyMascot} width="130" height="130" />
-              </ModalBody>
-              <ModalFooter>
-                <ButtonFunc
-                  text="Complete"
-                  handleOnPress={() => handleExit()}
-                />
-              </ModalFooter>
-            </VStack>
-          </ModalContent>
-        </Modal>
-      )}
-      <HStack justifyContent="space-between" alignItems="center" gap={8}>
-        <HeaderText
-          text="Ear Training"
-          xml={earTrainginIcon}
-          navigation={navigation}
-          section="TrainSection"
-        />
-        <CloseButton navigation={navigation} section="TrainSection" />
-      </HStack>
-      <ProgressBar question={question} />
-      {pageState === "question" && (
-        <>
-          <VStack
-            alignItems="center"
-            justifyContent="center"
-            margin={"auto"}
-            marginBottom={32}
-            gap={8}>
-            <View style={{ margin: "auto" }}>
-              <SVG
-                xml={soundIcon}
-                width="32"
-                height="32"
-                fill={Colors.primary.p2}
-              />
-            </View>
-            <Text style={styles.h1}>Which animal are you hearing?</Text>
-          </VStack>
-        </>
-      )}
-      {pageState === "revealAnswer" && (
-        <>
-          <RevealAnswer
-            text={answerState === "correct" ? "Good Job!" : "Try Again!"}
-            type={answerState}
+    <SafeAreaView style={{ flex: 1 }}>
+      <VStack padding={24} gap={24}>
+        {showModal && (
+          <Modal isOpen={showModal}>
+            <ModalBackdrop />
+            <ModalContent>
+              <VStack justifyContent="center" alignItems="center">
+                <ModalHeader>
+                  <Heading size="lg">Congratulation!</Heading>
+                </ModalHeader>
+                <ModalBody>
+                  <SVG xml={happyMascot} width="130" height="130" />
+                </ModalBody>
+                <ModalFooter>
+                  <ButtonFunc
+                    text="Complete"
+                    handleOnPress={() => handleExit()}
+                  />
+                </ModalFooter>
+              </VStack>
+            </ModalContent>
+          </Modal>
+        )}
+        <HStack justifyContent="space-between" alignItems="center" gap={8}>
+          <HeaderText
+            text="In Noise Quiz"
+            xml={earTrainginIcon}
+            navigation={navigation}
+            section="TrainSection"
           />
-        </>
-      )}
-      <AnimalChoices
-        dispatch={dispatch}
-        answerState={answerState}
-        userAnswer={userAnswer}
-        quizData={quizData[question]}
-      />
-      {pageState === "question" ? (
-        <ButtonFunc
-          text="See Answer"
-          handleOnPress={() =>
-            checkAnswer(userAnswer, quizData[question].correctAnswer, question)
-          }
+          <CloseButton navigation={navigation} section="TrainSection" />
+        </HStack>
+        <ProgressBar question={question} />
+        {pageState === "question" && (
+          <>
+            <VStack
+              alignItems="center"
+              justifyContent="center"
+              gap={8}
+              mb={90}
+              height={150}>
+              <View style={{ margin: "auto" }}>
+                <SVG
+                  xml={soundIcon}
+                  width="32"
+                  height="32"
+                  fill={Colors.primary.p2}
+                />
+              </View>
+              <Text style={styles.h1}>Which animal are you hearing?</Text>
+            </VStack>
+          </>
+        )}
+        {pageState === "revealAnswer" && (
+          <>
+            <RevealAnswer
+              text={answerState === "correct" ? "Good Job!" : "Try Again!"}
+              type={answerState}
+            />
+          </>
+        )}
+        <AnimalChoices
+          dispatch={dispatch}
+          answerState={answerState}
+          userAnswer={userAnswer}
+          quizData={quizData[question]}
         />
-      ) : pageState === "revealAnswer" && question < 4 ? (
-        <ButtonFunc text="Next" handleOnPress={() => handleNext()} />
-      ) : (
-        <ButtonFunc text="Finish" handleOnPress={() => handleSubmitScore()} />
-      )}
-    </VStack>
+      </VStack>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "flex-end",
+          marginHorizontal: 24,
+          marginBottom: 48,
+        }}>
+        {pageState === "question" ? (
+          <ButtonFunc
+            text="See Answer"
+            handleOnPress={() =>
+              checkAnswer(
+                userAnswer,
+                quizData[question].correctAnswer,
+                question
+              )
+            }
+          />
+        ) : pageState === "revealAnswer" && question < 4 ? (
+          <ButtonFunc text="Next" handleOnPress={() => handleNext()} />
+        ) : (
+          <ButtonFunc text="Finish" handleOnPress={() => handleSubmitScore()} />
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 

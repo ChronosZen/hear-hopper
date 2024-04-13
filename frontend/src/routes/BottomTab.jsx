@@ -4,11 +4,14 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
 import ParentalControlScreen from "../screens/ParentalControlScreen";
 import ParentalControlNoiseCheckScreen from "../screens/ParentalControlNoiseCheckScreen";
+import ParentalControlVolumeAdjustmentScreen from "../screens/ParentalControlVolumeAdjustmentScreen";
 import TestNoiseCheckScreen from "../screens/TestNoiseCheckScreen";
+import TestVolumeAdjustmentScreen from "../screens/TestVolumeAdjustmentScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import TestScreen from "../screens/TestScreen";
 import TrainScreen from "../screens/TrainScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import AddProfileScreen from "../screens/AddProfileScreen";
 import ExampleScreen from "../screens/ExampleScreen";
 import SVG from "../components/svg/SVG";
@@ -17,16 +20,20 @@ import {
   profileIcon,
   testIcon,
   trainingIcon,
+  homeSolidIcon,
+  profileSolidIcon,
+  testSolidIcon,
+  trainingSolidIcon,
 } from "../components/svg/svgs";
 import { Colors, Typography } from "../styles";
+import TestResult from "../components/hearingTest/TestResult";
+import ViewAllResult from "../screens/ViewAllResult";
+import VolumeListenerModal from "../components/background/VolumeListenerModal";
 import TrainSection from "../components/train/TrainSection";
 import StartSection from "../components/train/StartSection";
 import QuizSection from "../components/train/QuizSection";
 import TestTutorial from "../components/hearingTest/TestTutorial";
 import EarTestScreen from "../screens/EarTestScreen";
-import TestResult from "../components/hearingTest/TestResult";
-import ViewAllResult from "../screens/ViewAllResult";
-
 const ProfileStack = createNativeStackNavigator();
 function ProfileStackScreen({ route }) {
   return (
@@ -52,6 +59,10 @@ function HomeStackScreen({ route }) {
           name="Parental Control Noise Check"
           component={ParentalControlNoiseCheckScreen}
         />
+        <HomeStack.Screen
+          name="Parental Control Volume Setting"
+          component={ParentalControlVolumeAdjustmentScreen}
+        />
         <HomeStack.Screen name="Test Result" component={TestResult} />
       </HomeStack.Navigator>
     );
@@ -65,8 +76,6 @@ function TrainStackScreen() {
   return (
     <TrainStack.Navigator screenOptions={{ headerShown: false }}>
       <TrainStack.Screen name="TrainSection" component={TrainScreen} />
-      <TrainStack.Screen name="QuizSection" component={QuizSection} />
-      <TrainStack.Screen name="StartSection" component={StartSection} />
     </TrainStack.Navigator>
   );
 }
@@ -80,6 +89,10 @@ function HearingTestStackScreen() {
         name="Noise Check"
         component={TestNoiseCheckScreen}
       />
+      <HearinTestStack.Screen
+        name="Pretest Volume Adjustment"
+        component={TestVolumeAdjustmentScreen}
+      />
       <HearinTestStack.Screen name="Tutorial" component={TestTutorial} />
       <HearinTestStack.Screen name="Ear Test" component={EarTestScreen} />
       <HearinTestStack.Screen name="Test Result" component={TestResult} />
@@ -89,9 +102,10 @@ function HearingTestStackScreen() {
 }
 
 const Tab = createBottomTabNavigator();
-
 const BottomTab = () => {
   return (
+    <>
+    <VolumeListenerModal />
     <Tab.Navigator
       style={styles.tab}
       screenOptions={{
@@ -119,7 +133,7 @@ const BottomTab = () => {
           ),
           tabBarIcon: ({ focused }) => (
             <SVG
-              xml={homeIcon}
+              xml={focused ? homeSolidIcon : homeIcon}
               height="24"
               width="24"
               fill={focused ? Colors.gs.black : Colors.gs.gs4}
@@ -136,7 +150,7 @@ const BottomTab = () => {
           ),
           tabBarIcon: ({ focused }) => (
             <SVG
-              xml={testIcon}
+              xml={focused ? testSolidIcon : testIcon}
               height="24"
               width="24"
               fill={focused ? Colors.gs.black : Colors.gs.gs4}
@@ -150,12 +164,12 @@ const BottomTab = () => {
         options={{
           tabBarLabel: ({ focused }) => (
             <Text style={focused ? styles.hNavActive : styles.hNav}>
-              Training
+              Quiz
             </Text>
           ),
           tabBarIcon: ({ focused }) => (
             <SVG
-              xml={trainingIcon}
+              xml={focused ? trainingSolidIcon : trainingIcon}
               height="24"
               width="24"
               fill={focused ? Colors.gs.black : Colors.gs.gs4}
@@ -169,12 +183,12 @@ const BottomTab = () => {
         options={{
           tabBarLabel: ({ focused }) => (
             <Text style={focused ? styles.hNavActive : styles.hNav}>
-              Profile
+              Settings
             </Text>
           ),
           tabBarIcon: ({ focused }) => (
             <SVG
-              xml={profileIcon}
+              xml={focused ? profileSolidIcon : profileIcon}
               height="24"
               width="24"
               fill={focused ? Colors.gs.black : Colors.gs.gs4}
@@ -183,6 +197,7 @@ const BottomTab = () => {
         }}
       />
     </Tab.Navigator>
+    </>
   );
 };
 

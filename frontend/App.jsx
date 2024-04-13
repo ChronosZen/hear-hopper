@@ -28,6 +28,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AddProfileScreen from "./src/screens/AddProfileScreen";
 import { UserProvider } from "./src/context/UserContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import StartSection from "./src/components/train/StartSection";
+import QuizSection from "./src/components/train/QuizSection";
+import TestTutorial from "./src/components/hearingTest/TestTutorial";
+import EarTestScreen from "./src/screens/EarTestScreen";
 const queryClient = new QueryClient();
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -52,7 +56,16 @@ export default function App() {
           <NavigationContainer theme={MyTheme}>
             {isSignedIn ? (
               <UserProvider>
-                <BottomTab userData={userData} />
+                <Stack.Navigator
+                  screenOptions={{
+                    headerShown: false,
+                  }}>
+                  <Stack.Screen name="Base" component={BottomTab} />
+                  <Stack.Screen name="StartSection" component={StartSection} />
+                  <Stack.Screen name="QuizSection" component={QuizSection} />
+                  <Stack.Screen name="Tutorial" component={TestTutorial} />
+                  <Stack.Screen name="Ear Test" component={EarTestScreen} />
+                </Stack.Navigator>
               </UserProvider>
             ) : (
               <Stack.Navigator>

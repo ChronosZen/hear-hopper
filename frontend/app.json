@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "frontend",
+    "name": "HearHopper",
     "slug": "frontend",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/favicon_hopper_purple.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -18,10 +18,6 @@
       "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
       "package": "com.anhphanlangara.frontend"
     },
     "web": {
@@ -34,15 +30,14 @@
         {
           "fonts": [
             "node_modules/@expo-google-fonts/spline-sans/SplineSans_400Regular.ttf",
-            "node_modules/@expo-google-fonts/spline-sans/SplineSans_600SemiBold.ttf",
-            "./assets/RubikScribble-Regular.ttf"
+            "node_modules/@expo-google-fonts/spline-sans/SplineSans_600SemiBold.ttf"
           ]
         }
       ]
     ],
     "extra": {
       "eas": {
-        "projectId": "441716d4-8659-4d00-ad65-433255ea5f2b"
+        "projectId": "79652f88-c23f-436d-872b-25875834dd4c"
       }
     },
     "runtimeVersion": {

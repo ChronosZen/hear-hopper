@@ -5,7 +5,7 @@ import { correct, wrong } from "../svg/svgs";
 import { Typography } from "../../styles";
 const RevealAnswer = ({ text = "Good Job!", type = "correct" }) => {
   return (
-    <VStack justifyContent="center" alignItems="center">
+    <VStack justifyContent="center" alignItems="center" height={150} mb={90}>
       <SVG
         xml={type === "correct" ? correct : wrong}
         width={100}
